@@ -32,7 +32,8 @@ module_energy_L144.building_det_en <- function(command, ...) {
              "L142.in_EJ_R_bld_F_Yh",
              "L143.HDDCDD_scen_RG3_Y",
              "L143.HDDCDD_scen_ctry_Y",
-             FILE = "energy/A44.CalPrice_bld"))
+             FILE = "energy/A44.CalPrice_bld",
+             FILE = "energy/share_districtheat_korea.csv"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L144.end_use_eff",
              "L144.shell_eff_R_Y",
@@ -62,6 +63,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
     L142.in_EJ_R_bld_F_Yh <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh")
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y")
     L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y")
+    share_districtheat_korea <- get_data(all_data, "energy/share_districtheat_korea.csv")
 
     # ===================================================
 
@@ -72,6 +74,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
       `installed cost` <- iso <- lifetime <- normal <- normal_RG3 <- region_GCAM3 <- region_subsector <-
       regions_fuel <- scaler <- sector <- sector_fuel <- service <- share_TFEbysector <- share_serv_fuel <-
       share_serv_fuel_RG3 <- subsector <- supp_tech_2 <- supplysector <- technology <- tradbio_region <-
+      heating_share <- others_share <- kor_dh_total <-
       value_eff <- value_ratio <- value_ratio_2000 <- value_shell <- value_tech <- variable <- year <-
       value <- exponent <- NULL
 
@@ -493,6 +496,30 @@ module_energy_L144.building_det_en <- function(command, ...) {
       select(GCAM_region_ID, sector, fuel, service, year, value) ->
       L144.in_EJ_R_bld_serv_F_Yh # This is a final output table.
 
+    # Override South Korea's district heat (fuel == "heat") heating vs. others service split
+    # using an explicit, Korea-specific assumption (energy/share_districtheat_korea.csv), since
+    # the shared regional-archetype shares (A44.share_serv_fuel) are derived from other regions'
+    # district-heat usage patterns and are not representative of Korea's system. Total district
+    # heat energy by region / sector / year is preserved; only the heating vs. others split
+    # changes. No other fuel, service, or region is affected.
+    L144.in_EJ_R_bld_serv_F_Yh %>%
+      filter(GCAM_region_ID == 28, fuel == "heat") %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      mutate(kor_dh_total = sum(value)) %>%
+      ungroup() %>%
+      left_join_error_no_match(share_districtheat_korea, by = "year") %>%
+      mutate(value = if_else(grepl("heat", service),
+                             kor_dh_total * heating_share,
+                             kor_dh_total * others_share)) %>%
+      select(GCAM_region_ID, sector, fuel, service, year, value) ->
+      L144.KOR_districtheat_split
+
+    L144.in_EJ_R_bld_serv_F_Yh %>%
+      filter(!(GCAM_region_ID == 28 & fuel == "heat")) %>%
+      bind_rows(L144.KOR_districtheat_split) %>%
+      arrange(GCAM_region_ID, sector, fuel, service, year) ->
+      L144.in_EJ_R_bld_serv_F_Yh
+
 
     # 1E
     # Calculate building energy output by each service by GCAM region ID / sector / service / fuel / historical year
@@ -616,9 +643,10 @@ module_energy_L144.building_det_en <- function(command, ...) {
       add_title("Building energy consumption by GCAM region ID / sector / fuel / service / historical year") %>%
       add_units("EJ/yr") %>%
       add_comments("Energy consumption by service is calculated by allocating energy consumption across services using calculated service shares") %>%
+      add_comments("South Korea's district heat (fuel = heat) heating vs. others split is overridden using energy/share_districtheat_korea.csv") %>%
       add_legacy_name("L144.in_EJ_R_bld_serv_F_Yh") %>%
       add_precursors("energy/A_regions", "L142.in_EJ_R_bld_F_Yh", "energy/A44.share_serv_fuel", "L101.in_EJ_ctry_bld_Fi_Yh",
-                     "L143.HDDCDD_scen_RG3_Y", "L143.HDDCDD_scen_ctry_Y") ->
+                     "L143.HDDCDD_scen_RG3_Y", "L143.HDDCDD_scen_ctry_Y", "energy/share_districtheat_korea.csv") ->
       L144.in_EJ_R_bld_serv_F_Yh
 
     L144.NEcost_75USDGJ %>%
