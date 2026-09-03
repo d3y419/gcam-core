@@ -129,6 +129,26 @@ module_energy_L224.heat <- function(command, ...) {
         filter(region %in% heat_region$region) -> L224.SubsectorInterpTo_heat
     }
 
+    # South Korea override: the global "fixed" interpolation rule (A24.subsector_interp) holds each
+    # district-heat subsector's share-weight flat at its final-calibration-year (2021) value. For Korea's
+    # gas subsector that calibrated value is small (~0.06), because gas's historical district-heat role was
+    # overwhelmingly a CHP secondary output (recorded outside this subsector) rather than the boiler
+    # technology this subsector represents, leaving gas structurally unable to compete against biomass in
+    # future periods despite being cheaper. Until that CHP accounting is addressed, force Korea's gas
+    # subsector share-weight to 1 for all future years, on par with biomass, so it can compete on cost.
+    KOREA_REGION_NAME <- "South Korea"
+    L224.SubsectorInterp_heat <- L224.SubsectorInterp_heat %>%
+      filter(!(region == KOREA_REGION_NAME & supplysector == "district heat" & subsector == "gas"))
+
+    L224.KOR_gas_shrwt_override <- tibble::tibble(region = KOREA_REGION_NAME, supplysector = "district heat",
+                                                  subsector = "gas", year = MODEL_FUTURE_YEARS, share.weight = 1)
+    if(exists("L224.SubsectorShrwt_heat")) {
+      L224.SubsectorShrwt_heat <- L224.SubsectorShrwt_heat %>%
+        bind_rows(L224.KOR_gas_shrwt_override)
+    } else {
+      L224.SubsectorShrwt_heat <- L224.KOR_gas_shrwt_override
+    }
+
     # Identification of stub technologies of district heat
     # Note: assuming that technology list in the shareweight table includes the full set (any others would default to a 0 shareweight)
     A24.globaltech_shrwt %>%

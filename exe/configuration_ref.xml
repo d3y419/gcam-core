@@ -24,6 +24,7 @@
 		<Value name = "energy_transformation">../input/gcamdata/xml/en_transformation.xml</Value>
 		<Value name = "elec_water_base">../input/gcamdata/xml/electricity_water.xml</Value>
 		<Value name = "heat">../input/gcamdata/xml/heat.xml</Value>
+		<Value name = "korea_district_heat_2021_cost_override">../input/extra/korea_district_heat_2021_cost_override.xml</Value>
 		<Value name = "hydrogen">../input/gcamdata/xml/hydrogen.xml</Value>
 		<Value name = "energy_distribution">../input/gcamdata/xml/en_distribution.xml</Value>
 		<Value name = "other_industry">../input/gcamdata/xml/other_industry.xml</Value>
