@@ -39,6 +39,7 @@
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
+		<Value name = "building_KOR">../input/gcamdata/xml/building_det_KOR.xml</Value>
 		<Value name = "korea_bld_retirement_scurve">../input/extra/korea_bld_retirement_scurve.xml</Value>
 		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE.xml</Value>
 		<Value name = "carbon_content">../input/gcamdata/xml/Ccoef.xml</Value>
