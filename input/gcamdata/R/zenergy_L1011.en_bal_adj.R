@@ -26,7 +26,7 @@ module_energy_L1011.en_bal_adj <- function(command, ...) {
              FILE = "energy/mappings/EIA_ctry",
              FILE = "energy/A22.globaltech_coef",
              "L101.in_EJ_ctry_trn_Fi_Yh",
-             "L1010.en_bal_EJ_R_Si_Fi_Yh_full"))
+             "K101.en_bal_EJ_R_Si_Fi_Yh_full"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L1011.en_bal_EJ_R_Si_Fi_Yh",
              "L1011.in_EJ_ctry_intlship_TOT_Yh"))
@@ -47,7 +47,7 @@ module_energy_L1011.en_bal_adj <- function(command, ...) {
     EIA_TOT_intlship_kbbld <- get_data(all_data, "energy/EIA_TOT_intlship_kbbld")
     EIA_ctry <- get_data(all_data, "energy/mappings/EIA_ctry")
     A22.globaltech_coef <- get_data(all_data, "energy/A22.globaltech_coef")
-    L101.en_bal_EJ_R_Si_Fi_Yh_full <- get_data(all_data, "L1010.en_bal_EJ_R_Si_Fi_Yh_full", strip_attributes = TRUE)
+    L101.en_bal_EJ_R_Si_Fi_Yh_full <- get_data(all_data, "K101.en_bal_EJ_R_Si_Fi_Yh_full", strip_attributes = TRUE)
     L101.in_EJ_ctry_trn_Fi_Yh <- get_data(all_data, "L101.in_EJ_ctry_trn_Fi_Yh", strip_attributes = TRUE)
 
     EIA_RFO_intlship_kbbld %>%
@@ -241,7 +241,7 @@ module_energy_L1011.en_bal_adj <- function(command, ...) {
       add_comments("Replacing international shipping estimates on IEA energy balances with EIA, ") %>%
       add_comments("subtract coal-to-gas from natural gas TPES") %>%
       add_legacy_name("L1011.en_bal_EJ_R_Si_Fi_Yh") %>%
-      add_precursors("L1010.en_bal_EJ_R_Si_Fi_Yh_full", "energy/A22.globaltech_coef", "energy/calibrated_techs") ->
+      add_precursors("K101.en_bal_EJ_R_Si_Fi_Yh_full", "energy/A22.globaltech_coef", "energy/calibrated_techs") ->
       L1011.en_bal_EJ_R_Si_Fi_Yh
 
      L1011.in_EJ_ctry_intlship_TOT_Yh %>%
