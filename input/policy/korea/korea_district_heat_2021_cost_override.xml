@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+    <world>
+        <region name="South Korea">
+            <supplysector name="district heat">
+                <subsector name="biomass">
+                    <stub-technology name="biomass">
+                        <period year="2005">
+                            <minicam-non-energy-input name="non-energy">
+                                <input-cost>1</input-cost>
+                            </minicam-non-energy-input>
+                        </period>
+                        <period year="2010">
+                            <minicam-non-energy-input name="non-energy">
+                                <input-cost>1</input-cost>
+                            </minicam-non-energy-input>
+                        </period>
+                        <period year="2015">
+                            <minicam-non-energy-input name="non-energy">
+                                <input-cost>1</input-cost>
+                            </minicam-non-energy-input>
+                        </period>
+                        <period year="2021">
+                            <minicam-non-energy-input name="non-energy">
+                                <input-cost>1</input-cost>
+                            </minicam-non-energy-input>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+    </world>
+</scenario>
