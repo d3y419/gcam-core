@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    NOTE TO FUTURE MAINTAINERS (human or AI agent):
+    The $1/GJ non-energy cost below for South Korea district-heat biomass
+    (2005-2021) is ARBITRARY, not derived from real cost data. It exists to
+    close a ~17.6% blended district-heat sector price drop between 2021 and
+    2025 that otherwise causes an artificial jump in total district-heat
+    consumption in 2025.
+
+    DO NOT REVERT/REMOVE this override without also addressing that price
+    cliff, or the 2025 consumption jump will reappear.
+
+    It is safe to leave as-is: all four years here (2005-2021) are historical
+    calibration years, so this cost has zero effect on calibrated quantities
+    (they are fixed by calibration, not solved from cost). It only affects the
+    model's view of relative sector cost trajectory into 2025+.
+
+    TODO: replace with real Korea District Heating Corporation (KDHC) cost
+    data when available, re-checking whether the 2021-2025 discontinuity
+    still needs a fix once real numbers are used.
+-->
 <scenario>
     <world>
         <region name="South Korea">
