@@ -15,7 +15,8 @@
 #' @author HCM 2026
 module_energy_xml_building_KOR <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR"))
+    return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR",
+             "K1441.StubTechEff_bld_KOR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "building_det_KOR.xml"))
   } else if(command == driver.MAKE) {
@@ -25,12 +26,15 @@ module_energy_xml_building_KOR <- function(command, ...) {
     K1441.StubTechCalInput_bld_KOR <- get_data(all_data, "K1441.StubTechCalInput_bld_KOR")
     K1441.StubTechShrwt_bld_KOR <- get_data(all_data, "K1441.StubTechShrwt_bld_KOR")
     K1441.StubTechSCurve_bld_KOR <- get_data(all_data, "K1441.StubTechSCurve_bld_KOR")
+    K1441.StubTechEff_bld_KOR <- get_data(all_data, "K1441.StubTechEff_bld_KOR")
 
     create_xml("building_det_KOR.xml") %>%
       add_xml_data(K1441.StubTechCalInput_bld_KOR, "StubTechCalInput") %>%
       add_xml_data(K1441.StubTechShrwt_bld_KOR, "StubTechShrwt") %>%
       add_xml_data(K1441.StubTechSCurve_bld_KOR, "StubTechSCurve") %>%
-      add_precursors("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR") ->
+      add_xml_data(K1441.StubTechEff_bld_KOR, "StubTechEff") %>%
+      add_precursors("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR",
+                     "K1441.StubTechEff_bld_KOR") ->
       building_det_KOR.xml
 
     return_data(building_det_KOR.xml)

@@ -81,16 +81,28 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
   # ZERO calibrated share from 2021 onward (its energy was already reallocated to the new
   # tiers), so it has no effect on the actual future-year competition -- confirmed by
   # re-running with the override and finding the 2021-2025 output trajectory unchanged.
-  # South Korea's new technologies ("electric furnace", "electric heat pump", etc.) already
-  # use GCAM-USA's cost data unmodified, which is what actually determines the transition --
+  #
+  # The REAL cause of the cost cliff: the shared global-technology-database entries for these
+  # building technologies (both old and new) carry ONLY a capital-cost accounting block
+  # (tracking-non-energy-input) -- no minicam-energy-input/efficiency at all. That link is
+  # provided per-region via StubTechEff. Core's own L244 chunk writes it for every core
+  # region's EXISTING technologies (e.g. "electricity"), which is why the old technology's
+  # reported cost correctly includes both capital cost AND Korea's real electricity fuel
+  # price. This chunk originally did NOT write StubTechEff for the NEW technologies, so their
+  # fuel cost was never wired in for South Korea -- their reported cost was effectively just
+  # the bare capital-cost figure, missing ~$10/GJ of real fuel cost, making them look far
+  # cheaper than they actually are. K1441.StubTechEff_bld_KOR below fixes this, using
+  # GCAM-USA's own efficiency data (gcam-usa/A44.globaltech_eff) for the new technologies --
   # see [[project_korea_bld_tier_cost_gap]] memory for the full story.
 
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/A44.globaltech_shares",
              FILE = "gcam-usa/A44.globaltech_retirement",
+             FILE = "gcam-usa/A44.globaltech_eff",
              "L244.StubTechCalInput_bld"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR"))
+    return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR",
+             "K1441.StubTechEff_bld_KOR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -100,10 +112,11 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       base.technology <- new.technology <- mode <- sector_regex <- share_tech1 <- share_tech2 <-
       technology1 <- technology2 <- elec.heat.share <- retirement.category <- lifetime <-
       half_life_stock <- steepness_stock <- half_life_new <- steepness_new <- steepness <-
-      half.life <- NULL  # silence package check notes
+      half.life <- technology <- efficiency <- market.name <- NULL  # silence package check notes
 
     A44.globaltech_shares <- get_data(all_data, "gcam-usa/A44.globaltech_shares", strip_attributes = TRUE)
     A44.globaltech_retirement <- get_data(all_data, "gcam-usa/A44.globaltech_retirement", strip_attributes = TRUE)
+    A44.globaltech_eff <- get_data(all_data, "gcam-usa/A44.globaltech_eff", strip_attributes = TRUE)
     L244.StubTechCalInput_bld <- get_data(all_data, "L244.StubTechCalInput_bld", strip_attributes = TRUE)
 
     # USA's base-year exogenous share of "electric heat pump" within resid heating / electricity.
@@ -215,6 +228,33 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechSCurve"]]) ->
       K1441.StubTechSCurve_bld_KOR
 
+    # Wire in the fuel input/efficiency link GCAM-USA's own detailed technologies rely on
+    # (see chunk-level NOTE above for why this is needed). A44.globaltech_eff already carries
+    # its own minicam.energy.input per row, keyed the same way as A44.globaltech_retirement
+    # (supplysector = USA end-use category, e.g. "resid heating"; subsector = fuel;
+    # technology = the new tier name), so it's joined the same way as retirement was.
+    new_tier_rows %>%
+      dplyr::distinct(region, supplysector, subsector, stub.technology, retirement.category) %>%
+      # plain left_join (not left_join_error_no_match): each Korea sector/subsector/tech row
+      # intentionally expands to one row per USA data year here, ahead of interpolation below
+      dplyr::left_join(A44.globaltech_eff %>% gather_years(value_col = "efficiency"),
+                        by = c("retirement.category" = "supplysector", "subsector",
+                               "stub.technology" = "technology")) %>%
+      mutate(year = as.integer(year)) %>%
+      # group by the full (supplysector, subsector, stub.technology) key, not just
+      # stub.technology -- the same new-technology name (e.g. "electric furnace") appears
+      # under multiple supplysectors (each resid dwelling type, comm heating), and those can
+      # carry DIFFERENT efficiency schedules (resid vs comm heating categories), so each needs
+      # its own interpolation rather than one pooled across all of them.
+      group_by(region, supplysector, subsector, stub.technology, minicam.energy.input) %>%
+      tidyr::complete(year = MODEL_YEARS) %>%
+      mutate(efficiency = approx_fun(year, efficiency, rule = 2)) %>%
+      ungroup() %>%
+      filter(year %in% MODEL_YEARS) %>%
+      mutate(market.name = region) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechEff"]]) ->
+      K1441.StubTechEff_bld_KOR
+
     K1441.StubTechCalInput_bld_KOR %>%
       add_title("South Korea efficiency-tier building technology calibration (USA structure, USA-borrowed base-year shares)") %>%
       add_units("EJ") %>%
@@ -239,7 +279,16 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       add_precursors("gcam-usa/A44.globaltech_retirement", "L244.StubTechCalInput_bld") ->
       K1441.StubTechSCurve_bld_KOR
 
-    return_data(K1441.StubTechCalInput_bld_KOR, K1441.StubTechShrwt_bld_KOR, K1441.StubTechSCurve_bld_KOR)
+    K1441.StubTechEff_bld_KOR %>%
+      add_title("South Korea fuel input efficiency for new efficiency-tier building technologies") %>%
+      add_units("Unitless efficiency") %>%
+      add_comments("Wires the new technologies' minicam-energy-input/efficiency (missing from the shared global-technology-database, which only carries capital-cost tracking) using GCAM-USA's own efficiency data, so their fuel cost is correctly included in their competitive cost -- see chunk docs NOTE for why this was needed") %>%
+      add_legacy_name("K1441.StubTechEff_bld_KOR") %>%
+      add_precursors("gcam-usa/A44.globaltech_eff", "L244.StubTechCalInput_bld") ->
+      K1441.StubTechEff_bld_KOR
+
+    return_data(K1441.StubTechCalInput_bld_KOR, K1441.StubTechShrwt_bld_KOR, K1441.StubTechSCurve_bld_KOR,
+                K1441.StubTechEff_bld_KOR)
   } else {
     stop("Unknown command")
   }
