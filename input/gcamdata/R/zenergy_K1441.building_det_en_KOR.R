@@ -73,6 +73,18 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
     "^comm cooling$", "gas", "gas", "gas cooling", "add", "comm cooling"
   )
 
+  # NOTE: an earlier version of this chunk also harmonized South Korea's EXISTING base
+  # technology cost (e.g. "electricity" heating, ~$12.84/GJ-service, calibration-derived) to
+  # GCAM-USA's cost for the corresponding base-tier technology (~$1.3/GJ-service for
+  # "electric furnace"), trying to smooth the ~9.5x cost cliff between 2021 and 2025 once the
+  # new tiers take over. That override was removed: it targets a technology that already has
+  # ZERO calibrated share from 2021 onward (its energy was already reallocated to the new
+  # tiers), so it has no effect on the actual future-year competition -- confirmed by
+  # re-running with the override and finding the 2021-2025 output trajectory unchanged.
+  # South Korea's new technologies ("electric furnace", "electric heat pump", etc.) already
+  # use GCAM-USA's cost data unmodified, which is what actually determines the transition --
+  # see [[project_korea_bld_tier_cost_gap]] memory for the full story.
+
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/A44.globaltech_shares",
              FILE = "gcam-usa/A44.globaltech_retirement",
