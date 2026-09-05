@@ -102,7 +102,7 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
              "L244.StubTechCalInput_bld"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR",
-             "K1441.StubTechEff_bld_KOR"))
+             "K1441.StubTechEff_bld_KOR", "K1441.StubTechInterp_bld_KOR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -112,7 +112,8 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       base.technology <- new.technology <- mode <- sector_regex <- share_tech1 <- share_tech2 <-
       technology1 <- technology2 <- elec.heat.share <- retirement.category <- lifetime <-
       half_life_stock <- steepness_stock <- half_life_new <- steepness_new <- steepness <-
-      half.life <- technology <- efficiency <- market.name <- NULL  # silence package check notes
+      half.life <- technology <- efficiency <- market.name <- apply.to <- from.year <- to.year <-
+      interpolation.function <- NULL  # silence package check notes
 
     A44.globaltech_shares <- get_data(all_data, "gcam-usa/A44.globaltech_shares", strip_attributes = TRUE)
     A44.globaltech_retirement <- get_data(all_data, "gcam-usa/A44.globaltech_retirement", strip_attributes = TRUE)
@@ -255,6 +256,53 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechEff"]]) ->
       K1441.StubTechEff_bld_KOR
 
+    # Gradual (not instantaneous) adoption of the new efficiency-tier technologies.
+    #
+    # Without this rule the new tiers jump from their calibrated base-year share-weight
+    # straight to the global-technology-database default of 1 in the first future period.
+    # For "electric heat pump" that is an ~84x jump (South Korea resid heating: 0.0119 in
+    # 2021 -> 1 in 2025), which discards exactly the real-world adoption friction --
+    # consumer inertia, installer availability, retrofit constraints -- that the calibrated
+    # base-year share-weight had encoded, and hands the heat pump the whole subsector in one
+    # period on cost merit (its COP ~2.7 vs ~0.91 for the generic technology it replaces).
+    # GCAM-USA's own detailed buildings have the same discontinuity (USA heat pump
+    # share-weight 0.0137 in 2021 -> 1 in 2025), so this is an upstream artifact, not a
+    # South Korea data problem.
+    #
+    # TechnologyContainer::interpolateShareWeights runs once, in the first period AFTER the
+    # final calibration period, and seeds calibration-period entries from the CALIBRATED
+    # share-weight (not the parsed one). InterpolationRule::applyInterpolations then
+    # interpolates strictly BETWEEN the two anchors, leaving both endpoints untouched. So
+    # anchoring from-year at the final calibration year and to-year at the model end year
+    # ramps share-weight linearly from whatever calibration back-solved (0.0119) up to the
+    # global default of 1 at 2100, with both endpoints preserved. No explicit endpoint
+    # share-weight is needed, and none can be written anyway -- there is no StubTechInterpTo
+    # header (only Subsector/Tech/GlobalTech have "...InterpTo" with a to-value).
+    #
+    # Applied to every new tier for consistency: a tier whose calibrated share-weight is
+    # already at the 2100 default (e.g. "electric furnace", 1 -> 1) interpolates flat, so
+    # this is a no-op for those and a genuine ramp only where calibration actually
+    # suppressed the technology.
+    #
+    # NB: input share-weights are not trustworthy evidence here -- GCAM overwrites them
+    # (interpolation rules default to overwrite-policy ALWAYS). Verify the resulting ramp by
+    # querying share-weight from the model OUTPUT database, never from this table or the
+    # generated XML.
+    new_tier_rows %>%
+      dplyr::distinct(region, supplysector, subsector, stub.technology) %>%
+      # NB: numeric years, not the "final-calibration-year"/"end-year" keywords. Those
+      # keywords are a gcamdata-side convenience recoded by set_years() when reading
+      # exogenous CSVs (see YEAR_RECODE in constants.R); GCAM itself parses from-year/to-year
+      # as integers, so writing the literal keyword strings into the XML makes GCAM segfault
+      # during completeInit with nothing in main_log. The generated XML must carry numbers,
+      # exactly as the working precedent (aglu an_input.xml) does.
+      mutate(apply.to = "share-weight",
+             from.year = max(MODEL_BASE_YEARS),
+             to.year = max(MODEL_FUTURE_YEARS),
+             interpolation.function = "linear") %>%
+      select(LEVEL2_DATA_NAMES[["StubTechInterp"]]) ->
+      K1441.StubTechInterp_bld_KOR
+
     K1441.StubTechCalInput_bld_KOR %>%
       add_title("South Korea efficiency-tier building technology calibration (USA structure, USA-borrowed base-year shares)") %>%
       add_units("EJ") %>%
@@ -287,8 +335,16 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       add_precursors("gcam-usa/A44.globaltech_eff", "L244.StubTechCalInput_bld") ->
       K1441.StubTechEff_bld_KOR
 
+    K1441.StubTechInterp_bld_KOR %>%
+      add_title("South Korea share-weight interpolation rule for new efficiency-tier building technologies") %>%
+      add_units("NA") %>%
+      add_comments("Linear ramp from the calibrated final-base-year share-weight to the global default at the model end year, so new tiers (notably electric heat pump) phase in gradually instead of jumping to full competitiveness in the first future period") %>%
+      add_legacy_name("K1441.StubTechInterp_bld_KOR") %>%
+      add_precursors("gcam-usa/A44.globaltech_shares", "L244.StubTechCalInput_bld") ->
+      K1441.StubTechInterp_bld_KOR
+
     return_data(K1441.StubTechCalInput_bld_KOR, K1441.StubTechShrwt_bld_KOR, K1441.StubTechSCurve_bld_KOR,
-                K1441.StubTechEff_bld_KOR)
+                K1441.StubTechEff_bld_KOR, K1441.StubTechInterp_bld_KOR)
   } else {
     stop("Unknown command")
   }
