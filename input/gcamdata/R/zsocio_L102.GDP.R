@@ -26,6 +26,7 @@ module_socio_L102.GDP <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
+      FILE = "socioeconomics/post2100_socioeconomics",
       "L100.gdp_mil90usd_ctry_Yh",
       "L100.GDP_bilusd_SSP_ctry_Yfut_raw",
       "L100.Pop_thous_ctry_Yh",
@@ -219,10 +220,50 @@ module_socio_L102.GDP <- function(command, ...) {
              PPP_MER = PPP / MER) ->
       ppp.mer.rgn
 
+    # Extend past the end of the SSP database, if the horizon runs that far ----
+    # As in module_socio_L101.Population, scale the 2100 value by the RFF-SP
+    # growth factor matched to each SSP in each region. Done after the regional
+    # adjustments above so those are untouched, and inert when the horizon ends
+    # at 2100.
+    if(max(MODEL_FUTURE_YEARS) > max(FUTURE_YEARS)) {
+      POST2100_YEARS <- MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS > max(FUTURE_YEARS)]
+
+      post2100_socioeconomics %>%
+        filter(year %in% POST2100_YEARS) %>%
+        select(scenario, GCAM_region_ID, year, gdp.ratio) %>%
+        left_join_error_no_match(
+          gdp.mil90usd.scen.rgn.yr %>%
+            ungroup %>%
+            filter(year == max(FUTURE_YEARS)) %>%
+            select(scenario, GCAM_region_ID, gdp_anchor = gdp),
+          by = c("scenario", "GCAM_region_ID")) %>%
+        mutate(gdp = gdp_anchor * gdp.ratio) %>%
+        select(scenario, GCAM_region_ID, year, gdp) ->
+        gdp_post2100
+
+      gdp.mil90usd.scen.rgn.yr <-
+        bind_rows(ungroup(gdp.mil90usd.scen.rgn.yr), gdp_post2100)
+
+      # Per capita follows from the extended GDP over the extended population;
+      # gdp is millions and population thousands, so the quotient is thousands.
+      gdp_post2100 %>%
+        left_join_error_no_match(
+          L101.Pop_thous_Scen_R_Y %>%
+            filter(year %in% POST2100_YEARS) %>%
+            select(scenario, GCAM_region_ID, year, population = value),
+          by = c("scenario", "GCAM_region_ID", "year")) %>%
+        mutate(pcgdp = gdp / population) %>%
+        select(scenario, GCAM_region_ID, year, pcgdp) ->
+        pcgdp_post2100
+
+      pcgdp.thous90usd.scen.rgn.yr <-
+        bind_rows(ungroup(pcgdp.thous90usd.scen.rgn.yr), pcgdp_post2100)
+    }
+
     # Produce outputs ----
     gdp.mil90usd.scen.rgn.yr %>%
       ungroup %>%
-      filter(year %in% c(HISTORICAL_YEARS, FUTURE_YEARS)) %>%
+      filter(year %in% c(HISTORICAL_YEARS, FUTURE_YEARS, MODEL_FUTURE_YEARS)) %>%
       rename(value = gdp) %>%
       mutate(year = as.integer(year)) %>%
       add_title("Gross Domestic Product (GDP) by scenario, region, and year.") %>%
@@ -231,13 +272,14 @@ module_socio_L102.GDP <- function(command, ...) {
       add_comments("our final calibration period.") %>%
       add_legacy_name("L102.gdp_mil90usd_Scen_R_Y") %>%
       add_precursors("common/iso_GCAM_regID",
+                     "socioeconomics/post2100_socioeconomics",
                      "L100.GDP_bilusd_SSP_ctry_Yfut_raw",
                      "L100.gdp_mil90usd_ctry_Yh") ->
       L102.gdp_mil90usd_Scen_R_Y
 
     pcgdp.thous90usd.scen.rgn.yr %>%
       ungroup %>%
-      filter(year %in% c(HISTORICAL_YEARS, FUTURE_YEARS)) %>%
+      filter(year %in% c(HISTORICAL_YEARS, FUTURE_YEARS, MODEL_FUTURE_YEARS)) %>%
       rename(value = pcgdp) %>%
       add_title("Gross Domestic Product (GDP) per capita, by scenario, region, and year.") %>%
       add_units("Thousands of 1990 USD (MER)") %>%
@@ -245,6 +287,7 @@ module_socio_L102.GDP <- function(command, ...) {
       add_comments("historical; values subsequent are from SSP projections.") %>%
       add_legacy_name("L102.pcgdp_thous90USD_Scen_R_Y") %>%
       add_precursors("common/iso_GCAM_regID",
+                     "socioeconomics/post2100_socioeconomics",
                      "L100.GDP_bilusd_SSP_ctry_Yfut_raw",
                      "L100.gdp_mil90usd_ctry_Yh",
                      "L101.Pop_thous_Scen_R_Y") ->

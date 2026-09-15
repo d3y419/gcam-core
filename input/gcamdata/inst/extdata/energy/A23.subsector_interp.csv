@@ -8,7 +8,9 @@ supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.functio
 electricity,coal,share-weight,final-calibration-year,2300,1,s-curve
 electricity,gas,share-weight,final-calibration-year,2300,1,s-curve
 electricity,refined liquids,share-weight,final-calibration-year,2100,,linear
+electricity,refined liquids,share-weight,2100,end-year,,fixed
 electricity,biomass,share-weight,final-calibration-year,2100,,linear
+electricity,biomass,share-weight,2100,end-year,,fixed
 electricity,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
 electricity,nuclear,share-weight,initial-future-year,2035,,linear
 electricity,nuclear,share-weight,2035,2050,,linear
@@ -16,4 +18,6 @@ electricity,nuclear,share-weight,2050,2300,1,s-curve
 electricity,wind,share-weight,final-calibration-year,2030,,linear
 electricity,solar,share-weight,final-calibration-year,2030,,linear
 electricity,geothermal,share-weight,final-calibration-year,2100,,linear
+electricity,geothermal,share-weight,2100,end-year,,fixed
 elect_td_bld,rooftop_pv,share-weight,final-calibration-year,2100,1,linear
+elect_td_bld,rooftop_pv,share-weight,2100,end-year,,fixed

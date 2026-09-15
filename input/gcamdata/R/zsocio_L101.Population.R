@@ -19,6 +19,7 @@ module_socio_L101.Population <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
+      FILE = "socioeconomics/post2100_socioeconomics",
       "L100.Pop_thous_ctry_Yh",
       "L100.Pop_thous_SSP_ctry_Yfut_raw")
 
@@ -119,6 +120,26 @@ module_socio_L101.Population <- function(command, ...) {
       L101.Pop_thous_R_Yh %>%
       repeat_add_columns(tibble(scenario = unique(L101.Pop_thous_SSP_R_Yfut$scenario))) %>%
       bind_rows(L101.Pop_thous_SSP_R_Yfut)
+
+    # Extend past the end of the SSP database, if the horizon runs that far ----
+    # The SSP projections stop in 2100. Scale the 2100 population by the growth
+    # factors in post2100_socioeconomics, which come from the RFF-SP percentile
+    # matched to each SSP in each region. Periods through 2100 are untouched, so
+    # this is inert whenever the horizon ends at 2100.
+    if(max(MODEL_FUTURE_YEARS) > max(FUTURE_YEARS)) {
+      post2100_socioeconomics %>%
+        filter(year %in% MODEL_FUTURE_YEARS) %>%
+        select(scenario, GCAM_region_ID, year, pop.ratio) %>%
+        left_join_error_no_match(
+          L101.Pop_thous_Scen_R_Y %>%
+            filter(year == max(FUTURE_YEARS)) %>%
+            select(scenario, GCAM_region_ID, pop_anchor = value),
+          by = c("scenario", "GCAM_region_ID")) %>%
+        mutate(value = pop_anchor * pop.ratio) %>%
+        select(scenario, GCAM_region_ID, year, value) %>%
+        bind_rows(L101.Pop_thous_Scen_R_Y, .) ->
+        L101.Pop_thous_Scen_R_Y
+    }
 
 
     # Produce outputs ----
