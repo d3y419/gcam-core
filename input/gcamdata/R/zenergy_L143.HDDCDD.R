@@ -121,6 +121,22 @@ module_energy_L143.HDDCDD <- function(command, ...) {
     L143.HDDCDD_scen_R_Y <- L143.wtHDDCDD_scen_ctry_Y %>%
       group_by(GCAM_region_ID, SCEN, GCM, variable, year) %>%
       summarise(value = weighted.mean(value, population)) %>%
+      ungroup() %>%
+      # The GCM degree-day projections end in 2100. Carry the final year forward
+      # over the remaining model periods so consumers that join on year - notably
+      # module_energy_L244.building_det - cover the whole horizon.
+      #
+      # Held flat rather than extrapolated. There is no GCM output past 2100 to
+      # extrapolate from, and trending degree days here would invent a climate
+      # signal that is supposed to come from the climate model, not from an
+      # assumption table. Inert when the horizon ends at 2100, since the completed
+      # years are already present annually.
+      # TODO: drive post-2100 degree days off the Hector temperature path instead.
+      complete(nesting(GCAM_region_ID, SCEN, GCM, variable),
+               year = unique(c(year, MODEL_FUTURE_YEARS))) %>%
+      group_by(GCAM_region_ID, SCEN, GCM, variable) %>%
+      arrange(year) %>%
+      mutate(value = approx_fun(year, value)) %>%
       ungroup()
 
     # Calculate weighted degree day by GCAM 3 regions

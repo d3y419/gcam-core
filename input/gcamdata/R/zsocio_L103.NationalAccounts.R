@@ -184,8 +184,14 @@ module_socio_L103.NationalAccounts <- function(command, ...) {
       # it is need for interpolations here
       filter(year >= socioeconomics.SSP_DB_LABOR_STARTYEAR) %>%
       spread(var,value) %>%
-      # Interpolate for base-year year if missing
-      complete(nesting(scenario, GCAM_region_ID), year = c(year, FINAL_HISTORICAL_YEAR, FUTURE_YEARS)) %>%
+      # Interpolate for base-year year if missing.
+      # MODEL_FUTURE_YEARS is included alongside FUTURE_YEARS because the labour
+      # force series is bounded by the level 1 data horizon, which ends in 2100,
+      # while module_socio_L201.Pop_GDP_scenarios joins this by year across the
+      # whole model horizon. rule = 2 below then holds the final share flat past
+      # 2100. Inert when the horizon ends there, as the years coincide.
+      complete(nesting(scenario, GCAM_region_ID),
+               year = c(year, FINAL_HISTORICAL_YEAR, FUTURE_YEARS, MODEL_FUTURE_YEARS)) %>%
       group_by(scenario, GCAM_region_ID) %>%
       mutate(pop = approx_fun(year, pop , rule = 2),
              labor.force = approx_fun(year, labor.force , rule = 2)) %>%

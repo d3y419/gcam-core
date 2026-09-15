@@ -1565,3 +1565,56 @@ resource_reserve_back_calculate <- function(data) {
     filter(year == year_operate) %>%
     select(year, value = reserve)
 }
+
+#' interpolate_post2100
+#'
+#' Expand post-2100 anchor years onto the full post-2100 model period set.
+#'
+#' @details Post-2100 data is carried only at \code{modeltime.POST2100_DATA_YEARS}
+#' (2100, 2150, 2200, 2300) rather than at every post-2100 model period. That keeps
+#' the chunks and the assumption tables working with four points instead of fifteen,
+#' which is where extending the horizon otherwise demands a value from every table at
+#' every decade. This helper fills the periods in between before the XML is written.
+#'
+#' Interpolation is linear between anchors and flat beyond the last one
+#' (\code{approx_fun} rule 2). Flat is the right default: we have no basis for a
+#' trend in, say, a technology cost in 2250, and holding the last known value is the
+#' conservative choice.
+#'
+#' The expansion happens on the R side because GCAM cannot do it. InterpolationRule
+#' is applied in only two places in the C++ (subsector.cpp and
+#' technology_container.cpp) and both act on share-weights only; every other period
+#' vector is filled with a default for unparsed periods rather than interpolated, so
+#' a coefficient left unparsed would read as zero rather than as its 2100 value.
+#'
+#' @param d Long tibble carrying a year column and a value column.
+#' @param value_col Name of the value column, default \code{"value"}.
+#' @param year_col Name of the year column, default \code{"year"}.
+#' @return \code{d} with the post-2100 model periods filled in. Inert when the
+#' horizon ends at 2100, and inert when the periods are already present.
+#' @author Claude Opus 5
+interpolate_post2100 <- function(d, value_col = "value", year_col = "year") {
+  assert_that(is.data.frame(d))
+  assert_that(has_name(d, year_col))
+  assert_that(has_name(d, value_col))
+
+  post_years <- MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS > min(modeltime.POST2100_DATA_YEARS)]
+  if(length(post_years) == 0) return(d)                      # standard 2100 horizon
+  if(all(post_years %in% unique(d[[year_col]]))) return(d)   # already dense
+
+  group_cols <- setdiff(names(d), c(year_col, value_col))
+  out_years <- sort(unique(c(d[[year_col]], post_years)))
+
+  skeleton <- d[, group_cols, drop = FALSE] %>%
+    distinct() %>%
+    repeat_add_columns(tibble(..year.. = out_years))
+  names(skeleton)[names(skeleton) == "..year.."] <- year_col
+
+  skeleton %>%
+    left_join(d, by = c(group_cols, year_col)) %>%
+    group_by_at(group_cols) %>%
+    arrange(.data[[year_col]], .by_group = TRUE) %>%
+    mutate(across(dplyr::all_of(value_col),
+                  ~ approx_fun(.data[[year_col]], .x, rule = 2))) %>%
+    ungroup()
+}

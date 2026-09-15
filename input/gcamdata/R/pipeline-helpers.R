@@ -166,8 +166,28 @@ approx_fun <- function(year, value, rule = 1) {
   # trap leftover rule=3 from old processing chunks which should now explicitly call
   # fill_exp_decay_extrapolate
   if(length(rule) > 1 || rule != 3) {
-    tryCatch(stats::approx(as.vector(year), value, rule = rule, xout = year, ties = mean)$y,
-             error = function(e) NA)
+    out <- tryCatch(stats::approx(as.vector(year), value, rule = rule, xout = year, ties = mean)$y,
+                    error = function(e) NA)
+
+    # Under an extended horizon, hold the last known value forward rather than
+    # returning NA. Chunks complete() their data onto MODEL_FUTURE_YEARS, but the
+    # assumption tables behind them end in 2100, so rule = 1 leaves every period
+    # past that NA - which then reaches a left_join_error_no_match or the XML. A
+    # trend past 2100 has no basis in the data, so flat is the conservative fill.
+    #
+    # Only years after the last known one are filled, so leading NAs and anything
+    # inside the series behave exactly as before, and the fill keys off year
+    # rather than position because callers do not always arrange() first.
+    # Inert when the horizon ends at 2100.
+    if(modeltime.EXTEND_HORIZON && length(out) > 1 && anyNA(out)) {
+      known <- which(!is.na(out))
+      if(length(known) > 0) {
+        last_known_year <- max(year[known])
+        fill_value <- out[known][which.max(year[known])]
+        out[is.na(out) & year > last_known_year] <- fill_value
+      }
+    }
+    out
 
   } else {
     stop("Use fill_exp_decay_extrapolate!")

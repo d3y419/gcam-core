@@ -190,8 +190,26 @@ module_aglu_L2083.ag_factor_productivity_scen <- function(command, ...) {
       L2083.AgLaborIOCoef_Scaler_DerivedBasedOnLand
 
 
-    L2083.AgLaborIOCoef_Scaler <-
-      L2083.AgLaborIOCoef_Scaler_DerivedBasedOnLand
+    # The biophysical productivity ratios this is derived from end in 2100, but the
+    # coefficient tables it is joined to below are built out to the end of the model
+    # horizon. Complete onto the model years and let approx_fun hold the final value
+    # forward so the join covers every period. Inert when the horizon ends at 2100.
+    #
+    # Holding flat means agricultural labour productivity stops improving after
+    # 2100. That is the conservative reading and it matches how the rest of the
+    # post-2100 extension treats assumptions that run out of data. The alternative
+    # is to keep applying the shaping function above, whose CumTimeProgress_S term
+    # is normalised on 2100 and so would extrapolate past 1 - that compounds a
+    # century-scale trend on no evidence.
+    # TODO: replace with a sourced long-run agricultural productivity assumption.
+    L2083.AgLaborIOCoef_Scaler_DerivedBasedOnLand %>%
+      complete(nesting(scenario, region), year = MODEL_YEARS) %>%
+      group_by(scenario, region) %>%
+      arrange(year) %>%
+      mutate(productivity = approx_fun(year, productivity),
+             LaborIO_Scaler = approx_fun(year, LaborIO_Scaler)) %>%
+      ungroup() ->
+      L2083.AgLaborIOCoef_Scaler
 
     L2082.AgCoef_laborcapital_ag_irr_mgmt %>%
       left_join_error_no_match(L2083.AgLaborIOCoef_Scaler, by = c("region", "year")) %>%

@@ -44,8 +44,8 @@ MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 # The horizon runs past 2100 on a widening timestep: 5-yr to 2100, 10-yr to 2200,
 # 20-yr to 2300. GCAM supports a changing timestep natively - module_modeltime_L200
 # emits the <inter-year> entries that tell the C++ Modeltime where the step changes -
-# so no C++ change is required. The widening step is what keeps the added cost down;
-# a flat 5-yr step to 2300 would be 56 future periods instead of 31.
+# so no C++ change is required for the horizon itself. The widening step bounds the
+# cost; a flat 5-yr step to 2300 would be 56 future periods instead of 31.
 #
 # To return to the standard 2100 horizon set modeltime.EXTEND_HORIZON to FALSE.
 # Nothing else needs changing: every downstream chunk keys off MODEL_FUTURE_YEARS.
@@ -56,6 +56,27 @@ MODEL_FUTURE_YEARS      <- if(modeltime.EXTEND_HORIZON) {
 } else {
   seq(2025, 2100, 5)
 }
+
+# The horizon the assumption tables were written against. 142 of the 322
+# year-dimensioned tables in extdata stop exactly here, because it was the end of
+# the model when they were authored. extend_horizon_assumptions() uses this to tell
+# those apart from tables that legitimately end earlier - historical series ending
+# 2015 or 2021, near-term assumptions ending 2030 - which must not be extended.
+modeltime.STANDARD_HORIZON_END <- 2100
+
+# Inputs extend_horizon_assumptions() must leave alone. These are projection
+# datasets rather than assumption tables, so holding their final year flat would
+# quietly replace a modelled trajectory with a constant. The SSP database is carried
+# past 2100 by the RFF-SP percentile matching in module_socio_L101.Population and
+# module_socio_L102.GDP instead, which is a trajectory rather than a hold.
+modeltime.HORIZON_EXTENSION_EXCLUDE <- c("socioeconomics/SSP/SSP_database")
+
+# Years at which post-2100 data is actually processed. Chunks carry values only at
+# these anchors rather than at all 15 post-2100 periods, which is what keeps the
+# extension from demanding a value from every assumption table at every decade.
+# The anchors are expanded back onto the full post-2100 period set before the XML
+# is written - see interpolate_post2100() in module-helpers.R.
+modeltime.POST2100_DATA_YEARS <- c(2100, 2150, 2200, 2300)
 
 # Near-term alignment year for harmonizing drivers and parameters across model scenarios
 # E.g., results across SSPs in MODEL_SCENARIO_ALIGN_YEAR should be the same
