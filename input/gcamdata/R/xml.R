@@ -57,6 +57,38 @@ set_xml_file_helper <- function(xml, fq_name) {
   invisible(xml)
 }
 
+#' truncate_post_horizon
+#'
+#' Drop rows past the standard horizon end for XML files that should not carry them.
+#'
+#' @details GCAM fills a period with no parsed technology by cloning the last one it
+#' has - \code{TechnologyContainer::interpolateVintage} - inputs and all. That path
+#' is correct and needs no data. A partially written post-2100 period, by contrast,
+#' replaces the clone and silently drops whatever inputs it omits, which is fatal
+#' once an emissions driver references one of them.
+#'
+#' So everything is truncated at \code{modeltime.STANDARD_HORIZON_END} except the
+#' files listed in \code{modeltime.XML_POST2100_ALLOWED}, which carry quantities
+#' that are genuinely exogenous and must exist at every period.
+#'
+#' @param data Tibble about to be written into an XML table.
+#' @param xml_file Target XML filename, used to match the allow list.
+#' @return \code{data}, truncated if it qualifies. Unchanged when the horizon ends
+#' at 2100, when the file is allowed, or when there is no year column.
+#' @author Claude Opus 5
+truncate_post_horizon <- function(data, xml_file) {
+  if(!modeltime.EXTEND_HORIZON) return(data)
+  if(is.null(xml_file) || !is.data.frame(data)) return(data)
+  if(!"year" %in% names(data)) return(data)
+  if(any(vapply(modeltime.XML_POST2100_ALLOWED,
+                function(p) grepl(p, xml_file, fixed = TRUE), logical(1)))) {
+    return(data)
+  }
+  yrs <- suppressWarnings(as.integer(data[["year"]]))
+  data[is.na(yrs) | yrs <= modeltime.STANDARD_HORIZON_END, , drop = FALSE]
+}
+
+
 #' Add a table to an XML pipeline to include for conversion to XML.
 #'
 #' We need the tibble to convert and a header tag which can be looked up in
@@ -81,6 +113,8 @@ add_xml_data <- function(dot, data, header, column_order_lookup = header) {
   if(!is.null(column_order_lookup)) {
     data <- data[, LEVEL2_DATA_NAMES[[column_order_lookup]] ]
   }
+
+  data <- truncate_post_horizon(data, dot$xml_file)
 
   curr_table <- list(data = data, header = header)
   dot$data_tables[[length(dot$data_tables)+1]] <- curr_table

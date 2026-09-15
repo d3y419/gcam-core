@@ -71,6 +71,30 @@ modeltime.STANDARD_HORIZON_END <- 2100
 # module_socio_L102.GDP instead, which is a trajectory rather than a hold.
 modeltime.HORIZON_EXTENSION_EXCLUDE <- c("socioeconomics/SSP/SSP_database")
 
+# XML files allowed to carry data past modeltime.STANDARD_HORIZON_END. Everything
+# else is truncated there and GCAM carries it forward itself:
+# TechnologyContainer::interpolateVintage clones the last parsed technology - its
+# inputs included - into every later period.
+#
+# Writing a *partial* post-2100 period is worse than writing none. A parsed period
+# replaces the clone, so any input it omits simply disappears, which surfaces as
+# "does not have a matching input in the next period" and then kills the run in
+# input_driver.cpp. Measured on the first 2300 build, only 71 of 1936 technology
+# periods in transportation_UCD_CORE.xml were written at 2110 - the other 96% were
+# cloned correctly, and it was that 4% which broke the model.
+#
+# What must genuinely be supplied at every period, and so is listed here:
+#   modeltime      - the period definition itself
+#   socioeconomics - population, GDP and labour force are exogenous drivers, and
+#                    the income and price elasticities that demand needs
+#   HDDCDD         - degree days drive building service demand per period
+#   ag_storage     - AgStorageTechnology asserts its lifetime equals the span of the
+#                    two surrounding periods (ag_storage_technology.cpp), so it is
+#                    timestep-dependent and cannot be cloned across a step change.
+#                    module_aglu_L113.ag_storage already computes it correctly as
+#                    timestep + lead(timestep); it just has to reach the XML.
+modeltime.XML_POST2100_ALLOWED <- c("modeltime", "socioeconomics", "HDDCDD", "ag_storage")
+
 # Years at which post-2100 data is actually processed. Chunks carry values only at
 # these anchors rather than at all 15 post-2100 periods, which is what keeps the
 # extension from demanding a value from every assumption table at every decade.
