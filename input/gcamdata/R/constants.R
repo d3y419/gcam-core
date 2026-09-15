@@ -126,6 +126,14 @@ gcam.REAL_PRICE_BASE_YEAR     <- 1975  # This is only used in AgLU prices now.
 
 # Driver constants ======================================================================
 
+# Maximum heap for the Java CSV-to-XML converter invoked by run_xml_conversion().
+# The largest tables scale with the number of model periods, so extending the
+# horizon makes them correspondingly bigger: at 2300 the full XML set is about
+# 5.2 GB and the biggest single file no longer converts inside the old 2 GB cap.
+# Lower this if the machine is memory-constrained; raise it if a conversion fails
+# with a Java heap error.
+driver.XML_JAVA_MAX_HEAP <- "8g"
+
 driver.MAKE            <- "MAKE"
 driver.DECLARE_OUTPUTS <- "DECLARE_OUTPUTS"
 driver.DECLARE_INPUTS  <- "DECLARE_INPUTS"

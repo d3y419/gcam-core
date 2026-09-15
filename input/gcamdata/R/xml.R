@@ -128,7 +128,7 @@ make_run_xml_conversion <- function() {
       close(tmp_conn)
       args <- c(
         "-cp", shQuote(java_cp),
-        "-Xmx2g", # TODO: memory limits?
+        paste0("-Xmx", driver.XML_JAVA_MAX_HEAP),
         "ModelInterface.ModelGUI2.csvconv.CSVToXMLMain",
         tmpfn, # Read from the temporary file
         shQuote(dot$mi_header),
@@ -136,6 +136,22 @@ make_run_xml_conversion <- function() {
       )
       warning_msgs <- system2("java", args, stdout = TRUE, stderr = TRUE)
       unlink(tmpfn)
+
+      # A failed conversion must not pass as a successful build. Java reports
+      # trouble - a heap exhaustion on a large table, most often - through a
+      # non-zero exit status, and routing that to warning() meant the driver
+      # finished cleanly having silently not written the file. Check the status,
+      # and check the file actually appeared, before treating the rest as advisory.
+      status <- attr(warning_msgs, "status")
+      if(!is.null(status) && status != 0) {
+        stop("XML conversion failed for ", basename(dot$xml_file),
+             " (java exited ", status, "). If this is a heap error, raise ",
+             "driver.XML_JAVA_MAX_HEAP (currently ", driver.XML_JAVA_MAX_HEAP, ").\n",
+             paste(utils::tail(warning_msgs, 15), collapse = "\n"))
+      }
+      if(!file.exists(dot$xml_file)) {
+        stop("XML conversion reported success but wrote no file: ", dot$xml_file)
+      }
 
       # Note warnings and errors will have been combined together which ideally
       # would be separate so we can forward them to the appropriate message stream
