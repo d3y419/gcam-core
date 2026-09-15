@@ -44,74 +44,6 @@ find_header <- function(fqfn) {
 #' @importFrom magrittr "%>%"
 #' @importFrom methods is
 #' @importFrom assertthat assert_that
-#' extend_horizon_assumptions
-#'
-#' Hold an assumption table's final year forward to the end of an extended horizon.
-#'
-#' @details Most of the year-dimensioned tables in extdata stop exactly at
-#' \code{modeltime.STANDARD_HORIZON_END}, because that was the end of the model when
-#' they were written. Chunks that interpolate such a table onto MODEL_FUTURE_YEARS
-#' are already covered by \code{\link{approx_fun}}, which holds the last known value
-#' forward; but chunks that join one directly on year are not, and get NA for every
-#' period past 2100 - which surfaces as a left_join_error_no_match, or worse reaches
-#' the XML unnoticed.
-#'
-#' Only tables whose last year is exactly the standard horizon end are touched, so
-#' historical series and near-term assumptions that legitimately stop earlier are
-#' left alone. Values are held flat rather than trended: there is no basis in these
-#' tables for a trajectory past 2100, and flat is the conservative reading.
-#'
-#' @param d Tibble just read from an extdata CSV.
-#' @param name Input name, used to skip the projection datasets listed in
-#' \code{modeltime.HORIZON_EXTENSION_EXCLUDE}.
-#' @return \code{d}, with post-2100 model years added if it qualifies. Returns
-#' \code{d} untouched when the horizon ends at 2100, so the standard configuration
-#' is unaffected.
-#' @author Claude Opus 5
-extend_horizon_assumptions <- function(d, name = "") {
-  if(!modeltime.EXTEND_HORIZON) return(d)
-  if(!is.data.frame(d) || nrow(d) == 0) return(d)
-
-  # Projection datasets are extended by their own chunks, not held flat here.
-  if(length(name) == 1 && nzchar(name) &&
-     any(vapply(modeltime.HORIZON_EXTENSION_EXCLUDE,
-                function(p) grepl(p, name, fixed = TRUE), logical(1)))) {
-    return(d)
-  }
-
-  END <- modeltime.STANDARD_HORIZON_END
-  new_years <- MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS > END]
-  if(length(new_years) == 0) return(d)
-
-  # Wide layout: year-named columns. Copy the final year's column forward.
-  wide <- suppressWarnings(as.integer(names(d)))
-  wide_ok <- !is.na(wide) & wide > 1800 & wide < 2600
-  if(any(wide_ok)) {
-    if(max(wide[wide_ok]) == END && as.character(END) %in% names(d)) {
-      for(y in new_years) d[[as.character(y)]] <- d[[as.character(END)]]
-    }
-    return(d)
-  }
-
-  # Long layout: a year column. Repeat the final year's rows forward.
-  if("year" %in% names(d)) {
-    yrs <- suppressWarnings(as.integer(d[["year"]]))
-    if(all(is.na(yrs))) return(d)
-    if(max(yrs, na.rm = TRUE) == END) {
-      last_rows <- d[!is.na(yrs) & yrs == END, , drop = FALSE]
-      if(nrow(last_rows) > 0) {
-        added <- lapply(new_years, function(y) {
-          r <- last_rows
-          r[["year"]] <- if(is.integer(d[["year"]])) as.integer(y) else y
-          r
-        })
-        d <- dplyr::bind_rows(d, dplyr::bind_rows(added))
-      }
-    }
-  }
-  d
-}
-
 load_csv_files <- function(filenames, optionals, quiet = FALSE, dummy = NULL, ...) {
   assert_that(is.character(filenames))
   assert_that(is.logical(optionals))
@@ -171,6 +103,73 @@ load_csv_files <- function(filenames, optionals, quiet = FALSE, dummy = NULL, ..
 
   }
   filedata
+}
+
+
+#' extend_horizon_assumptions
+#'
+#' Hold an assumption table's final year forward to the end of an extended horizon.
+#'
+#' @details Most of the year-dimensioned tables in extdata stop exactly at
+#' \code{modeltime.STANDARD_HORIZON_END}, because that was the end of the model when
+#' they were written. Chunks that interpolate such a table onto MODEL_FUTURE_YEARS
+#' are covered by \code{\link{approx_fun}}, which holds the last known value forward;
+#' chunks that join one directly on year are not, and get NA for every period past
+#' 2100 - surfacing as a left_join_error_no_match, or reaching the XML unnoticed.
+#'
+#' Only tables whose last year is exactly the standard horizon end are touched, so
+#' historical series and near-term assumptions that legitimately stop earlier are
+#' left alone. Values are held flat rather than trended: there is no basis in these
+#' tables for a trajectory past 2100, and flat is the conservative reading.
+#'
+#' @param d Tibble just read from an extdata CSV.
+#' @param name Input name, used to skip the projection datasets listed in
+#' \code{modeltime.HORIZON_EXTENSION_EXCLUDE}.
+#' @return \code{d}, with post-2100 model years added if it qualifies. Returns
+#' \code{d} untouched when the horizon ends at 2100.
+#' @author Claude Opus 5
+extend_horizon_assumptions <- function(d, name = "") {
+  if(!modeltime.EXTEND_HORIZON) return(d)
+  if(!is.data.frame(d) || nrow(d) == 0) return(d)
+
+  # Projection datasets are extended by their own chunks, not held flat here.
+  if(length(name) == 1 && nzchar(name) &&
+     any(vapply(modeltime.HORIZON_EXTENSION_EXCLUDE,
+                function(p) grepl(p, name, fixed = TRUE), logical(1)))) {
+    return(d)
+  }
+
+  END <- modeltime.STANDARD_HORIZON_END
+  new_years <- MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS > END]
+  if(length(new_years) == 0) return(d)
+
+  # Wide layout: year-named columns. Copy the final year's column forward.
+  wide <- suppressWarnings(as.integer(names(d)))
+  wide_ok <- !is.na(wide) & wide > 1800 & wide < 2600
+  if(any(wide_ok)) {
+    if(max(wide[wide_ok]) == END && as.character(END) %in% names(d)) {
+      for(y in new_years) d[[as.character(y)]] <- d[[as.character(END)]]
+    }
+    return(d)
+  }
+
+  # Long layout: a year column. Repeat the final year's rows forward.
+  if("year" %in% names(d)) {
+    yrs <- suppressWarnings(as.integer(d[["year"]]))
+    if(all(is.na(yrs))) return(d)
+    if(max(yrs, na.rm = TRUE) == END) {
+      last_rows <- d[!is.na(yrs) & yrs == END, , drop = FALSE]
+      if(nrow(last_rows) > 0) {
+        added <- lapply(new_years, function(y) {
+          r <- last_rows
+          r[["year"]] <- if(is.integer(d[["year"]])) as.integer(y) else y
+          r
+        })
+        d <- dplyr::bind_rows(d, dplyr::bind_rows(added))
+      }
+    }
+  }
+  d
 }
 
 
