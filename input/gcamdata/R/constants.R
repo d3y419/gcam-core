@@ -27,15 +27,35 @@ HISTORICAL_YEARS        <- 1971:2021
 FINAL_HISTORICAL_YEAR   <- max(HISTORICAL_YEARS)
 
 # Future years for level 1 data processing, for the few chunks that
-# produce future data (e.g., population projections)
+# produce future data (e.g., population projections).
+# This is annual and is bounded by the underlying source data - the SSP database,
+# the HDDCDD climate projections and the hydro potential series all end in 2100 -
+# not by the model horizon, which may run past it (see MODEL_FUTURE_YEARS).
+# Model periods beyond this horizon are supplied by the post-2100 socioeconomic
+# extension in socioeconomics/post2100_socioeconomics.csv.
 FUTURE_YEARS            <- (max(HISTORICAL_YEARS)+1):2100
 
 # Calibrated periods in the model. Only level 2 chunks should reference these
 MODEL_BASE_YEARS        <- unique(c(1975, 1990, 2005, 2010, 2015, max(HISTORICAL_YEARS)))
 MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 
-# Future (not calibrated) model periods. Only level 2 chunks should reference these
-MODEL_FUTURE_YEARS      <- seq(2025, 2100, 5)
+# Future (not calibrated) model periods. Only level 2 chunks should reference these.
+#
+# The horizon runs past 2100 on a widening timestep: 5-yr to 2100, 10-yr to 2200,
+# 20-yr to 2300. GCAM supports a changing timestep natively - module_modeltime_L200
+# emits the <inter-year> entries that tell the C++ Modeltime where the step changes -
+# so no C++ change is required. The widening step is what keeps the added cost down;
+# a flat 5-yr step to 2300 would be 56 future periods instead of 31.
+#
+# To return to the standard 2100 horizon set modeltime.EXTEND_HORIZON to FALSE.
+# Nothing else needs changing: every downstream chunk keys off MODEL_FUTURE_YEARS.
+modeltime.EXTEND_HORIZON <- TRUE
+
+MODEL_FUTURE_YEARS      <- if(modeltime.EXTEND_HORIZON) {
+  c(seq(2025, 2100, 5), seq(2110, 2200, 10), seq(2220, 2300, 20))
+} else {
+  seq(2025, 2100, 5)
+}
 
 # Near-term alignment year for harmonizing drivers and parameters across model scenarios
 # E.g., results across SSPs in MODEL_SCENARIO_ALIGN_YEAR should be the same
@@ -46,7 +66,11 @@ if (min(MODEL_FUTURE_YEARS) <= max(HISTORICAL_YEARS)) {
   stop("ERROR: Model future years overlap historial years in constants.R")
 }
 
-if (!(all(MODEL_FUTURE_YEARS %in% FUTURE_YEARS))) {
+# Model future years falling inside the level 1 data horizon must be present in it.
+# Periods beyond max(FUTURE_YEARS) are legitimate - they are driven by the post-2100
+# socioeconomic extension rather than by the annual level 1 series - so they are
+# exempt from this check rather than being an error.
+if (!(all(MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS <= max(FUTURE_YEARS)] %in% FUTURE_YEARS))) {
   stop("ERROR: Model future years not present in future years in constants.R")
 }
 
