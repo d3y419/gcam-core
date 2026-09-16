@@ -12,3 +12,14 @@ Release*
 gas*.emk
 outFile*.csv
 debug*.xml
+
+# Ignore restart files and any backup copies of them
+restart*/
+
+# Ignore run logs and captured console output
+*.log
+gcam_run_*.txt
+
+# Ignore local BaseX client state
+.basex
+.basexhome
