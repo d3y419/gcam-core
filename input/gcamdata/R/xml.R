@@ -67,12 +67,16 @@ set_xml_file_helper <- function(xml, fq_name) {
 #' replaces the clone and silently drops whatever inputs it omits, which is fatal
 #' once an emissions driver references one of them.
 #'
-#' So everything is truncated at \code{modeltime.STANDARD_HORIZON_END} except the
-#' files listed in \code{modeltime.XML_POST2100_ALLOWED}, which carry quantities
-#' that are genuinely exogenous and must exist at every period.
-#' Even there, a table that adjusts energy technologies (see
-#' \code{modeltime.XML_POST2100_TRUNCATE_HEADERS}) is truncated, since a parsed
-#' post-2100 period replaces the clone with a bare technology.
+#' So only tables that create technology vintages - a \code{\{year\}period} step in
+#' their ModelInterface header, see \code{\link{xml_tech_period_headers}} - are
+#' truncated at \code{modeltime.STANDARD_HORIZON_END}. Every other per-period table
+#' is written to the horizon end: GCAM clones technologies forward but fills nothing
+#' else, so an unparsed post-2100 value on a resource, land leaf or demand reads as
+#' zero. Files in \code{modeltime.XML_POST2100_ALLOWED} keep even their technology
+#' periods, because those are complete definitions; a table named in
+#' \code{modeltime.XML_POST2100_TRUNCATE_HEADERS} is truncated even there, because it
+#' adjusts an energy technology and a parsed post-2100 period replaces the clone with
+#' a bare technology.
 #'
 #' @param data Tibble about to be written into an XML table.
 #' @param xml_file Target XML filename, used to match the allow list.
@@ -85,11 +89,36 @@ truncate_post_horizon <- function(data, xml_file, header = NULL) {
   if(!modeltime.EXTEND_HORIZON) return(data)
   if(is.null(xml_file) || !is.data.frame(data)) return(data)
   if(!"year" %in% names(data)) return(data)
-  # An allowed file may still carry tables that adjust energy technologies rather
-  # than define exogenous quantities; those are truncated regardless, because any
-  # parsed post-2100 period pre-empts the clone GCAM would otherwise make. See
-  # modeltime.XML_POST2100_TRUNCATE_HEADERS.
+
+  # Rule 1: only a table that creates technology vintages can pre-empt GCAM's
+  # clone, so only those are ever truncated. Everything else per-period is an
+  # exogenous quantity GCAM does not fill for itself (resource maxima, land ghost
+  # shares, elasticities, constraints, accounts) and must reach the horizon end.
+  # add_xml_data_generate_levels passes "<header>,<levels command>", so decide on
+  # the base name. A header the file does not know is truncated, not kept: a
+  # missed exogenous table costs a flat post-2100 value, a missed technology
+  # period costs the whole clone. Say so once so it can be added to the file.
+  base_header <- if(is.null(header)) NULL else sub(",.*$", "", header)
+  if(!is.null(base_header) && base_header %in% xml_year_headers()) {
+    if(!(base_header %in% xml_tech_period_headers())) {
+      return(data)
+    }
+  }
+  else {
+    key <- paste0("truncate_post_horizon_warned_", base_header)
+    if(is.null(getOption(key))) {
+      options(structure(list(TRUE), names = key))
+      warning("truncate_post_horizon: header ", if(is.null(base_header)) "<none>" else base_header,
+              " not in ModelInterface_headers.txt; truncating ", xml_file, " at ",
+              modeltime.STANDARD_HORIZON_END, " to be safe")
+    }
+  }
+
+  # Rule 2: an adjustment table is truncated even inside an allowed file. See
+  # modeltime.XML_POST2100_TRUNCATE_HEADERS for the case that found this.
   header_forces <- !is.null(header) && header %in% modeltime.XML_POST2100_TRUNCATE_HEADERS
+
+  # Rule 3: files whose technology periods are complete definitions keep them.
   if(!header_forces &&
      any(vapply(modeltime.XML_POST2100_ALLOWED,
                 function(p) grepl(p, xml_file, fixed = TRUE), logical(1)))) {
@@ -98,6 +127,39 @@ truncate_post_horizon <- function(data, xml_file, header = NULL) {
   yrs <- suppressWarnings(as.integer(data[["year"]]))
   data[is.na(yrs) | yrs <= modeltime.STANDARD_HORIZON_END, , drop = FALSE]
 }
+
+
+#' Headers whose XML path creates a technology vintage
+#'
+#' @details Read once from the ModelInterface header file and cached: every header
+#' whose path contains a \code{\{year\}period} step, i.e. whose rows become
+#' \code{<period year=...>} elements under a technology container. All such steps sit
+#' under technology-type parents (technology, stub-technology, AgProductionTechnology,
+#' intermittent-technology, resource-reserve-technology, food-storage-technology,
+#' UnmanagedLandTechnology, tranTechnology, backup-intermittent-technology).
+#' @return Character vector of header names.
+#' @author Claude Fable 5.1
+xml_tech_period_headers <- function() xml_header_index()$tech_period
+
+#' All header names known to the ModelInterface header file
+#' @return Character vector of header names.
+xml_year_headers <- function() xml_header_index()$all
+
+xml_header_index <- local({
+  cache <- NULL
+  function() {
+    if(is.null(cache)) {
+      hf <- system.file("extdata/mi_headers", "ModelInterface_headers.txt",
+                        package = "gcamdata")
+      lines <- readLines(hf, warn = FALSE)
+      lines <- lines[grepl("^[A-Za-z]", lines)]
+      nm <- trimws(sub(",.*$", "", lines))
+      cache <<- list(all = nm,
+                     tech_period = nm[grepl("{year}period", lines, fixed = TRUE)])
+    }
+    cache
+  }
+})
 
 
 #' Add a table to an XML pipeline to include for conversion to XML.

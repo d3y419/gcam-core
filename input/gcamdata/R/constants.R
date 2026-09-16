@@ -93,19 +93,25 @@ modeltime.HORIZON_EXTENSION_EXCLUDE <- c("socioeconomics/SSP/SSP_database")
 #                    timestep-dependent and cannot be cloned across a step change.
 #                    module_aglu_L113.ag_storage already computes it correctly as
 #                    timestep + lead(timestep); it just has to reach the XML.
+# Only tables that create technology vintages (a {year}period step in their
+# ModelInterface header) are truncated at all; see truncate_post_horizon. This list
+# exempts files whose technology periods are COMPLETE definitions that must exist at
+# every period (storage technologies whose lifetime equals the period span, the
+# macro labour technologies). Every other per-period table - population, national
+# accounts, resource maxima, land ghost shares, elasticities, constraints - is
+# written for every model year regardless, because GCAM clones technologies forward
+# but fills nothing else: a PeriodVector left unparsed past 2100 reads as zero.
 modeltime.XML_POST2100_ALLOWED <- c("modeltime", "socioeconomics", "HDDCDD", "ag_storage")
 
-# Tables truncated at modeltime.STANDARD_HORIZON_END even when their file is in
-# modeltime.XML_POST2100_ALLOWED. The allow list is for files that DEFINE exogenous
-# quantities at every period (population, GDP, degree days, storage technologies).
-# A table that ADJUSTS an existing energy technology must not be in it: a
-# <period year="2110"> written for, say, other industrial energy use / biomass
-# makes GCAM create that vintage from the adjustment alone - a bare technology
-# with an output-accounting and no inputs - and TechnologyContainer::completeInit
-# then finds the period present and never clones the 2100 vintage forward. That
-# is how the 2110 run lost every energy input and aborted in the emissions
-# driver. The clone carries mOutputs, so the 2100 output-accounting reaches 2300
-# without this table. Match is on the add_xml_data header. Empty vector disables.
+# Technology-period tables truncated even when their file is in
+# modeltime.XML_POST2100_ALLOWED, because they ADJUST an existing energy technology
+# rather than define one. A <period year="2110"> written for, say, other industrial
+# energy use / biomass makes GCAM build that vintage from the adjustment alone - a
+# bare technology with an output-accounting and no inputs - and
+# TechnologyContainer::completeInit then finds the period present and never clones
+# the 2100 vintage forward. That is how the 2110 run lost every energy input and
+# aborted in the emissions driver. The clone carries mOutputs, so the 2100
+# output-accounting reaches 2300 without this table. Empty vector disables.
 modeltime.XML_POST2100_TRUNCATE_HEADERS <- c("GlobalTechAccountOutputUseBasePrice")
 
 # Years at which post-2100 data is actually processed. Chunks carry values only at
