@@ -95,6 +95,19 @@ modeltime.HORIZON_EXTENSION_EXCLUDE <- c("socioeconomics/SSP/SSP_database")
 #                    timestep + lead(timestep); it just has to reach the XML.
 modeltime.XML_POST2100_ALLOWED <- c("modeltime", "socioeconomics", "HDDCDD", "ag_storage")
 
+# Tables truncated at modeltime.STANDARD_HORIZON_END even when their file is in
+# modeltime.XML_POST2100_ALLOWED. The allow list is for files that DEFINE exogenous
+# quantities at every period (population, GDP, degree days, storage technologies).
+# A table that ADJUSTS an existing energy technology must not be in it: a
+# <period year="2110"> written for, say, other industrial energy use / biomass
+# makes GCAM create that vintage from the adjustment alone - a bare technology
+# with an output-accounting and no inputs - and TechnologyContainer::completeInit
+# then finds the period present and never clones the 2100 vintage forward. That
+# is how the 2110 run lost every energy input and aborted in the emissions
+# driver. The clone carries mOutputs, so the 2100 output-accounting reaches 2300
+# without this table. Match is on the add_xml_data header. Empty vector disables.
+modeltime.XML_POST2100_TRUNCATE_HEADERS <- c("GlobalTechAccountOutputUseBasePrice")
+
 # Years at which post-2100 data is actually processed. Chunks carry values only at
 # these anchors rather than at all 15 post-2100 periods, which is what keeps the
 # extension from demanding a value from every assumption table at every decade.
