@@ -4,7 +4,7 @@
 \alias{approx_fun}
 \title{approx_fun}
 \usage{
-approx_fun(year, value, rule = 1)
+approx_fun(year, value, rule = 1, extend_horizon = modeltime.EXTEND_HORIZON)
 }
 \arguments{
 \item{year}{Numeric year, in a melted tibble or data frame}
@@ -12,6 +12,12 @@ approx_fun(year, value, rule = 1)
 \item{value}{Numeric value to interpolate}
 
 \item{rule}{Rule to use; 1 - linear interpolation, 2 = constant. see \code{\link{approx}}}
+
+\item{extend_horizon}{Hold the last known value forward past the end of the data
+instead of returning NA. Defaults to \code{modeltime.EXTEND_HORIZON}. Pass
+\code{FALSE} from a caller that means rule = 1 literally because it extrapolates
+the trailing NAs itself - \code{\link{fill_exp_decay_extrapolate}} does exactly
+that, and filling them here would flatten its decay curve.}
 }
 \value{
 Interpolated values.

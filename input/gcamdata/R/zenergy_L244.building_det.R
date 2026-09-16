@@ -2820,7 +2820,12 @@ module_energy_L244.building_det <- function(command, ...) {
     # Efficiency for consumer i = Regional average efficiency  * (GDP per capita for consumer i / Avergae regional GDP per capita)^elasticity
 
     # First, create the tibble with price elasticities
-    L244.PrElast.shell<-tibble(shell.year=c(min(MODEL_FUTURE_YEARS),max(MODEL_FUTURE_YEARS)),prelast=c(-0.07,-0.1)) %>%
+    # The comment above says "over the century", and anchoring the end of the ramp on
+    # max(MODEL_FUTURE_YEARS) only means that while the horizon ends in 2100. At 2300
+    # the same -0.07 to -0.1 swing is spread over 275 years instead of 75, which
+    # changes the elasticity in every year before 2100 too. Anchor it on the standard
+    # horizon end; approx_fun's extended-horizon fill holds -0.1 flat afterwards.
+    L244.PrElast.shell<-tibble(shell.year=c(min(MODEL_FUTURE_YEARS),min(modeltime.STANDARD_HORIZON_END,max(MODEL_FUTURE_YEARS))),prelast=c(-0.07,-0.1)) %>%
       complete(nesting(shell.year=MODEL_FUTURE_YEARS)) %>%
       mutate(prelast = if_else(is.na(prelast), approx_fun(shell.year, prelast, rule = 1), prelast)) %>%
       repeat_add_columns(tibble(region=unique(GCAM_region_names$region)))

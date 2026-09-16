@@ -119,7 +119,15 @@ module_aglu_L2042.resbio_input_irr_mgmt <- function(command, ...) {
         mutate(harvest.index = if_else(year>MODEL_YEARS[1],NA_real_,harvest.index)) %>%
         group_by(GCAM_region_ID) %>%
         arrange(year) %>%
-        mutate(harvest.index= if_else(year==tail(MODEL_FUTURE_YEARS,n=1),aglu.FOREST_HARVEST_INDEX,harvest.index),
+        # The harvest index ramps linearly from its first-model-year value to
+        # aglu.FOREST_HARVEST_INDEX. Anchoring that ramp on the last model year makes
+        # its slope a function of where the horizon ends: at 2300 the same rise is
+        # spread over 325 years instead of 125, which lowers every year in between,
+        # the calibration years included - 2021 falls 46%. Anchor it on the standard
+        # horizon end so the trajectory is identical to a 2100 run whatever the
+        # horizon is, and let approx_fun's extended-horizon fill hold it flat after.
+        # Set modeltime.EXTEND_HORIZON to FALSE and this reduces to the original line.
+        mutate(harvest.index= if_else(year==min(modeltime.STANDARD_HORIZON_END, tail(MODEL_FUTURE_YEARS,n=1)),aglu.FOREST_HARVEST_INDEX,harvest.index),
                harvest.index= if_else(is.na(harvest.index), approx_fun(year,harvest.index),harvest.index)) %>%
         ungroup()
     } # end add_bio_res_params_For_Mill_Forest

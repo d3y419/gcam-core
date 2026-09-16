@@ -152,6 +152,11 @@ fast_left_join <- function(left, right, by) {
 #' @param year Numeric year, in a melted tibble or data frame
 #' @param value Numeric value to interpolate
 #' @param rule Rule to use; 1 - linear interpolation, 2 = constant. see \code{\link{approx}}
+#' @param extend_horizon Hold the last known value forward past the end of the data
+#'   instead of returning NA. Defaults to \code{modeltime.EXTEND_HORIZON}. Pass
+#'   \code{FALSE} from a caller that means rule = 1 literally because it extrapolates
+#'   the trailing NAs itself - \code{\link{fill_exp_decay_extrapolate}} does exactly
+#'   that, and filling them here would flatten its decay curve.
 #' @details This was \code{gcam_interp} in the original data system.
 #' @return Interpolated values.
 #' @importFrom assertthat assert_that
@@ -159,7 +164,7 @@ fast_left_join <- function(left, right, by) {
 #' @examples
 #' df <- data.frame(year = 1:5, value = c(1, 2, NA, 4, 5))
 #' approx_fun(df$year, df$value, rule = 2)
-approx_fun <- function(year, value, rule = 1) {
+approx_fun <- function(year, value, rule = 1, extend_horizon = modeltime.EXTEND_HORIZON) {
   assert_that(is.numeric(year))
   assert_that(is.numeric(value))
 
@@ -179,7 +184,11 @@ approx_fun <- function(year, value, rule = 1) {
     # inside the series behave exactly as before, and the fill keys off year
     # rather than position because callers do not always arrange() first.
     # Inert when the horizon ends at 2100.
-    if(modeltime.EXTEND_HORIZON && length(out) > 1 && anyNA(out)) {
+    #
+    # A caller that extrapolates the trailing NAs itself must opt out with
+    # extend_horizon = FALSE, or this fill removes the very NAs it was going to
+    # work on. Set modeltime.EXTEND_HORIZON to FALSE to disable it everywhere.
+    if(extend_horizon && length(out) > 1 && anyNA(out)) {
       known <- which(!is.na(out))
       if(length(known) > 0) {
         last_known_year <- max(year[known])

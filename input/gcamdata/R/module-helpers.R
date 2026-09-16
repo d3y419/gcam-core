@@ -562,7 +562,11 @@ fill_exp_decay_extrapolate <- function(d, out_years, tech_colnames = c("supplyse
     # we must also arrange for consistency with the old complete behavior
     arrange(year, .by_group = TRUE) %>%
     # finally do the linearly interpolation between values which are specified
-    mutate(value = approx_fun(year, value, rule = 1)) ->
+    # extend_horizon = FALSE: the trailing NAs are what the exponential decay below
+    # extrapolates into. Letting approx_fun hold the last value forward instead
+    # leaves nothing to extrapolate, and the technology stays flat at its base-year
+    # value for the whole horizon.
+    mutate(value = approx_fun(year, value, rule = 1, extend_horizon = FALSE)) ->
     d
 
   # Rows in which improvement.max/rate is not specified should not be extrapolated,
