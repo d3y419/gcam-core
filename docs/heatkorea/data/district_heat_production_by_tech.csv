@@ -1,0 +1,100 @@
+year,type,fuel,EJ
+1990,boiler,biomass,0.0
+2005,boiler,biomass,0.006195
+2010,boiler,biomass,0.0161747
+2015,boiler,biomass,0.0158756
+2020,boiler,biomass,0.0
+2021,boiler,biomass,0.0183165
+2025,boiler,biomass,0.029526
+2030,boiler,biomass,0.030835
+2035,boiler,biomass,0.0294684
+2040,boiler,biomass,0.028223
+2045,boiler,biomass,0.025943
+2050,boiler,biomass,0.0232339
+2055,boiler,biomass,0.0211978
+2060,boiler,biomass,0.0194433
+2065,boiler,biomass,0.0181129
+2070,boiler,biomass,0.0169226
+2075,boiler,biomass,0.0157982
+2080,boiler,biomass,0.0147204
+2085,boiler,biomass,0.0138571
+2090,boiler,biomass,0.0129475
+2095,boiler,biomass,0.0121011
+2100,boiler,biomass,0.0113688
+1990,boiler,gas,0.0
+2005,boiler,gas,0.00428629
+2010,boiler,gas,0.00445391
+2015,boiler,gas,0.0015407
+2020,boiler,gas,0.0
+2021,boiler,gas,0.00301369
+2025,boiler,gas,0.0751627
+2030,boiler,gas,0.0729028
+2035,boiler,gas,0.0677287
+2040,boiler,gas,0.0610054
+2045,boiler,gas,0.0527831
+2050,boiler,gas,0.0476796
+2055,boiler,gas,0.0457015
+2060,boiler,gas,0.0431256
+2065,boiler,gas,0.0400765
+2070,boiler,gas,0.0369016
+2075,boiler,gas,0.0340407
+2080,boiler,gas,0.0316145
+2085,boiler,gas,0.0294455
+2090,boiler,gas,0.0276411
+2095,boiler,gas,0.0258854
+2100,boiler,gas,0.0242428
+1990,boiler,refined liquids,0.0
+2005,boiler,refined liquids,0.0225699
+2010,boiler,refined liquids,0.0122566
+2015,boiler,refined liquids,0.00391865
+2020,boiler,refined liquids,0.0
+2021,boiler,refined liquids,0.00170779
+2025,boiler,refined liquids,0.00489119
+2030,boiler,refined liquids,0.00399804
+2035,boiler,refined liquids,0.00381789
+2040,boiler,refined liquids,0.00339267
+2045,boiler,refined liquids,0.00287777
+2050,boiler,refined liquids,0.00246801
+2055,boiler,refined liquids,0.00216105
+2060,boiler,refined liquids,0.00200355
+2065,boiler,refined liquids,0.00183324
+2070,boiler,refined liquids,0.00165346
+2075,boiler,refined liquids,0.00148693
+2080,boiler,refined liquids,0.00133892
+2085,boiler,refined liquids,0.00120606
+2090,boiler,refined liquids,0.00107146
+2095,boiler,refined liquids,0.000953352
+2100,boiler,refined liquids,0.000863497
+1990,CHP,biomass,0.0
+2005,CHP,biomass,0.0
+2010,CHP,biomass,0.0
+2015,CHP,biomass,0.000334869
+2020,CHP,biomass,0.0
+2021,CHP,biomass,0.000418607
+2035,CHP,biomass,0.0
+2050,CHP,biomass,0.0
+2065,CHP,biomass,0.0
+2080,CHP,biomass,0.0
+2095,CHP,biomass,0.0
+1990,CHP,gas,0.0
+2005,CHP,gas,0.0432008
+2010,CHP,gas,0.057097
+2015,CHP,gas,0.0595647
+2020,CHP,gas,0.0
+2021,CHP,gas,0.0915075
+2035,CHP,gas,0.0
+2050,CHP,gas,0.0
+2065,CHP,gas,0.0
+2080,CHP,gas,0.0
+2095,CHP,gas,0.0
+1990,CHP,refined liquids,0.0
+2005,CHP,refined liquids,0.00581871
+2010,CHP,refined liquids,0.00489761
+2015,CHP,refined liquids,0.00184177
+2020,CHP,refined liquids,0.0
+2021,CHP,refined liquids,0.000125583
+2035,CHP,refined liquids,0.0
+2050,CHP,refined liquids,0.0
+2065,CHP,refined liquids,0.0
+2080,CHP,refined liquids,0.0
+2095,CHP,refined liquids,0.0

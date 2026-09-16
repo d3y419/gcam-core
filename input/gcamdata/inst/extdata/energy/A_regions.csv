@@ -32,7 +32,7 @@ GCAM_region_ID,region,tradbio_region,ethanol,biodiesel,biomassOil_tech,elect_td_
 25,South America_Northern,1,sugar cane ethanol,biodiesel,OilPalm,0.00075,0,D,gas_intensive
 26,South America_Southern,1,corn ethanol,biodiesel,Soybean,0.00075,0,D,gas_intensive
 27,South Asia,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E,coal_intensive
-28,South Korea,1,corn ethanol,biodiesel,Soybean,0.0001,0,D,gas_intensive
+28,South Korea,1,corn ethanol,biodiesel,Soybean,0.0001,1,D,gas_intensive
 29,Southeast Asia,1,sugar cane ethanol,biodiesel,OilPalm,0.00025,0,E,coal_intensive
 30,Taiwan,1,sugar cane ethanol,biodiesel,OilPalm,0.0001,0,D,gas_intensive
 31,Argentina,1,corn ethanol,biodiesel,Soybean,0.00075,0,D,gas_intensive
