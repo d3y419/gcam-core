@@ -9,9 +9,9 @@
 .drake/
 
 # Files produced by data system
-outputs/
+outputs*/
 xml*/
-sample-generator/outputs/
+sample-generator/outputs*/
 R/*.html
 Rplots.pdf
 
