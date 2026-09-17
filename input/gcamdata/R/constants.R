@@ -47,9 +47,13 @@ MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 # so no C++ change is required for the horizon itself. The widening step bounds the
 # cost; a flat 5-yr step to 2300 would be 56 future periods instead of 31.
 #
-# To return to the standard 2100 horizon set modeltime.EXTEND_HORIZON to FALSE.
-# Nothing else needs changing: every downstream chunk keys off MODEL_FUTURE_YEARS.
-modeltime.EXTEND_HORIZON <- TRUE
+# Off by default: a standard build is byte-identical to one without this feature
+# (verified by diffing every XML at or before 2100). To build the 2300 horizon set
+# the environment variable GCAM_EXTEND_HORIZON=TRUE before loading gcamdata - e.g.
+# Sys.setenv(GCAM_EXTEND_HORIZON = "TRUE") in the R session, or in .Renviron - so no
+# source edit is needed and the flag cannot be committed flipped by accident. Nothing
+# else needs changing: every downstream chunk keys off MODEL_FUTURE_YEARS.
+modeltime.EXTEND_HORIZON <- toupper(Sys.getenv("GCAM_EXTEND_HORIZON", "FALSE")) == "TRUE"
 
 MODEL_FUTURE_YEARS      <- if(modeltime.EXTEND_HORIZON) {
   c(seq(2025, 2100, 5), seq(2110, 2200, 10), seq(2220, 2300, 20))

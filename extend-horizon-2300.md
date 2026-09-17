@@ -4,6 +4,14 @@ What the 2300 horizon needs from the data system and the model, and what was
 learned making it work. Read alongside `gcamontology.md`; this file is specific to
 the horizon feature and lives with the feature, not in the ontology.
 
+## Building it
+
+`modeltime.EXTEND_HORIZON` is **off by default**; a default build is byte-identical to
+one without the feature. Set `GCAM_EXTEND_HORIZON=TRUE` in the environment before
+loading gcamdata (`Sys.setenv(GCAM_EXTEND_HORIZON = "TRUE")`, or `.Renviron`) to build
+the 2300 horizon. Then regenerate `input/extra/post2100_shrwt_interp.xml` from the
+built XML and run with a configuration that lists it.
+
 ## Design
 
 - Model periods stay dense: 5-year steps to 2100, 10-year 2100–2200, 20-year
