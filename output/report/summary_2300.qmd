@@ -1,0 +1,116 @@
+---
+title: "GCAM to 2300 — what was done, and a first look"
+format:
+  html:
+    toc: true
+    embed-resources: true
+    fig-width: 9
+    fig-height: 4.2
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+source("prep_data.R"); library(ggplot2); library(scales)
+ref <- load_scenario("../spotcheck_run3_scratch_zero_rates.csv", "../elecgen_ref.csv", "Reference")
+scen <- list(ref)
+if (file.exists("../spotcheck_nz.csv") && file.exists("../elecgen_nz.csv"))
+  scen[[2]] <- load_scenario("../spotcheck_nz.csv", "../elecgen_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200")
+clim <- load_climate("../climate_ref.csv", "../gcam-hector-outputstream-Reference.csv", "Reference")
+if (file.exists("../climate_nz.csv"))
+  clim <- bind_rows(clim, load_climate("../climate_nz.csv", "../gcam-hector-outputstream-NetZero.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200"))
+clim$metric <- factor(clim$metric, levels = c("CO2 concentration (ppm)", "Total radiative forcing (W/m2)",
+                                              "Global mean surface temperature (degC vs 1850-1900)", "Sea level rise (cm vs 1990)"))
+nonco2 <- load_nonco2("../nonco2_ref.csv", "Reference")
+if (file.exists("../nonco2_nz.csv")) nonco2 <- bind_rows(nonco2, load_nonco2("../nonco2_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200"))
+seq <- if (file.exists("../seq_nz.csv")) load_seq("../seq_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
+kaya <- bind_rows(lapply(scen, `[[`, "kaya")); pe <- bind_rows(lapply(scen, `[[`, "pe")); elec <- bind_rows(lapply(scen, `[[`, "elec"))
+pe$fuel <- factor(pe$fuel, levels = rev(fuel_levels)); elec$fuel <- factor(elec$fuel, levels = rev(fuel_levels))
+pal <- c(coal = "#2c2c2a", oil = "#5f5e5a", gas = "#888780", biomass = "#639922", hydro = "#378add",
+         nuclear = "#7f77dd", geothermal = "#993c1d", wind = "#1d9e75", solar = "#eda100")
+scen_col <- c("Reference" = "#2a78d6", "Net-zero CO2 2100, -10 GtCO2 by 2200" = "#eb6834")
+base <- function(p) p + geom_vline(xintercept = 2100, linetype = "dotted", colour = "grey55") +
+  scale_x_continuous(breaks = seq(2000, 2300, 50), limits = c(1990, 2300)) + theme_minimal(base_size = 12) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+kline <- function(y, lab) base(ggplot(kaya, aes(year, .data[[y]], colour = scenario)) + geom_line(linewidth = 1) +
+  scale_colour_manual(values = scen_col) + labs(x = NULL, y = lab, colour = NULL))
+```
+
+## What was done
+
+- **Horizon.** GCAM runs to 2300: 5-year steps to 2100, 10-year to 2200, 20-year to 2300 (37 periods). No C++ change; a local build was used only to diagnose.
+- **Drivers.** Population and GDP past 2100 follow RFF-SP percentiles matched to the SSP path (growth ratios relative to 2100); assumptions are held flat; resource depletion is endogenous.
+- **Rule.** gcamdata writes technology vintages only to 2100 (GCAM clones the last one forward) and every other per-year table to 2300 (GCAM fills nothing else). Files whose vintages are complete definitions are exempt; one adjustment table is truncated inside an exempt file; resource technical-change rates are zeroed past 2100 so cloned technology costs and resource costs are treated alike.
+- **Verification.** Data at or before 2100 is unchanged against a 2100-horizon build (worst calibration-year change 0.37 %, an `optim()` fit). The reference run from 1975 solves all 37 periods with no unsolved markets.
+- **Scope.** Feature branch `hcm/feat/extend-horizon-2300`, off by default (`GCAM_EXTEND_HORIZON=TRUE` selects it). Side project; not for the main branch.
+
+## Kaya identity
+
+```{r kaya, fig.height=7.5}
+kaya_long <- kaya %>%
+  transmute(scenario, year,
+            `Population (bn)` = pop_bn,
+            `GDP per capita (thousand 1990$)` = gdp_per_cap / 1e3,
+            `Primary energy / GDP (EJ per trn 1990$)` = energy_int,
+            `CO2 / primary energy (MtCO2 per EJ)` = carbon_int,
+            `CO2, fossil + industrial (GtCO2)` = co2_gt) %>%
+  pivot_longer(-c(scenario, year), names_to = "metric", values_to = "value") %>%
+  mutate(metric = factor(metric, levels = c("Population (bn)", "GDP per capita (thousand 1990$)",
+                                            "Primary energy / GDP (EJ per trn 1990$)", "CO2 / primary energy (MtCO2 per EJ)",
+                                            "CO2, fossil + industrial (GtCO2)")))
+base(ggplot(kaya_long, aes(year, value, colour = scenario)) + geom_line(linewidth = 1) +
+  facet_wrap(~metric, scales = "free_y", ncol = 2) + scale_colour_manual(values = scen_col) +
+  labs(x = NULL, y = NULL, colour = NULL, caption = "CO2 = population x GDP/capita x energy/GDP x CO2/energy. Dotted line: 2100, end of the standard horizon.") +
+  theme(strip.text = element_text(hjust = 0, face = "bold", size = 11), panel.spacing = unit(1.2, "lines")))
+```
+
+## Primary energy by fuel
+
+```{r pe, fig.height=4.5}
+base(ggplot(pe, aes(year, EJ, fill = fuel)) + geom_area(alpha = 0.95, colour = "white", linewidth = 0.15) +
+  scale_fill_manual(values = pal, breaks = fuel_levels) + facet_wrap(~scenario) + labs(x = NULL, y = "EJ", fill = NULL) + guides(fill = guide_legend(nrow = 1)))
+```
+
+## Electricity generation by technology
+
+```{r elec, fig.height=4.5}
+base(ggplot(elec, aes(year, EJ, fill = fuel)) + geom_area(alpha = 0.95, colour = "white", linewidth = 0.15) +
+  scale_fill_manual(values = pal, breaks = fuel_levels) + facet_wrap(~scenario) + labs(x = NULL, y = "EJ", fill = NULL) + guides(fill = guide_legend(nrow = 1)))
+```
+
+## Removals and the net GHG balance
+
+```{r netghg, fig.height=4.5}
+ghg <- kaya %>% select(scenario, year, co2_gt) %>%
+  inner_join(nonco2 %>% group_by(scenario, year) %>% summarise(nonco2_gt = sum(gt), .groups = "drop"), c("scenario", "year")) %>%
+  transmute(scenario, year, `CO2, fossil + industrial` = co2_gt, `Non-CO2 (AR5 GWP100)` = nonco2_gt, `Net GHG` = co2_gt + nonco2_gt) %>%
+  pivot_longer(-c(scenario, year), names_to = "series", values_to = "gt")
+base(ggplot(ghg, aes(year, gt, colour = scenario, linetype = series)) + geom_line(linewidth = 1) + geom_hline(yintercept = 0, colour = "grey40") +
+  scale_colour_manual(values = scen_col) + labs(x = NULL, y = "GtCO2e per year", colour = NULL, linetype = NULL,
+  caption = "Non-CO2 = CH4, N2O, HFCs, PFCs, SF6 at AR5 GWP100. Not capped, but GCAM's abatement-cost curves respond to the CO2 price, so they fall under the cap. LUC CO2 excluded. Net GHG = CO2 + non-CO2.") +
+  guides(colour = guide_legend(nrow = 2), linetype = guide_legend(nrow = 3)))
+```
+
+```{r seq, fig.height=4}
+if (!is.null(seq)) base(ggplot(seq %>% filter(year >= 2020), aes(year, gt, fill = sector)) + geom_area(alpha = 0.9) +
+  labs(x = NULL, y = "GtCO2 sequestered per year", fill = NULL, title = "Net-zero scenario: CO2 sequestration by sector",
+       caption = "Geologic storage by sector. DAC is not in this configuration; removals are BECCS in electricity, hydrogen, liquids and industry.") +
+  guides(fill = guide_legend(nrow = 1)))
+```
+
+## Climate (Hector)
+
+```{r climate, fig.height=6}
+base(ggplot(clim, aes(year, value, colour = scenario)) + geom_line(linewidth = 1) +
+  facet_wrap(~metric, scales = "free_y", ncol = 2) + scale_colour_manual(values = scen_col) +
+  labs(x = NULL, y = NULL, colour = NULL, caption = "Annual Hector 3.2 output. Sea level comes from Hector's output stream, which each run overwrites; the reference stream was overwritten and not regenerated. Hector's sea level is the Vermeer & Rahmstorf (2009) semi-empirical relation, extrapolated far beyond its calibration range.") +
+  theme(strip.text = element_text(hjust = 0, face = "bold", size = 11), panel.spacing = unit(1.2, "lines")))
+```
+
+```{r table}
+kaya %>% filter(year %in% c(2021, 2100, 2200, 2300)) %>%
+  transmute(scenario, year, `Population (bn)` = round(pop_bn, 2), `GDP (trn 1990$)` = round(gdp_trn, 0),
+            `Primary energy (EJ)` = round(pe_EJ, 0), `CO2 (Gt)` = round(co2_gt, 1)) %>% knitr::kable()
+```

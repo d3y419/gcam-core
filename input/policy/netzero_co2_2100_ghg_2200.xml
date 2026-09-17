@@ -1,0 +1,1157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+  <world>
+    <region name="Africa_Eastern">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Africa_Northern">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Africa_Southern">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Africa_Western">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Argentina">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Australia_NZ">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Brazil">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Canada">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Central America and Caribbean">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Central Asia">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="China">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Colombia">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="EU-12">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="EU-15">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Europe_Non_EU">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="European Free Trade Association">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="India">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Indonesia">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Japan">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Mexico">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Middle East">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Pakistan">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Russia">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="South Africa">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="South America_Northern">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="South America_Southern">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="South Asia">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="South Korea">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Southeast Asia">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Taiwan">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="USA">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+    <region name="Ukraine">
+      <ghgpolicy name="CO2"><market>global</market>
+        <constraint year="2030">10181.8</constraint>
+        <constraint year="2035">9454.5</constraint>
+        <constraint year="2040">8727.3</constraint>
+        <constraint year="2045">8000.0</constraint>
+        <constraint year="2050">7272.7</constraint>
+        <constraint year="2055">6545.5</constraint>
+        <constraint year="2060">5818.2</constraint>
+        <constraint year="2065">5090.9</constraint>
+        <constraint year="2070">4363.6</constraint>
+        <constraint year="2075">3636.4</constraint>
+        <constraint year="2080">2909.1</constraint>
+        <constraint year="2085">2181.8</constraint>
+        <constraint year="2090">1454.5</constraint>
+        <constraint year="2095">727.3</constraint>
+        <constraint year="2100">-2.7</constraint>
+        <constraint year="2110">-272.7</constraint>
+        <constraint year="2120">-545.5</constraint>
+        <constraint year="2130">-818.2</constraint>
+        <constraint year="2140">-1090.9</constraint>
+        <constraint year="2150">-1363.6</constraint>
+        <constraint year="2160">-1636.4</constraint>
+        <constraint year="2170">-1909.1</constraint>
+        <constraint year="2180">-2181.8</constraint>
+        <constraint year="2190">-2454.5</constraint>
+        <constraint year="2200">-2727.3</constraint>
+        <constraint year="2220">-2727.3</constraint>
+        <constraint year="2240">-2727.3</constraint>
+        <constraint year="2260">-2727.3</constraint>
+        <constraint year="2280">-2727.3</constraint>
+        <constraint year="2300">-2727.3</constraint>
+      </ghgpolicy>
+      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
+    </region>
+  </world>
+</scenario>

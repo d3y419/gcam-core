@@ -85,3 +85,91 @@ may not be written past 2100:
 - Carrying inputs forward in C++ (`FunctionUtils::copyInputParamsForward`).
 - Finding the vintage creator by reading code; instrument `Technology::copy` with
   object addresses and list `mVintages` at `completeInit` entry instead.
+
+## Net-zero scenario (`input/policy/netzero_co2_2100_ghg_2200.xml`)
+
+CO2-only global cap (`ghgpolicy CO2`, MtC): anchored at 40,000 MtCO2 in 2025, linear to 0 in
+2100, then linearly to minus the reference non-CO2 CO2e in 2200 (-21.2 Gt, SAR GWPs via the
+demand-adjusts in `linked_ghg_policy.xml`), tracking -nonCO2_ref(t) to 2300. Non-CO2 gases are
+neither capped nor priced (approximate net-zero GHG, by design). `CO2_FUG` linked 1/1;
+`CO2_LUC` outside the cap (demand-adjust 0) with a small price-adjust 0.01 (TODO arbitrary).
+Includes `negative_emissions_budget.xml`. Generator: `gen_netzero_policy.py` (scratchpad,
+to be committed with the scenario). Runs from 1975: adding markets invalidates restart files.
+
+**Lesson - never write a cap that only grazes the reference.** The first launch wrote a 2025
+constraint of 40,000 MtCO2 against reference emissions of 39,958. The CO2 market went
+degenerate (supply 10,909 > demand 10,783 MtC yet price stuck at 17.9 $/tC: demand is flat
+near zero price and the solver cannot find the zero) and dragged 1,037 markets into a
+Part-1 non-solve at 2025 with 3,189 iterations. Fix: omit the constraint for that year
+(market unsolved, price 0) and let the first written cap bind clearly (2030: 37.3 vs 41.1 Gt,
+-9%). Signature: `Tax, globalCO2` row in the unsolved list with supply > demand and a
+positive price; hundreds of unrelated resource markets at 1-50% RED.
+
+**Lesson - a net-negative cap collides with the negative-emissions budget.** The budget
+(`negative_emissions_budget.xml`, `negative-emiss-budget-fraction` = 1 % of GDP, a single
+scalar per region: supply = fraction x GDP) was slack until 2095, then bound from 2100 on as
+the cap went negative. The CO2 price ran 653 $/tC (2100) -> 1198 (2150) -> 2272 (2160) ->
+3564 (2170); at 2170 subsidy demand exceeded the budget by 13 % and 942 markets failed.
+Fix for this scenario: `input/extra/neg_emiss_budget_fraction_5pct.xml` (generator next to
+it; 0.05 is arbitrary, TODO). Unchanged before 2095 because the 1 % budget was slack there.
+Read CO2/budget market prices per period from the debug XML (`<market name="globalCO2">`),
+the main log only prints unsolved markets.
+
+**Final design (user, 2026-09-17 23:40):** AR5 GWP100 for the residual non-CO2 (CH4 28,
+N2O 265, all HFCs/PFCs/SF6), budget kept at 1 % of GDP, cap floor -10 GtCO2 (0 in 2100 ->
+-10 Gt in 2200, flat after), residual non-CO2 taken from a net-zero run's own nonCO2 query
+(`output/nonco2_nz.csv`), not the reference. Generator lives in
+`input/policy/gen_netzero_policy.py`. The 5 %-budget run is only a proxy to harvest that
+non-CO2 (its outputs kept as `*_b5.csv`, `summary_2300_b5.html`); its database is deleted.
+Residual non-CO2 (reference, AR5) is ~27 GtCO2e in 2100-2300, so with the -10 Gt floor
+net GHG stays ~+17 GtCO2e: "approximate" by design.
+
+**Macro (KLEAM) off for the net-zero run (user, 2026-09-18).** Fixed-GDP mode keeps every
+macro trial/tracking market (per-region TFP solve, `energy net export`, `energy service`,
+`capital`) alive; they dominated the post-2100 failing lists. Off = comment out only
+`<Value name="macro">socioeconomics_macro.xml`; keep `FixedGDP-Path=1` (the code aborts
+otherwise) and KEEP `capital_Ag` (`ag_capital_tracking.xml`): it is a plain `Capital_Ag`
+supply sector that `ag_input_laborcapital_IRR_MGMT.xml` feeds; removing it floods main_log
+(742 MB by 1990) with "Called for price of non-existent market Capital_Ag". Solver for this
+scenario: `input/solution/cal_broyden_config_2x.xml` (all iteration budgets doubled).
+Second macro-off trap: `socioeconomics_CORE.xml` defines a `Labor_Materials` resource per
+region whose only demand is the macro materials sector. Without macro it has supply and zero
+demand; it is an *unsolvable* market, but `SolutionInfoSet::isAllSolved()` also requires
+unsolvable markets to be cleared, so EVERY period is reported unsolved after exhausting the
+full iteration budget (1990: 2004 iterations, Part 1 empty, Part 2 = 32 Labor_Materials).
+Fix: `input/extra/delete_labor_materials.xml` (`<resource name="Labor_Materials" delete="1"/>`
+per region), read after socioeconomics_CORE.xml. `Labor_Ag` is fine (ag/animal inputs demand it).
+Third macro-off trap (the decisive one): every technology's capital cost is scaled by
+`SectorUtils::calcPriceRatio()` of its tracking market (`capital-energy`, `capital-ag`,
+`consumer durable`; ~155,000 `<tracking-market>` references), which the macro file links to the
+solved `capital` market (price = interest rate; reference 0.12 in 2021 -> 0.087 (2050) -> 0.084
+(2100) -> 0.049 (2300)). Without the market the ratio is 0/0 = NaN: calibration periods pass
+(ratio forced to 1), 2030 never converges and main_log grows GBs of "non-existent market
+capital-energy". So macro-on with fixed GDP is NOT results-neutral: the falling interest rate
+cuts capital costs ~30 % by 2050 and ~60 % by 2300 relative to base-year financing.
+Macro-off recipe = `input/extra/macro_off.xml` (delete Labor_Materials + fixed-price 0.1
+ghgpolicy markets for the three tracking names -> ratio exactly 1) + drop the macro Value +
+keep FixedGDP-Path=1 + keep capital_Ag. Compare macro-off only with macro-off: the reference
+is re-run that way (`exe_ref/configuration_2300_ref_nomacro.xml`, DB
+`database_basexdb_2300full_nomacro`, CSVs `*_ref_nomacro.csv`). Two gcam.exe in parallel need
+separate working dirs (shared logs/ otherwise); `exe_ref/` holds a copy of gcam.exe + dlls +
+XMLDBDriver + log_conf.
+
+**Zero-cap artefact and its proper fix.** Solved = relative excess demand |ED|/max(|demand|, 1e-6)
+< tolerance (0.001), unless |ED| < the absolute `solution-floor` (default 0.0001 in market units).
+A cap of exactly 0 therefore reads 100 % unsolved for any residual (-0.0017 MtC at 2100). Two
+fixes: write the cap as -10 MtCO2 (done in the generator), or set a per-market floor in the solver
+config: `<solution-floor fillout="1" good="CO2" market-type="Tax" period="1">1</solution-floor>`
+inside `<solution-info-param-parser>` (added to cal_broyden_config_2x.xml; effective from the next
+run). No C++ change needed. The same ratio explains large % on near-zero trial-value markets
+(energy net export).
+
+**Scale-aware convergence rule (C++) - PINNED FOR LATER as a separate branch off master (user 2026-09-18). Patch saved at C:\gcam\patches\scale_aware_relative_ed.patch; source reverted on this branch.** `SolutionInfo::getRelativeED()`
+now divides |ED| by `getScale()` = max(|D_t|, |S_t|, |D_{t-1}|, |S_{t-1}|) of the same market
+(`mPeriod` set from `SolutionInfoSet::init`), instead of |D_t| alone. Removes the
+small-denominator failure class (zero cap, phased-out fuel, balanced trade account) without
+per-market floors. Trade-off: a market that shrinks 90 % in one period is judged against its
+previous size, so a residual of 5 % of last period's volume counts as solved. Files:
+solution_info.h/.cpp, solution_info_set.cpp. Built with `build_gcam_scale.bat` into
+`exe/Release_scale/` (exe/gcam.exe is locked while a run is going); copy over after the run.
+Validate: reference run must reproduce results within tolerance; net-zero 2100 with cap 0 solves.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModelInterfaceBatch>
+    <class name="ModelInterface.ModelGUI2.DbViewer">
+        <command name="XMLDB Batch File">
+            <queryFile>C:\gcam\gcam-core9\output\queries\climate_queries.xml</queryFile>
+            <outFile>../output/climate_nz.csv</outFile>
+            <xmldbLocation>../output/database_basexdb_2300nz</xmldbLocation>
+        </command>
+    </class>
+</ModelInterfaceBatch>

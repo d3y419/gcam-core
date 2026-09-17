@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queries>
+  <aQuery>
+    <all-regions/>
+    <ClimateQuery title="CO2 concentrations">
+      <axis1 name="CO2-concentration">none</axis1>
+      <axis2 name="Year">CO2-concentration[@year]</axis2>
+      <xPath buildList="true" dataName="CO2-concentration" group="false" sumAll="false">climate-model/CO2-concentration/text()</xPath>
+      <comments/>
+    </ClimateQuery>
+  </aQuery>
+  <aQuery>
+    <all-regions/>
+    <ClimateQuery title="total climate forcing">
+      <axis1 name="forcing-total">none</axis1>
+      <axis2 name="Year">forcing-total[@year]</axis2>
+      <xPath buildList="true" dataName="forcing-total" group="false" sumAll="false">climate-model/forcing-total/text()</xPath>
+      <comments/>
+    </ClimateQuery>
+  </aQuery>
+  <aQuery>
+    <all-regions/>
+    <ClimateQuery title="global mean temperature">
+      <axis1 name="temperature">none</axis1>
+      <axis2 name="Year">global-mean-surface-temperature[@year]</axis2>
+      <xPath buildList="true" dataName="global-mean-temperature" group="false" sumAll="false">climate-model/global-mean-surface-temperature/text()</xPath>
+      <comments/>
+    </ClimateQuery>
+  </aQuery>
+</queries>
