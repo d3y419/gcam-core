@@ -38,6 +38,15 @@ may not be written past 2100:
    bare periods into the global technology database from `socioeconomics_macro.xml`).
 5. `add_xml_data_generate_levels` passes `"<header>,<command>"`; decide on the base
    name. An unknown header is truncated, with a one-time warning.
+6. **No trend past 2100** (`zero_rates_post_horizon`,
+   `modeltime.XML_POST2100_ZERO_RATE_HEADERS`): resource `techChange` is written with
+   `fillout` at its last specified year (2005 for fossil reserves: 0.75 %/yr oil and
+   gas, 0.5 %/yr coal) and would compound for two extra centuries while cloned
+   technology costs stay frozen. Explicit zero rows at every model year past 2100
+   override the fillout. Levels are held; only listed rates are zeroed.
+   *Not covered:* rates inside technology periods ride the clone — `agProdChange` is
+   already 0 at 2100 in the data; MAC-curve `tech-change` (`fillout` at 2030,
+   0.17–0.25 %/yr) is not, and keeps compounding.
 
 ## Failure signatures and what they mean
 

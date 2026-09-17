@@ -24,3 +24,16 @@ test_that("only technology-period tables are truncated past the standard horizon
   # unknown header: truncated, with a warning
   expect_warning(expect_equal(n("x.xml", "NotARealHeader"), 1))
 })
+
+test_that("resource rate tables are zeroed past the standard horizon", {
+  skip_if_not(modeltime.EXTEND_HORIZON, "horizon not extended")
+  d <- tibble::tibble(region = c("USA", "USA", "China"), resource = "crude oil", subresource = "crude oil",
+                      year.fillout = c(1975L, 2005L, 2005L), techChange = c(0.005, 0.0075, 0.0075))
+  later <- MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS > modeltime.STANDARD_HORIZON_END]
+  z <- zero_rates_post_horizon(d, "RsrcTechChange")
+  expect_equal(nrow(z), nrow(d) + 2 * length(later))
+  expect_true(all(z$techChange[z$year.fillout > modeltime.STANDARD_HORIZON_END] == 0))
+  expect_identical(z[z$year.fillout <= modeltime.STANDARD_HORIZON_END, ], d)
+  # levels are left alone
+  expect_identical(zero_rates_post_horizon(d, "GrdRenewRsrcMaxNoFillOut"), d)
+})

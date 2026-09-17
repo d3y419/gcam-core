@@ -129,6 +129,44 @@ truncate_post_horizon <- function(data, xml_file, header = NULL) {
 }
 
 
+#' Zero a rate table past the standard horizon end
+#'
+#' @details For headers in \code{modeltime.XML_POST2100_ZERO_RATE_HEADERS}: drop any
+#' rows past \code{modeltime.STANDARD_HORIZON_END}, then append one row per later
+#' model year for every key combination, copied from that key's last row with the
+#' rate column set to 0. Written with the table's own year column, so a
+#' \code{year.fillout} header emits \code{fillout="1"} and the zero holds to the
+#' horizon end. Inert unless the horizon is extended. The rate column is the last
+#' column of the header's \code{LEVEL2_DATA_NAMES} entry.
+#' @param data Tibble about to be written into an XML table.
+#' @param header The add_xml_data header (base name is used).
+#' @return \code{data}, with zero-rate rows appended if the header qualifies.
+#' @author Claude Fable 5.1
+zero_rates_post_horizon <- function(data, header = NULL) {
+  if(!modeltime.EXTEND_HORIZON || is.null(header) || !is.data.frame(data)) return(data)
+  base_header <- sub(",.*$", "", header)
+  if(!(base_header %in% modeltime.XML_POST2100_ZERO_RATE_HEADERS)) return(data)
+  cols <- LEVEL2_DATA_NAMES[[base_header]]
+  year_col <- grep("^year", cols, value = TRUE)[1]
+  rate_col <- cols[length(cols)]
+  if(is.na(year_col) || !all(c(year_col, rate_col) %in% names(data))) return(data)
+
+  END <- modeltime.STANDARD_HORIZON_END
+  later <- MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS > END]
+  if(length(later) == 0) return(data)
+
+  yrs <- suppressWarnings(as.integer(data[[year_col]]))
+  keep <- data[is.na(yrs) | yrs <= END, , drop = FALSE]
+  key_cols <- setdiff(names(keep), c(year_col, rate_col))
+  last <- keep[order(suppressWarnings(as.integer(keep[[year_col]]))), , drop = FALSE]
+  last <- last[!duplicated(last[key_cols], fromLast = TRUE), , drop = FALSE]
+  zero <- last[rep(seq_len(nrow(last)), each = length(later)), , drop = FALSE]
+  zero[[year_col]] <- if(is.integer(data[[year_col]])) as.integer(rep(later, times = nrow(last))) else rep(later, times = nrow(last))
+  zero[[rate_col]] <- 0
+  dplyr::bind_rows(keep, zero)
+}
+
+
 #' Headers whose XML path creates a technology vintage
 #'
 #' @details Read once from the ModelInterface header file and cached: every header
@@ -188,6 +226,7 @@ add_xml_data <- function(dot, data, header, column_order_lookup = header) {
   }
 
   data <- truncate_post_horizon(data, dot$xml_file, header)
+  data <- zero_rates_post_horizon(data, header)
 
   curr_table <- list(data = data, header = header)
   dot$data_tables[[length(dot$data_tables)+1]] <- curr_table

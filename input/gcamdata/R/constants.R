@@ -114,6 +114,21 @@ modeltime.XML_POST2100_ALLOWED <- c("modeltime", "socioeconomics", "HDDCDD", "ag
 # output-accounting reaches 2300 without this table. Empty vector disables.
 modeltime.XML_POST2100_TRUNCATE_HEADERS <- c("GlobalTechAccountOutputUseBasePrice")
 
+# Rate tables set to zero past modeltime.STANDARD_HORIZON_END: "no trend past 2100".
+# Resource techChange is written with fillout at its last specified year (2005 for
+# fossil reserves, 0.75%/yr oil and gas, 0.5%/yr coal), so without this it compounds
+# for the whole extended horizon while cloned technology costs stay frozen at their
+# 2100 values - extraction gets ~4x cheaper by 2300 against fixed capital costs, and
+# the fuel mix tilts to fossil for no reason but the asymmetry. An explicit zero row
+# at every model year past the horizon end overrides the fillout. Levels (population,
+# accounts, resource maxima) are held; only rates listed here are zeroed. Rates that
+# live inside technology periods (agProdChange, MAC tech-change) are carried by the
+# clone instead: agProdChange is already 0 at 2100 in the data; MAC tech-change is
+# not covered. Empty vector disables. TODO: arbitrary - "no trend" is one defensible
+# choice for an unobserved future; a decaying rate is another.
+modeltime.XML_POST2100_ZERO_RATE_HEADERS <- c("RsrcTechChange", "RenewRsrcTechChange",
+                                              "SmthRenewRsrcTechChange")
+
 # Years at which post-2100 data is actually processed. Chunks carry values only at
 # these anchors rather than at all 15 post-2100 periods, which is what keeps the
 # extension from demanding a value from every assumption table at every decade.
