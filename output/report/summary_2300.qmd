@@ -18,15 +18,18 @@ ref <- load_scenario("../spotcheck_run3_scratch_zero_rates.csv", "../elecgen_ref
 scen <- list(ref)
 if (file.exists("../spotcheck_nz.csv") && file.exists("../elecgen_nz.csv"))
   scen[[2]] <- load_scenario("../spotcheck_nz.csv", "../elecgen_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200")
-clim <- load_climate("../climate_ref.csv", "../gcam-hector-outputstream-Reference.csv", "Reference")
+co2p <- if (file.exists("../co2price_nz.csv")) load_co2price("../co2price_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
+clim <- load_climate("../climate_ref.csv", NULL, "Reference")
 if (file.exists("../climate_nz.csv"))
-  clim <- bind_rows(clim, load_climate("../climate_nz.csv", "../gcam-hector-outputstream-NetZero.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200"))
+  clim <- bind_rows(clim, load_climate("../climate_nz.csv", NULL, "Net-zero CO2 2100, -10 GtCO2 by 2200"))
+if (!is.null(co2p))   # CO2 price panel: reference has no carbon market (0)
+  clim <- bind_rows(clim, clim %>% distinct(scenario, year) %>% filter(year %in% co2p$year) %>% left_join(co2p, c("scenario", "year")) %>%
+                      transmute(year, metric = "CO2 price (1990$/tC)", value = coalesce(co2_price, 0), scenario))
 clim$metric <- factor(clim$metric, levels = c("CO2 concentration (ppm)", "Total radiative forcing (W/m2)",
-                                              "Global mean surface temperature (degC vs 1850-1900)", "Sea level rise (cm vs 1990)"))
+                                              "Global mean surface temperature (degC vs 1850-1900)", "CO2 price (1990$/tC)"))
 nonco2 <- load_nonco2("../nonco2_ref.csv", "Reference")
 if (file.exists("../nonco2_nz.csv")) nonco2 <- bind_rows(nonco2, load_nonco2("../nonco2_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200"))
 seq <- if (file.exists("../seq_nz.csv")) load_seq("../seq_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
-co2p <- if (file.exists("../co2price_nz.csv")) load_co2price("../co2price_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
 kaya <- bind_rows(lapply(scen, `[[`, "kaya")); pe <- bind_rows(lapply(scen, `[[`, "pe")); elec <- bind_rows(lapply(scen, `[[`, "elec"))
 pe$fuel <- factor(pe$fuel, levels = rev(fuel_levels)); elec$fuel <- factor(elec$fuel, levels = rev(fuel_levels))
 pal <- c(coal = "#2c2c2a", oil = "#5f5e5a", gas = "#888780", biomass = "#639922", hydro = "#378add",
@@ -58,15 +61,12 @@ kaya_long <- kaya %>%
             `CO2 / primary energy (MtCO2 per EJ)` = carbon_int,
             `CO2, fossil + industrial (GtCO2)` = co2_gt) %>%
   pivot_longer(-c(scenario, year), names_to = "metric", values_to = "value") %>%
-  bind_rows(kaya %>% distinct(scenario, year) %>% left_join(co2p, c("scenario", "year")) %>%
-              transmute(scenario, year, metric = "CO2 price (1990$/tC)", value = coalesce(co2_price, 0))) %>%
   mutate(metric = factor(metric, levels = c("Population (bn)", "GDP per capita (thousand 1990$)",
                                             "Primary energy / GDP (EJ per trn 1990$)", "CO2 / primary energy (MtCO2 per EJ)",
-                                            "CO2, fossil + industrial (GtCO2)", "CO2 price (1990$/tC)")))
+                                            "CO2, fossil + industrial (GtCO2)")))
 base(ggplot(kaya_long, aes(year, value, colour = scenario)) + geom_line(linewidth = 1) +
   facet_wrap(~metric, scales = "free_y", ncol = 2) + scale_colour_manual(values = scen_col) +
-  labs(x = NULL, y = NULL, colour = NULL, caption = "CO2 = population x GDP/capita x energy/GDP x CO2/energy. Dotted line: 2100, end of the standard horizon.
-CO2 price: global cap market, GCAM native 1990$/tC (x 12/44 for $/tCO2; x ~2.1 for 2020$). Reference has no carbon market.") +
+  labs(x = NULL, y = NULL, colour = NULL, caption = "CO2 = population x GDP/capita x energy/GDP x CO2/energy. Dotted line: 2100, end of the standard horizon.") +
   theme(strip.text = element_text(hjust = 0, face = "bold", size = 11), panel.spacing = unit(1.2, "lines")))
 ```
 
@@ -99,17 +99,21 @@ base(ggplot(ghg, aes(year, gt, colour = scenario, linetype = series)) + geom_lin
 
 ```{r seq, fig.height=4}
 if (!is.null(seq)) base(ggplot(seq %>% filter(year >= 2020), aes(year, gt, fill = sector)) + geom_area(alpha = 0.9) +
-  labs(x = NULL, y = "GtCO2 sequestered per year", fill = NULL, title = "Net-zero scenario: CO2 sequestration by sector",
-       caption = "Geologic storage by sector. DAC is not in this configuration; removals are BECCS in electricity, hydrogen, liquids and industry.") +
+  labs(x = NULL, y = "GtCO2 sequestered per year", fill = NULL, title = "Net-zero scenario: CO2 captured and stored, by sector",
+       caption = "Geologic storage by sector. Fossil-feedstock carbon stored in products (GCAM 'feedstocks' sectors) is excluded: product accounting, not removal.") +
   guides(fill = guide_legend(nrow = 1)))
 ```
 
 ## Climate (Hector)
 
 ```{r climate, fig.height=6}
-base(ggplot(clim, aes(year, value, colour = scenario)) + geom_line(linewidth = 1) +
+guides_t <- data.frame(metric = factor("Global mean surface temperature (degC vs 1850-1900)", levels = levels(clim$metric)), y = c(1.5, 2.0))
+base(ggplot(clim, aes(year, value, colour = scenario)) +
+  geom_hline(data = guides_t, aes(yintercept = y), colour = "grey30", linewidth = 0.7, linetype = "longdash") +
+  geom_text(data = guides_t, aes(x = 1992, y = y, label = paste0(y, "°C")), inherit.aes = FALSE, hjust = 0, vjust = -0.4, size = 3.3, colour = "grey30") +
+  geom_line(linewidth = 1) +
   facet_wrap(~metric, scales = "free_y", ncol = 2) + scale_colour_manual(values = scen_col) +
-  labs(x = NULL, y = NULL, colour = NULL, caption = "Annual Hector 3.2 output. Sea level comes from Hector's output stream, which each run overwrites; the reference stream was overwritten and not regenerated. Hector's sea level is the Vermeer & Rahmstorf (2009) semi-empirical relation, extrapolated far beyond its calibration range.") +
+  labs(x = NULL, y = NULL, colour = NULL, caption = "Hector 3.2 annual output. CO2 price in GCAM native 1990$/tC (x 12/44 for $/tCO2, x ~2.1 for 2020$); the reference has no carbon market.") +
   theme(strip.text = element_text(hjust = 0, face = "bold", size = 11), panel.spacing = unit(1.2, "lines")))
 ```
 

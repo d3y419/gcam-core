@@ -15,12 +15,22 @@ import csv, collections, re, sys
 # Default source is the REFERENCE run: both net-zero proxy runs collapsed after 2170 (deep cap), so no
 # usable net-zero non-CO2 exists yet. It does not matter for the cap: the AR5 residual (~27 GtCO2e)
 # is far above CAP_FLOOR_MTCO2, so the floor binds either way. Pass a net-zero nonCO2 CSV as argv[1].
-NONCO2_CSV = sys.argv[1] if len(sys.argv) > 1 else r"C:\gcam\gcam-core9\output\nonco2_ref.csv"
+NONCO2_CSV = next((a for a in sys.argv[1:] if not a.startswith("--")), None) or r"C:\gcam\gcam-core9\output\nonco2_ref.csv"
 OUT = r"C:\gcam\gcam-core9\input\policy\netzero_co2_2100_ghg_2200.xml"
 TEMPLATE = r"C:\gcam\gcam-core9\input\policy\linked_ghg_policy.xml"   # region list only
 CAP_2025_MTCO2 = 40000.0       # ~ reference 2025 fossil+industrial CO2 (40.0 Gt); ramp anchor only
 CAP_FLOOR_MTCO2 = 10000.0      # cap never below -10 GtCO2 (user choice; the 1 %-of-GDP negative-
                                # emissions budget could not pay for -15 Gt: CO2 price 3564 $/tC, 2170 unsolved)
+# Post-2100 instrument (user 2026-09-18): a quantity cap gives a saw-tooth CO2 price (654 -> 498 -> 931 -> 605
+# $/tC) because the tightening rate changes at 2100 and 2200, and fossil fuels creep back at each relief.
+# Instead: cap to 2100 (net-zero CO2), then a FIXED TAX rising linearly from the 2100 solved price
+# (--p2100, read from a stop-year-2100 run) to TAX_2300 in 2300. GHGPolicy uses the constraint where
+# present and the fixed tax elsewhere; tax years between 2110 and 2300 are written explicitly.
+# Without --p2100 the file carries the cap only (stage 1). Units: GCAM native 1990$/tC.
+TAX_2300 = 800.0               # user: "linearly increasing CO2 price to reach ~$800 by 2300" (1990$/tC)
+P2100 = None
+for a in sys.argv[1:]:
+    if a.startswith("--p2100="): P2100 = float(a.split("=")[1])
 LUC_PRICE_ADJUST = 0.01        # TODO: arbitrary - GCAM's ghg_link_global.xml default; user asked for "a small price adjust"
 C_PER_CO2 = 12.0 / 44.0
 # AR5 GWP100. GCAM units: CH4, N2O in Tg (-> MtCO2e = Tg x GWP); F-gases in Gg (-> Gg x GWP / 1000).
@@ -61,8 +71,11 @@ out = ['<?xml version="1.0" encoding="UTF-8"?>', '<scenario>', '  <world>']
 for reg in regions:
     out.append('    <region name="%s">' % reg)
     out.append('      <ghgpolicy name="CO2"><market>global</market>')
-    for y in p1 + p2 + p3:
+    for y in p1:
         out.append('        <constraint year="%d">%.1f</constraint>' % (y, cap[y] * C_PER_CO2))
+    if P2100 is not None:
+        for y in p2 + p3:
+            out.append('        <fixedTax year="%d">%.2f</fixedTax>' % (y, P2100 + (TAX_2300 - P2100) * (y - 2100) / 200.0))
     out.append('      </ghgpolicy>')
     out.append('      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>')
     out.append('      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">%s</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>' % LUC_PRICE_ADJUST)
@@ -70,4 +83,5 @@ for reg in regions:
 out += ['  </world>', '</scenario>', '']
 open(OUT, "w", encoding="utf-8").write("\n".join(out))
 print("wrote", OUT, "regions:", len(regions))
-print("cap path (MtCO2):", " ".join("%d:%.0f" % (y, cap[y]) for y in [2030, 2050, 2075, 2100, 2150, 2200, 2250, 2300] if y in cap))
+print("cap path (MtCO2):", " ".join("%d:%.0f" % (y, cap[y]) for y in [2030, 2050, 2075, 2100]))
+print("post-2100:", "cap only (stage 1)" if P2100 is None else "fixed tax %.0f (2100) -> %.0f (2300) 1990$/tC" % (P2100, TAX_2300))

@@ -64,6 +64,9 @@ load_climate <- function(clim_csv, hector_csv, label) {
 }
 
 # Non-CO2 (AR5 GWP100) and CO2 sequestration, for the net-GHG balance and removals panels.
+# NOTE: GCAM books the carbon of fossil feedstocks stored in petrochemical/construction products as
+# "emissions-sequestered" in sectors named "* feedstocks". That is product-carbon accounting, not
+# removal (it exists in the reference with no carbon price); load_seq() drops those sectors.
 gwp_ar5 <- c(CH4 = 28, CH4_AGR = 28, CH4_AWB = 28, N2O = 265, N2O_AGR = 265, N2O_AWB = 265,
              HFC23 = 12400, HFC32 = 677, HFC125 = 3170, HFC134a = 1300, HFC143a = 4800, HFC152a = 138,
              HFC227ea = 3350, HFC236fa = 8060, HFC245fa = 858, HFC365mfc = 804, HFC43 = 1650,
@@ -75,10 +78,9 @@ load_nonco2 <- function(csv, label) {                       # CH4/N2O in Tg, F-g
     group_by(year, group) %>% summarise(gt = sum(value * w) / 1e3, .groups = "drop") %>% mutate(scenario = label)
 }
 load_seq <- function(csv, label) {                          # MtC -> GtCO2
-  read_batch(csv)[["CO2 sequestration by sector"]] %>%
+  read_batch(csv)[["CO2 sequestration by sector"]] %>% filter(!grepl("feedstock", sector)) %>%
     mutate(sector = case_when(grepl("elec", sector) ~ "electricity", grepl("H2|hydrogen", sector) ~ "hydrogen",
-                              grepl("refining|liquids", sector) ~ "liquids", grepl("feedstock", sector) ~ "feedstocks (non-energy)",
-                              grepl("cement|iron|steel|chemical|alumin|industr|N fertil", sector) ~ "industry", grepl("DAC|CO2 removal|air", sector) ~ "DAC",
+                              grepl("refining|liquids", sector) ~ "liquids",                               grepl("cement|iron|steel|chemical|alumin|industr|N fertil", sector) ~ "industry", grepl("DAC|CO2 removal|air", sector) ~ "DAC",
                               TRUE ~ "other")) %>%
     group_by(year, sector) %>% summarise(gt = sum(value) * 44 / 12 / 1e3, .groups = "drop") %>% mutate(scenario = label)
 }
