@@ -51,8 +51,12 @@
 #include "marketplace/include/market.h"
 #include "solution/util/include/solution_info_param_parser.h"
 #include "containers/include/market_dependency_finder.h"
+#include "containers/include/scenario.h"
+#include "util/base/include/model_time.h"
 
 using namespace std;
+
+extern Scenario* scenario;
 
 //! Constructor
 SolutionInfoSet::SolutionInfoSet( Marketplace* aMarketplace ):
@@ -79,7 +83,8 @@ SolutionInfoSet::SolutionInfoSet( const vector<SolutionInfo> aSolutionSet ): sol
  *                                 that we should set within them.
  */
 void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSolutionTolerance,
-                          const double aDefaultSolutionFloor, const SolutionInfoParamParser* aSolutionInfoParamParser )
+                          const double aDefaultSolutionFloor, const SolutionInfoParamParser* aSolutionInfoParamParser,
+                          const bool aUseMarketScale )
 {
     assert( aPeriod >= 0 );
     this->period = aPeriod;
@@ -91,6 +96,18 @@ void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSol
 
     // Request the markets to solve from the marketplace. 
     vector<Market*> marketsToSolve = marketplace->getMarketsToSolve( period );
+    // The scale-aware convergence test is applied only after the final calibration period:
+    // calibration periods keep the classic test so calibrated results are untouched, and the
+    // previous period is then always a solved equilibrium. (Period 0 is never solved, and using
+    // its supplies and demands as the scale for 1990 made that period fail to solve.)
+    const bool useMarketScale = aUseMarketScale &&
+        static_cast<int>( period ) > scenario->getModeltime()->getFinalCalibrationPeriod();
+    // The same markets in the previous period, in the same (market number) order, so the
+    // scale-aware convergence test can be judged against the size the market recently had.
+    // Indexing by market number avoids a name lookup, which would fail for markets whose
+    // region is not a model region (e.g. the "global" CO2 market).
+    const vector<Market*> prevMarkets = useMarketScale ?
+        marketplace->getMarketsToSolve( period - 1 ) : vector<Market*>();
 
     // Create and initialize a SolutionInfo object for each market.
     typedef vector<Market*>::const_iterator ConstMarketIterator;
@@ -109,6 +126,12 @@ void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSol
 #else
         SolutionInfo currInfo( *iter, partialList );
 #endif
+        double prevPeriodScale = 0;
+        if( !prevMarkets.empty() ) {
+            const Market* prevMarket = prevMarkets[ marketNumber ];
+            prevPeriodScale = max( fabs( prevMarket->getDemand() ), fabs( prevMarket->getSupply() ) );
+        }
+        currInfo.setScaleParams( useMarketScale, prevPeriodScale );
         currInfo.init( aDefaultSolutionTolerance, aDefaultSolutionFloor,
                        aSolutionInfoParamParser->getSolutionInfoValuesForMarket( (*iter)->getGoodName(), (*iter)->getRegionName(),
                                                                                  currInfo.getTypeName(), period ) );

@@ -69,6 +69,8 @@ mDependencies( const_cast<vector<IActivity*>&>( aDependencies ) ),
 #if GCAM_PARALLEL_ENABLED
 mFlowGraph( aFlowGraph ),
 #endif
+mUseMarketScale( false ),
+mPrevPeriodScale( 0 ),
 mSolutionTolerance( 0 ),
 mSolutionFloor( 0 ),
 mBracketInterval( 0 ),
@@ -265,11 +267,44 @@ void SolutionInfo::expandBracket( const double aAdjFactor ) {
     XR /= aAdjFactor;
 }
 
+/*!
+ * \brief Set the parameters of the scale-aware convergence test.
+ * \param aUseMarketScale Whether getRelativeED divides by getScale() rather than the current demand.
+ * \param aPrevPeriodScale max(|demand|, |supply|) of this market in the previous period (0 if none).
+ */
+void SolutionInfo::setScaleParams( const bool aUseMarketScale, const double aPrevPeriodScale ) {
+    mUseMarketScale = aUseMarketScale;
+    mPrevPeriodScale = aPrevPeriodScale;
+}
+
+/*!
+ * \brief The size of this market, used as the denominator of the convergence test.
+ * \details The classic test divides the excess demand by the current demand alone. When the
+ *          target itself is (near) zero - an emissions cap of 0, a fuel phased out to a sliver,
+ *          a trade account in balance - any residual reads as ~100 % and the period exhausts its
+ *          iteration budget on a market that is solved to any physical standard. With the market
+ *          scale enabled the denominator is instead the largest of the current |demand|, the
+ *          current |supply| and the previous period's |demand| and |supply| of the same market,
+ *          so a market is judged against the size it recently had, not against a vanishing
+ *          target. Trade-off: a market that shrinks 90 % in one period is judged against its
+ *          previous size, so a residual of 5 % of last period's volume counts as solved.
+ *          Falls back to |demand| when disabled, in calibration periods (see
+ *          SolutionInfoSet::init), and for a market that has always been ~0 (the solution
+ *          floor then decides, as before).
+ * \return The scale to divide the excess demand by.
+ */
+double SolutionInfo::getScale() const {
+    if( !mUseMarketScale ) {
+        return fabs( getDemand() );
+    }
+    return max( max( fabs( getDemand() ), fabs( getSupply() ) ), mPrevPeriodScale );
+}
+
 /*! \brief Get the relativeED
 * \return The relative excess demand. 
 */
 double SolutionInfo::getRelativeED() const {
-    return SolverLibrary::getRelativeED( getED(), getDemand(), mSolutionFloor );
+    return SolverLibrary::getRelativeED( getED(), getScale(), mSolutionFloor );
 }
 
 /*! \brief Determine whether a market is within the solution tolerance. 

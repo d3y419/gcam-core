@@ -74,6 +74,10 @@ class SolutionInfoParamParser;
  *                      The tolerance used for checking calibrated values when calibrating.
  *              - \c max-model-calcs int UserConfigurableSolver::mMaxModelCalcs
  *                      The maximum total number of iterations to try to find a solution.
+ *              - \c use-market-scale bool UserConfigurableSolver::mUseMarketScale
+ *                      Whether the convergence test divides the excess demand by the market
+ *                      scale (max of current |demand|, |supply| and the previous period's) instead
+ *                      of the current demand alone. Default false. See SolutionInfo::getScale.
  *              - \c (any SolverComponent) vector<SolverComponent*> UserConfigurableSolver::mSolverComponents
  *                      Can be any solver component contained in SolverComponentFactory, each one
  *                      being added in order to the list of solver components to use.
@@ -110,6 +114,9 @@ protected:
         
         //! Max total solution iterations
         DEFINE_VARIABLE( SIMPLE, "max-model-calcs", mMaxModelCalcs, int ),
+
+        //! Whether the convergence test uses the market scale as its denominator (see SolutionInfo::getScale)
+        DEFINE_VARIABLE( SIMPLE, "use-market-scale", mUseMarketScale, bool ),
         
         //! In order list of solver components to use when trying to solve.
         DEFINE_VARIABLE( CONTAINER, "solver-components", mSolverComponents, std::vector<SolverComponent*> )

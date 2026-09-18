@@ -70,7 +70,8 @@ UserConfigurableSolver::UserConfigurableSolver( Marketplace* aMarketplace, World
     mDefaultSolutionTolerance( 0.001),
     mDefaultSolutionFloor( 0.0001 ),
     mCalibrationTolerance( 0.01 ),
-    mMaxModelCalcs( 2000 )
+    mMaxModelCalcs( 2000 ),
+    mUseMarketScale( false )
 {
     // get the calc counter from the world
     mCalcCounter = world->getCalcCounter();
@@ -81,7 +82,8 @@ UserConfigurableSolver::UserConfigurableSolver() :
     mDefaultSolutionTolerance( 0.001),
     mDefaultSolutionFloor( 0.0001 ),
     mCalibrationTolerance( 0.01 ),
-    mMaxModelCalcs( 2000 )
+    mMaxModelCalcs( 2000 ),
+    mUseMarketScale( false )
 {
     // get the calc counter from the world
     mCalcCounter = world->getCalcCounter();
@@ -138,7 +140,8 @@ bool UserConfigurableSolver::solve( const int aPeriod, const SolutionInfoParamPa
     // Create and initialize the solution set.
     // This will fetch the markets to solve and update the prices, supplies and demands.
     SolutionInfoSet solution_set( marketplace );
-    solution_set.init( aPeriod, mDefaultSolutionTolerance, mDefaultSolutionFloor, aSolutionInfoParamParser ); // determines solvable and unsolvable markets
+    solution_set.init( aPeriod, mDefaultSolutionTolerance, mDefaultSolutionFloor, aSolutionInfoParamParser,
+                       mUseMarketScale ); // determines solvable and unsolvable markets
     
     mainLog << "Starting Solution. Solving for " << solution_set.getNumSolvable()
         << " markets." << endl;
