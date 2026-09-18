@@ -17,24 +17,24 @@ source("prep_data.R"); library(ggplot2); library(scales)
 ref <- load_scenario("../spotcheck_run3_scratch_zero_rates.csv", "../elecgen_ref.csv", "Reference")
 scen <- list(ref)
 if (file.exists("../spotcheck_nz.csv") && file.exists("../elecgen_nz.csv"))
-  scen[[2]] <- load_scenario("../spotcheck_nz.csv", "../elecgen_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200")
-co2p <- if (file.exists("../co2price_nz.csv")) load_co2price("../co2price_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
+  scen[[2]] <- load_scenario("../spotcheck_nz.csv", "../elecgen_nz.csv", "Net-zero CO2 2100, then rising CO2 tax")
+co2p <- if (file.exists("../co2price_nz.csv")) load_co2price("../co2price_nz.csv", "Net-zero CO2 2100, then rising CO2 tax") else NULL
 clim <- load_climate("../climate_ref.csv", NULL, "Reference")
 if (file.exists("../climate_nz.csv"))
-  clim <- bind_rows(clim, load_climate("../climate_nz.csv", NULL, "Net-zero CO2 2100, -10 GtCO2 by 2200"))
+  clim <- bind_rows(clim, load_climate("../climate_nz.csv", NULL, "Net-zero CO2 2100, then rising CO2 tax"))
 if (!is.null(co2p))   # CO2 price panel: reference has no carbon market (0)
   clim <- bind_rows(clim, clim %>% distinct(scenario, year) %>% filter(year %in% co2p$year) %>% left_join(co2p, c("scenario", "year")) %>%
                       transmute(year, metric = "CO2 price (1990$/tC)", value = coalesce(co2_price, 0), scenario))
 clim$metric <- factor(clim$metric, levels = c("CO2 concentration (ppm)", "Total radiative forcing (W/m2)",
                                               "Global mean surface temperature (degC vs 1850-1900)", "CO2 price (1990$/tC)"))
 nonco2 <- load_nonco2("../nonco2_ref.csv", "Reference")
-if (file.exists("../nonco2_nz.csv")) nonco2 <- bind_rows(nonco2, load_nonco2("../nonco2_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200"))
-seq <- if (file.exists("../seq_nz.csv")) load_seq("../seq_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
+if (file.exists("../nonco2_nz.csv")) nonco2 <- bind_rows(nonco2, load_nonco2("../nonco2_nz.csv", "Net-zero CO2 2100, then rising CO2 tax"))
+seq <- if (file.exists("../seq_nz.csv")) load_seq("../seq_nz.csv", "Net-zero CO2 2100, then rising CO2 tax") else NULL
 kaya <- bind_rows(lapply(scen, `[[`, "kaya")); pe <- bind_rows(lapply(scen, `[[`, "pe")); elec <- bind_rows(lapply(scen, `[[`, "elec"))
 pe$fuel <- factor(pe$fuel, levels = rev(fuel_levels)); elec$fuel <- factor(elec$fuel, levels = rev(fuel_levels))
 pal <- c(coal = "#2c2c2a", oil = "#5f5e5a", gas = "#888780", biomass = "#639922", hydro = "#378add",
          nuclear = "#7f77dd", geothermal = "#993c1d", wind = "#1d9e75", solar = "#eda100")
-scen_col <- c("Reference" = "#2a78d6", "Net-zero CO2 2100, -10 GtCO2 by 2200" = "#eb6834")
+scen_col <- c("Reference" = "#2a78d6", "Net-zero CO2 2100, then rising CO2 tax" = "#eb6834")
 base <- function(p) p + geom_vline(xintercept = 2100, linetype = "dotted", colour = "grey55") +
   scale_x_continuous(breaks = seq(2000, 2300, 50), limits = c(1990, 2300)) + theme_minimal(base_size = 12) +
   theme(legend.position = "bottom", panel.grid.minor = element_blank())
@@ -93,7 +93,7 @@ ghg <- kaya %>% select(scenario, year, co2_gt) %>%
   pivot_longer(-c(scenario, year), names_to = "series", values_to = "gt")
 base(ggplot(ghg, aes(year, gt, colour = scenario, linetype = series)) + geom_line(linewidth = 1) + geom_hline(yintercept = 0, colour = "grey40") +
   scale_colour_manual(values = scen_col) + labs(x = NULL, y = "GtCO2e per year", colour = NULL, linetype = NULL,
-  caption = "Non-CO2 = CH4, N2O, HFCs, PFCs, SF6 at AR5 GWP100. Not capped, but GCAM's abatement-cost curves respond to the CO2 price, so they fall under the cap. LUC CO2 excluded. Net GHG = CO2 + non-CO2.") +
+  caption = "Non-CO2 = CH4, N2O, HFCs, PFCs, SF6 at AR5 GWP100. Not capped, but GCAM's abatement-cost curves respond to the CO2 price, so they fall with the carbon price. LUC CO2 excluded. Net GHG = CO2 + non-CO2.") +
   guides(colour = guide_legend(nrow = 2), linetype = guide_legend(nrow = 3)))
 ```
 

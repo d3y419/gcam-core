@@ -27,7 +27,16 @@ CAP_FLOOR_MTCO2 = 10000.0      # cap never below -10 GtCO2 (user choice; the 1 %
 # (--p2100, read from a stop-year-2100 run) to TAX_2300 in 2300. GHGPolicy uses the constraint where
 # present and the fixed tax elsewhere; tax years between 2110 and 2300 are written explicitly.
 # Without --p2100 the file carries the cap only (stage 1). Units: GCAM native 1990$/tC.
-TAX_2300 = 800.0               # user: "linearly increasing CO2 price to reach ~$800 by 2300" (1990$/tC)
+TAX_2300 = 460.0               # terminal tax (1990$/tC). Iteration 1: 800 held from 2260 gave net GHG -5.6 (2200),
+                               # -13 (2260), -18.8 (2300). Iteration 2: 560 linear -> net GHG -2.4 (2200), -6.4/-6.6/-6.8
+                               # (2260/80/2300): flat tail achieved, level too low. Response ~0.05 GtCO2e per $/tC at 2300
+                               # -> iteration 3: 460 (predicted ~-2 in 2300). Earlier note:
+                               # -13 (2260), -18.8 (2300) and CO2 still falling at constant price (DAC learning);
+                               # iteration 2: 560, linear to 2300, no plateau. Tune so net GHG (CO2 + AR5 non-CO2) is
+                               # ~0 and flat by 2300 ("stable net-zero GHG by 2300", user 2026-09-18)
+TAX_PLATEAU_YEAR = 2300        # linear rise 2100 -> TAX_PLATEAU_YEAR, then held (2300 = no plateau: at a flat 800 the
+                               # removals kept growing 5 Gt in 40 yr, so a plateau does not give a flat tail anyway)
+                               # leave net GHG trending down; the plateau gives the flat tail the target asks for
 P2100 = None
 for a in sys.argv[1:]:
     if a.startswith("--p2100="): P2100 = float(a.split("=")[1])
@@ -75,7 +84,7 @@ for reg in regions:
         out.append('        <constraint year="%d">%.1f</constraint>' % (y, cap[y] * C_PER_CO2))
     if P2100 is not None:
         for y in p2 + p3:
-            out.append('        <fixedTax year="%d">%.2f</fixedTax>' % (y, P2100 + (TAX_2300 - P2100) * (y - 2100) / 200.0))
+            out.append('        <fixedTax year="%d">%.2f</fixedTax>' % (y, P2100 + (TAX_2300 - P2100) * min(1.0, (y - 2100) / float(TAX_PLATEAU_YEAR - 2100))))
     out.append('      </ghgpolicy>')
     out.append('      <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>')
     out.append('      <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">%s</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>' % LUC_PRICE_ADJUST)
@@ -84,4 +93,4 @@ out += ['  </world>', '</scenario>', '']
 open(OUT, "w", encoding="utf-8").write("\n".join(out))
 print("wrote", OUT, "regions:", len(regions))
 print("cap path (MtCO2):", " ".join("%d:%.0f" % (y, cap[y]) for y in [2030, 2050, 2075, 2100]))
-print("post-2100:", "cap only (stage 1)" if P2100 is None else "fixed tax %.0f (2100) -> %.0f (2300) 1990$/tC" % (P2100, TAX_2300))
+print("post-2100:", "cap only (stage 1)" if P2100 is None else "fixed tax %.0f (2100) -> %.0f (%d), held to 2300, 1990$/tC" % (P2100, TAX_2300, TAX_PLATEAU_YEAR))

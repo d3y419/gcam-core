@@ -173,3 +173,11 @@ previous size, so a residual of 5 % of last period's volume counts as solved. Fi
 solution_info.h/.cpp, solution_info_set.cpp. Built with `build_gcam_scale.bat` into
 `exe/Release_scale/` (exe/gcam.exe is locked while a run is going); copy over after the run.
 Validate: reference run must reproduce results within tolerance; net-zero 2100 with cap 0 solves.
+
+**Net-zero v2 design (user, 2026-09-18 13:30).** Cap to 2100 (net-zero CO2), then a FIXED TAX rising
+linearly from the solved 2100 price to a terminal value in 2300, chosen so that net GHG (CO2 + AR5
+non-CO2) is near zero in 2300 - "a bit negative is fine, never positive". The point of the tax is
+consistent, slowly increasing pressure 2100-2300 with no discontinuity, so coal/gas/oil never return
+(the cap gave 654 -> 498 -> 931 -> 605 $/tC). 800 $/tC (1990$/tC) is only a first guess: iterate the
+terminal value on stage-2 reruns (restart at 2110 from stage-1 files, ~40 min each) until net GHG 2300
+is within ~1 Gt of zero. DAC SSP1 included in the scenario (idle in the reference).
