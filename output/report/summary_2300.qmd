@@ -26,6 +26,7 @@ clim$metric <- factor(clim$metric, levels = c("CO2 concentration (ppm)", "Total 
 nonco2 <- load_nonco2("../nonco2_ref.csv", "Reference")
 if (file.exists("../nonco2_nz.csv")) nonco2 <- bind_rows(nonco2, load_nonco2("../nonco2_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200"))
 seq <- if (file.exists("../seq_nz.csv")) load_seq("../seq_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
+co2p <- if (file.exists("../co2price_nz.csv")) load_co2price("../co2price_nz.csv", "Net-zero CO2 2100, -10 GtCO2 by 2200") else NULL
 kaya <- bind_rows(lapply(scen, `[[`, "kaya")); pe <- bind_rows(lapply(scen, `[[`, "pe")); elec <- bind_rows(lapply(scen, `[[`, "elec"))
 pe$fuel <- factor(pe$fuel, levels = rev(fuel_levels)); elec$fuel <- factor(elec$fuel, levels = rev(fuel_levels))
 pal <- c(coal = "#2c2c2a", oil = "#5f5e5a", gas = "#888780", biomass = "#639922", hydro = "#378add",
@@ -57,12 +58,15 @@ kaya_long <- kaya %>%
             `CO2 / primary energy (MtCO2 per EJ)` = carbon_int,
             `CO2, fossil + industrial (GtCO2)` = co2_gt) %>%
   pivot_longer(-c(scenario, year), names_to = "metric", values_to = "value") %>%
+  bind_rows(kaya %>% distinct(scenario, year) %>% left_join(co2p, c("scenario", "year")) %>%
+              transmute(scenario, year, metric = "CO2 price (1990$/tC)", value = coalesce(co2_price, 0))) %>%
   mutate(metric = factor(metric, levels = c("Population (bn)", "GDP per capita (thousand 1990$)",
                                             "Primary energy / GDP (EJ per trn 1990$)", "CO2 / primary energy (MtCO2 per EJ)",
-                                            "CO2, fossil + industrial (GtCO2)")))
+                                            "CO2, fossil + industrial (GtCO2)", "CO2 price (1990$/tC)")))
 base(ggplot(kaya_long, aes(year, value, colour = scenario)) + geom_line(linewidth = 1) +
   facet_wrap(~metric, scales = "free_y", ncol = 2) + scale_colour_manual(values = scen_col) +
-  labs(x = NULL, y = NULL, colour = NULL, caption = "CO2 = population x GDP/capita x energy/GDP x CO2/energy. Dotted line: 2100, end of the standard horizon.") +
+  labs(x = NULL, y = NULL, colour = NULL, caption = "CO2 = population x GDP/capita x energy/GDP x CO2/energy. Dotted line: 2100, end of the standard horizon.
+CO2 price: global cap market, GCAM native 1990$/tC (x 12/44 for $/tCO2; x ~2.1 for 2020$). Reference has no carbon market.") +
   theme(strip.text = element_text(hjust = 0, face = "bold", size = 11), panel.spacing = unit(1.2, "lines")))
 ```
 

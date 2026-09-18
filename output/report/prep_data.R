@@ -82,3 +82,8 @@ load_seq <- function(csv, label) {                          # MtC -> GtCO2
                               TRUE ~ "other")) %>%
     group_by(year, sector) %>% summarise(gt = sum(value) * 44 / 12 / 1e3, .groups = "drop") %>% mutate(scenario = label)
 }
+
+# Global CO2 market price, 1990$/tC (GCAM's native unit). The reference has no carbon market (price 0).
+load_co2price <- function(csv, label) {
+  read_batch(csv)[["CO2 prices"]] %>% filter(market == "globalCO2") %>% transmute(year, co2_price = value) %>% mutate(scenario = label)
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queries>
+  <aQuery>
+    <all-regions/>
+    <marketQuery title="CO2 prices">
+      <axis1 name="market">market</axis1>
+      <axis2 name="Year">market</axis2>
+      <xPath buildList="true" dataName="price" group="false" sumAll="false">Marketplace/market[true() and contains(@name,'CO2')]/price/node()</xPath>
+      <comments/>
+    </marketQuery>
+  </aQuery>
+</queries>
