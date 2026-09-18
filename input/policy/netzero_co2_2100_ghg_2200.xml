@@ -18,21 +18,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -54,21 +54,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -90,21 +90,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -126,21 +126,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -162,21 +162,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -198,21 +198,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -234,21 +234,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -270,21 +270,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -306,21 +306,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -342,21 +342,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -378,21 +378,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -414,21 +414,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -450,21 +450,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -486,21 +486,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -522,21 +522,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -558,21 +558,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -594,21 +594,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -630,21 +630,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -666,21 +666,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -702,21 +702,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -738,21 +738,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -774,21 +774,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -810,21 +810,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -846,21 +846,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -882,21 +882,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -918,21 +918,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -954,21 +954,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -990,21 +990,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -1026,21 +1026,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -1062,21 +1062,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -1098,21 +1098,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
@@ -1134,21 +1134,21 @@
         <constraint year="2090">1454.5</constraint>
         <constraint year="2095">727.3</constraint>
         <constraint year="2100">-2.7</constraint>
-        <constraint year="2110">-272.7</constraint>
-        <constraint year="2120">-545.5</constraint>
-        <constraint year="2130">-818.2</constraint>
-        <constraint year="2140">-1090.9</constraint>
-        <constraint year="2150">-1363.6</constraint>
-        <constraint year="2160">-1636.4</constraint>
-        <constraint year="2170">-1909.1</constraint>
-        <constraint year="2180">-2181.8</constraint>
-        <constraint year="2190">-2454.5</constraint>
-        <constraint year="2200">-2727.3</constraint>
-        <constraint year="2220">-2727.3</constraint>
-        <constraint year="2240">-2727.3</constraint>
-        <constraint year="2260">-2727.3</constraint>
-        <constraint year="2280">-2727.3</constraint>
-        <constraint year="2300">-2727.3</constraint>
+        <fixedTax year="2110">433.03</fixedTax>
+        <fixedTax year="2120">436.03</fixedTax>
+        <fixedTax year="2130">439.02</fixedTax>
+        <fixedTax year="2140">442.02</fixedTax>
+        <fixedTax year="2150">445.02</fixedTax>
+        <fixedTax year="2160">448.02</fixedTax>
+        <fixedTax year="2170">451.02</fixedTax>
+        <fixedTax year="2180">454.02</fixedTax>
+        <fixedTax year="2190">457.02</fixedTax>
+        <fixedTax year="2200">460.01</fixedTax>
+        <fixedTax year="2220">466.01</fixedTax>
+        <fixedTax year="2240">472.01</fixedTax>
+        <fixedTax year="2260">478.01</fixedTax>
+        <fixedTax year="2280">484.00</fixedTax>
+        <fixedTax year="2300">490.00</fixedTax>
       </ghgpolicy>
       <linked-ghg-policy name="CO2_FUG"><price-adjust fillout="1" year="1975">1</price-adjust><demand-adjust fillout="1" year="1975">1</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>
       <linked-ghg-policy name="CO2_LUC"><price-adjust fillout="1" year="1975">0.01</price-adjust><demand-adjust fillout="1" year="1975">0</demand-adjust><market>global</market><linked-policy>CO2</linked-policy><price-unit>1990$/tC</price-unit><output-unit>MtC</output-unit></linked-ghg-policy>

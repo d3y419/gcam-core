@@ -181,3 +181,14 @@ consistent, slowly increasing pressure 2100-2300 with no discontinuity, so coal/
 (the cap gave 654 -> 498 -> 931 -> 605 $/tC). 800 $/tC (1990$/tC) is only a first guess: iterate the
 terminal value on stage-2 reruns (restart at 2110 from stage-1 files, ~40 min each) until net GHG 2300
 is within ~1 Gt of zero. DAC SSP1 included in the scenario (idle in the reference).
+
+**FINAL net-zero scenario (2026-09-18 21:53).** Cap 37.3 GtCO2 (2030) -> -10 Mt (2100); DAC SSP1;
+fixed CO2 tax from the solved 2100 price 430 $/tC rising linearly to 490 in 2300 (1990$/tC).
+Two-stage run: stage 1 to 2100 (stop-period 21), stage 2 restart at 2110 (or 2200 for
+re-tuning). Every period 1975-2300 solved (2x solver budgets). Net GHG (AR5) +12.1 (2100) ->
+-0.5 (2190) -> -1.5 (2200) -> -1.2 (2300); CO2 -6.7 (2200), -4.3 (2300); non-CO2 3.1 (2300).
+Tuning history (terminal -> net GHG 2300): 800 plateau -18.8; 560 -6.8; 460 +0.9; 490 -1.2.
+Removals 2300: BECCS electricity 8.9, liquids 3.7, DAC 2.9 GtCO2. Fossils 2300: coal 28, gas 92,
+oil 82 EJ (reference 360/117/120). Peak warming 2.3 degC (~2110), 1.0 degC in 2300.
+Database `output/database_basexdb_2300nz`, CSVs `*_nz.csv`, report `summary_2300.html`;
+superseded iterations archived as `*_nz_{capfloor,tax800,tax560,tax460}` and recycled DBs.

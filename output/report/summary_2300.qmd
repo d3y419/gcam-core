@@ -93,7 +93,7 @@ ghg <- kaya %>% select(scenario, year, co2_gt) %>%
   pivot_longer(-c(scenario, year), names_to = "series", values_to = "gt")
 base(ggplot(ghg, aes(year, gt, colour = scenario, linetype = series)) + geom_line(linewidth = 1) + geom_hline(yintercept = 0, colour = "grey40") +
   scale_colour_manual(values = scen_col) + labs(x = NULL, y = "GtCO2e per year", colour = NULL, linetype = NULL,
-  caption = "Non-CO2 = CH4, N2O, HFCs, PFCs, SF6 at AR5 GWP100. Not capped, but GCAM's abatement-cost curves respond to the CO2 price, so they fall with the carbon price. LUC CO2 excluded. Net GHG = CO2 + non-CO2.") +
+  caption = "Non-CO2 = CH4, N2O, HFCs, PFCs, SF6 at AR5 GWP100; not capped, but their abatement curves respond to the CO2 price. LUC CO2 excluded.") +
   guides(colour = guide_legend(nrow = 2), linetype = guide_legend(nrow = 3)))
 ```
 

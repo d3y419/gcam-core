@@ -27,7 +27,11 @@ CAP_FLOOR_MTCO2 = 10000.0      # cap never below -10 GtCO2 (user choice; the 1 %
 # (--p2100, read from a stop-year-2100 run) to TAX_2300 in 2300. GHGPolicy uses the constraint where
 # present and the fixed tax elsewhere; tax years between 2110 and 2300 are written explicitly.
 # Without --p2100 the file carries the cap only (stage 1). Units: GCAM native 1990$/tC.
-TAX_2300 = 460.0               # terminal tax (1990$/tC). Iteration 1: 800 held from 2260 gave net GHG -5.6 (2200),
+TAX_2300 = 490.0               # FINAL (2026-09-18): net GHG -0.5 (2190), -1.5 (2200), -1.2..-1.5 flat to 2300; no positive
+                               # period after the crossing (acceptance rule). Iteration 3: 460 -> net GHG -0.4 (2200), 0.0 (2220), then
+                               # +0.4/+0.3/+0.5/+0.9 (2240-2300): DAC recedes 5.6 -> 2.0 Gt at a near-flat price, so the
+                               # response is non-linear (560 -> -6.8; 460 -> +0.9). Iteration 4: 490 (predicted ~ -1.4).
+                               # History: Iteration 1: 800 held from 2260 gave net GHG -5.6 (2200),
                                # -13 (2260), -18.8 (2300). Iteration 2: 560 linear -> net GHG -2.4 (2200), -6.4/-6.6/-6.8
                                # (2260/80/2300): flat tail achieved, level too low. Response ~0.05 GtCO2e per $/tC at 2300
                                # -> iteration 3: 460 (predicted ~-2 in 2300). Earlier note:
