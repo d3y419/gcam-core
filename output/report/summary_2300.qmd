@@ -104,6 +104,20 @@ if (!is.null(seq)) base(ggplot(seq %>% filter(year >= 2020), aes(year, gt, fill 
   guides(fill = guide_legend(nrow = 1)))
 ```
 
+```{r seq-cum, fig.height=4}
+if (!is.null(seq)) {
+  # cumulative storage: annual rate x length of the model step (5 / 10 / 20 yr), summed from the first year
+  seq_cum <- seq %>% filter(year >= 2020) %>% group_by(sector) %>% arrange(year, .by_group = TRUE) %>%
+    mutate(dt = year - lag(year, default = first(year)), cum_gt = cumsum(gt * dt)) %>% ungroup()
+  p_cum <- base(ggplot(seq_cum, aes(year, cum_gt, fill = sector)) + geom_area(alpha = 0.9) +
+    labs(x = NULL, y = "GtCO2 stored, cumulative", fill = NULL, title = "Net-zero scenario: cumulative CO2 captured and stored, by sector",
+         caption = "Annual storage x model-step length, summed from 2020. Feedstock (product) carbon excluded.") +
+    guides(fill = guide_legend(nrow = 1)))
+  ggsave("cumulative.png", p_cum, width = 9, height = 4, dpi = 150, bg = "white")
+  p_cum
+}
+```
+
 ## Climate (Hector)
 
 ```{r climate, fig.height=6}
