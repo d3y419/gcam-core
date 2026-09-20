@@ -100,6 +100,8 @@ public:
     double getDemand() const;
     double getSupply() const;
     double getED() const;
+    void setScaleParams( const bool aUseMarketScale, const double aPrevPeriodScale );
+    double getScale() const;
     double getEDLeft() const;
     double getEDRight() const;
     double getSolutionFloor() const;
@@ -162,6 +164,12 @@ private:
     bool bracketed; //!< Bracketed or unbracketed.
     bool mBisected;
     Market* linkedMarket; //!< Linked market. 
+    //! Whether the convergence test divides by the market scale (see getScale) instead of
+    //! the current demand alone. Set from the solver config, default false (upstream behaviour).
+    bool mUseMarketScale;
+    //! max(|demand|, |supply|) of the same market in the previous model period, cached at
+    //! init since those values do not change while the current period solves. 0 when unused.
+    double mPrevPeriodScale;
     double XL;      //!< left bracket
     double XR;      //!< right bracket
     double EDL;     //!< excess demand for left bracket
