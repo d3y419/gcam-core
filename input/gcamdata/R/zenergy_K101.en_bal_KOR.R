@@ -29,7 +29,7 @@ module_energy_K101.en_bal_KOR <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    GCAM_region_ID <- sector <- fuel <- year <- value <- NULL  # silence package check notes
+    GCAM_region_ID <- sector <- fuel <- year <- value <- value_KOR <- NULL  # silence package check notes
 
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     L101.en_bal_EJ_R_Si_Fi_Yh_full <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_full", strip_attributes = TRUE)
