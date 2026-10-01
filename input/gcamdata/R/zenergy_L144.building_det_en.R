@@ -74,7 +74,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
       `installed cost` <- iso <- lifetime <- normal <- normal_RG3 <- region_GCAM3 <- region_subsector <-
       regions_fuel <- scaler <- sector <- sector_fuel <- service <- share_TFEbysector <- share_serv_fuel <-
       share_serv_fuel_RG3 <- subsector <- supp_tech_2 <- supplysector <- technology <- tradbio_region <-
-      heating_share <- others_share <- kor_dh_total <-
+      heating_share <- others_share <- kor_dh_total <- value_KOR <- n_serv <- n_heating <-
       value_eff <- value_ratio <- value_ratio_2000 <- value_shell <- value_tech <- variable <- year <-
       value <- exponent <- NULL
 
@@ -502,22 +502,42 @@ module_energy_L144.building_det_en <- function(command, ...) {
     # district-heat usage patterns and are not representative of Korea's system. Total district
     # heat energy by region / sector / year is preserved; only the heating vs. others split
     # changes. No other fuel, service, or region is affected.
+    KOREA_REGION_ID <- GCAM_region_names$GCAM_region_ID[GCAM_region_names$region == gcam.KOREA_REGION]
+    assertthat::assert_that(length(KOREA_REGION_ID) == 1,
+                            msg = paste("Region", gcam.KOREA_REGION, "not found once in common/GCAM_region_names"))
+    # The split only preserves the total if the two shares add up to 1 and each sector has
+    # exactly one heating and one other service using district heat
+    assertthat::assert_that(!anyNA(share_districtheat_korea$heating_share),
+                            !anyNA(share_districtheat_korea$others_share),
+                            all(abs(share_districtheat_korea$heating_share + share_districtheat_korea$others_share - 1) < 1e-6),
+                            msg = "energy/share_districtheat_korea.csv: heating_share + others_share must be 1 in every year")
     L144.in_EJ_R_bld_serv_F_Yh %>%
-      filter(GCAM_region_ID == 28, fuel == "heat") %>%
+      filter(GCAM_region_ID == KOREA_REGION_ID, fuel == "heat") %>%
+      group_by(sector, year) %>%
+      summarise(n_serv = n(), n_heating = sum(grepl("heating", service)), .groups = "drop") %>%
+      filter(n_serv != 2 | n_heating != 1) ->
+      L144.KOR_dh_bad_groups
+    if(nrow(L144.KOR_dh_bad_groups) > 0) {
+      stop("Korea district heat split expects one heating and one other service per sector; found ",
+           paste(unique(L144.KOR_dh_bad_groups$sector), collapse = ", "))
+    }
+    L144.in_EJ_R_bld_serv_F_Yh %>%
+      filter(GCAM_region_ID == KOREA_REGION_ID, fuel == "heat") %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       mutate(kor_dh_total = sum(value)) %>%
       ungroup() %>%
       left_join_error_no_match(share_districtheat_korea, by = "year") %>%
-      mutate(value = if_else(grepl("heat", service),
+      mutate(value = if_else(grepl("heating", service),
                              kor_dh_total * heating_share,
                              kor_dh_total * others_share)) %>%
-      select(GCAM_region_ID, sector, fuel, service, year, value) ->
+      select(GCAM_region_ID, sector, fuel, service, year, value_KOR = value) ->
       L144.KOR_districtheat_split
 
+    # Replace the values in place, so the table keeps its rows and row order for all regions
     L144.in_EJ_R_bld_serv_F_Yh %>%
-      filter(!(GCAM_region_ID == 28 & fuel == "heat")) %>%
-      bind_rows(L144.KOR_districtheat_split) %>%
-      arrange(GCAM_region_ID, sector, fuel, service, year) ->
+      left_join(L144.KOR_districtheat_split, by = c("GCAM_region_ID", "sector", "fuel", "service", "year")) %>%
+      mutate(value = if_else(is.na(value_KOR), value, value_KOR)) %>%
+      select(-value_KOR) ->
       L144.in_EJ_R_bld_serv_F_Yh
 
 

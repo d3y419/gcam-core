@@ -134,19 +134,19 @@ module_energy_L224.heat <- function(command, ...) {
     # gas subsector that calibrated value is small (~0.06), because gas's historical district-heat role was
     # overwhelmingly a CHP secondary output (recorded outside this subsector) rather than the boiler
     # technology this subsector represents, leaving gas structurally unable to compete against biomass in
-    # future periods despite being cheaper. Until that CHP accounting is addressed, force Korea's gas
-    # subsector share-weight to 1 for all future years, on par with biomass, so it can compete on cost.
-    KOREA_REGION_NAME <- "South Korea"
-    L224.SubsectorInterp_heat <- L224.SubsectorInterp_heat %>%
-      filter(!(region == KOREA_REGION_NAME & supplysector == "district heat" & subsector == "gas"))
-
-    L224.KOR_gas_shrwt_override <- tibble::tibble(region = KOREA_REGION_NAME, supplysector = "district heat",
-                                                  subsector = "gas", year = MODEL_FUTURE_YEARS, share.weight = 1)
-    if(exists("L224.SubsectorShrwt_heat")) {
-      L224.SubsectorShrwt_heat <- L224.SubsectorShrwt_heat %>%
-        bind_rows(L224.KOR_gas_shrwt_override)
-    } else {
-      L224.SubsectorShrwt_heat <- L224.KOR_gas_shrwt_override
+    # future periods despite being cheaper. Until that CHP accounting is addressed, drop Korea's gas
+    # interpolation rule. Its future share-weights then keep the start-year fill-out value from
+    # A24.subsector_shrwt (1, on par with biomass), so gas can compete on cost.
+    # (Only L224.SubsectorShrwtFllt_heat and L224.SubsectorInterp_heat are written to heat.xml, so the
+    # rule has to be removed here rather than overridden in L224.SubsectorShrwt_heat.)
+    KOREA_REGION_NAME <- gcam.KOREA_REGION
+    if(exists("L224.SubsectorInterp_heat")) {
+      L224.SubsectorInterp_heat <- L224.SubsectorInterp_heat %>%
+        filter(!(region == KOREA_REGION_NAME & supplysector == "district heat" & subsector == "gas"))
+    }
+    if(exists("L224.SubsectorInterpTo_heat")) {
+      L224.SubsectorInterpTo_heat <- L224.SubsectorInterpTo_heat %>%
+        filter(!(region == KOREA_REGION_NAME & supplysector == "district heat" & subsector == "gas"))
     }
 
     # Identification of stub technologies of district heat

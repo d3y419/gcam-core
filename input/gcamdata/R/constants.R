@@ -68,6 +68,7 @@ YEAR_RECODE <- c("start-year" =  min(MODEL_BASE_YEARS),
 
 gcam.USA_CODE            <- 1
 gcam.USA_REGION          <- "USA"
+gcam.KOREA_REGION        <- "South Korea"  # region name in common/GCAM_region_names; look up its ID there
 gcam.LOGIT_TYPES         <- c("relative-cost-logit", "absolute-cost-logit")
 gcam.EQUIV_TABLE         <- "EQUIV_TABLE"
 gcam.IND_ENERGY_USE      <- c("biomass", "coal", "gas", "refined liquids")  # GCAM industrial energy use fuels
