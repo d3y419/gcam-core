@@ -100,8 +100,17 @@ void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSol
     // calibration periods keep the classic test so calibrated results are untouched, and the
     // previous period is then always a solved equilibrium. (Period 0 is never solved, and using
     // its supplies and demands as the scale for 1990 made that period fail to solve.)
-    const bool useMarketScale = aUseMarketScale &&
+    // GCAM moves on after a period fails to solve, so also require that the previous period
+    // solved: an unsolved period's supplies and demands are not a valid scale.
+    const vector<int>& unsolvedPeriods = scenario->getUnsolvedPeriods();
+    const bool prevPeriodSolved = find( unsolvedPeriods.begin(), unsolvedPeriods.end(),
+                                        static_cast<int>( period ) - 1 ) == unsolvedPeriods.end();
+    const bool useMarketScale = aUseMarketScale && prevPeriodSolved &&
         static_cast<int>( period ) > scenario->getModeltime()->getFinalCalibrationPeriod();
+    if( aUseMarketScale && !prevPeriodSolved ) {
+        solverLog << "Previous period did not solve: using the classic convergence test in period "
+                  << period << "." << endl;
+    }
     // The same markets in the previous period, in the same (market number) order, so the
     // scale-aware convergence test can be judged against the size the market recently had.
     // Indexing by market number avoids a name lookup, which would fail for markets whose
@@ -129,7 +138,10 @@ void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSol
         double prevPeriodScale = 0;
         if( !prevMarkets.empty() ) {
             const Market* prevMarket = prevMarkets[ marketNumber ];
-            prevPeriodScale = max( fabs( prevMarket->getDemand() ), fabs( prevMarket->getSupply() ) );
+            // Use the solver's view of the market, as SolutionInfo::getDemand/getSupply do: for
+            // price and demand markets getDemand/getSupply return the linked quantity, not the
+            // values the excess demand is computed from.
+            prevPeriodScale = max( fabs( prevMarket->getSolverDemand() ), fabs( prevMarket->getSolverSupply() ) );
         }
         currInfo.setScaleParams( useMarketScale, prevPeriodScale );
         currInfo.init( aDefaultSolutionTolerance, aDefaultSolutionFloor,
