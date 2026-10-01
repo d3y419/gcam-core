@@ -15,7 +15,7 @@
 #' energy supply (TES) is recomputed for Korea from the overlay's in_/net_ sector rows, using
 #' the same logic as \code{module_energy_L101.en_bal_IEA}, so the two stay internally consistent.
 #' All other regions pass through unchanged.
-#' @importFrom dplyr bind_rows distinct filter group_by left_join mutate select summarise
+#' @importFrom dplyr anti_join bind_rows distinct filter group_by left_join mutate select summarise
 #' @importFrom tidyr gather replace_na
 #' @author HCM 2026
 module_energy_K101.en_bal_KOR <- function(command, ...) {
@@ -55,7 +55,25 @@ module_energy_K101.en_bal_KOR <- function(command, ...) {
     # via left_join_error_no_match, so this substitution must preserve that structural shape.
     L101.en_bal_EJ_R_Si_Fi_Yh_full %>%
       filter(sector != energy.TPES_FLOW) %>%
+      distinct(sector, fuel) ->
+      K101.template_sector_fuel
+
+    # The join below keeps only template combinations. Stop if the overlay has a (sector, fuel)
+    # pair the template does not know (e.g. a typo in a sector name), or a duplicated pair,
+    # instead of silently dropping or double counting that energy.
+    KOR_en_bal.csv %>%
       distinct(sector, fuel) %>%
+      anti_join(K101.template_sector_fuel, by = c("sector", "fuel")) ->
+      K101.KOR_unmatched
+    if(nrow(K101.KOR_unmatched) > 0) {
+      stop("energy/KOR_en_bal.csv has sector/fuel pairs that are not in L101.en_bal_EJ_R_Si_Fi_Yh_full: ",
+           paste(K101.KOR_unmatched$sector, K101.KOR_unmatched$fuel, sep = " / ", collapse = "; "))
+    }
+    if(anyDuplicated(KOR_en_bal.csv[c("sector", "fuel")]) > 0) {
+      stop("energy/KOR_en_bal.csv has duplicated sector/fuel rows")
+    }
+
+    K101.template_sector_fuel %>%
       repeat_add_columns(tibble::tibble(year = HISTORICAL_YEARS)) %>%
       mutate(GCAM_region_ID = KOREA_REGION_ID) %>%
       left_join(K101.KOR_overlay_sparse, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
