@@ -61,6 +61,8 @@ SolutionInfo::SolutionInfo( Market* aLinkedMarket, const vector<IActivity*>& aDe
 bracketed( false ),
 mBisected( false ),
 linkedMarket( aLinkedMarket ),
+mUseMarketScale( false ),
+mPrevPeriodScale( 0 ),
 XL( 0 ),
 XR( 0 ),
 EDL( 0 ),
@@ -69,8 +71,6 @@ mDependencies( const_cast<vector<IActivity*>&>( aDependencies ) ),
 #if GCAM_PARALLEL_ENABLED
 mFlowGraph( aFlowGraph ),
 #endif
-mUseMarketScale( false ),
-mPrevPeriodScale( 0 ),
 mSolutionTolerance( 0 ),
 mSolutionFloor( 0 ),
 mBracketInterval( 0 ),
