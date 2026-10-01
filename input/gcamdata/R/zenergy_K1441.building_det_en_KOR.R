@@ -9,7 +9,8 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{K1441.StubTechCalInput_bld_KOR}.
+#' the generated outputs: \code{K1441.StubTechCalInput_bld_KOR}, \code{K1441.StubTechShrwt_bld_KOR},
+#' \code{K1441.StubTechSCurve_bld_KOR}, \code{K1441.StubTechEff_bld_KOR}, \code{K1441.StubTechInterp_bld_KOR}.
 #' @details South Korea's core building technologies are a single flat technology per fuel
 #' (e.g. "gas", "electricity"). GCAM-USA's buildings module models several of the same
 #' fuels as multiple efficiency-tier technologies (e.g. "gas furnace" vs "gas furnace
@@ -48,7 +49,7 @@
 #' @importFrom dplyr bind_rows filter group_by left_join mutate rename select ungroup
 #' @author HCM 2026
 module_energy_K1441.building_det_en_KOR <- function(command, ...) {
-  KOREA_REGION_NAME <- "South Korea"
+  KOREA_REGION_NAME <- gcam.KOREA_REGION
 
   # Base technology -> new efficiency-tier technology, by subsector, and which supplysectors
   # (by regex on supplysector name) the pairing applies to. "split" pairs replace part of the
@@ -92,8 +93,7 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
   # fuel cost was never wired in for South Korea -- their reported cost was effectively just
   # the bare capital-cost figure, missing ~$10/GJ of real fuel cost, making them look far
   # cheaper than they actually are. K1441.StubTechEff_bld_KOR below fixes this, using
-  # GCAM-USA's own efficiency data (gcam-usa/A44.globaltech_eff) for the new technologies --
-  # see [[project_korea_bld_tier_cost_gap]] memory for the full story.
+  # GCAM-USA's own efficiency data (gcam-usa/A44.globaltech_eff) for the new technologies.
 
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-usa/A44.globaltech_shares",
@@ -256,6 +256,14 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechEff"]]) ->
       K1441.StubTechEff_bld_KOR
 
+    # The plain left_join above gives NA for a tier that A44.globaltech_eff does not have; stop
+    # rather than write a technology without a fuel input
+    if(anyNA(K1441.StubTechEff_bld_KOR$efficiency) || anyNA(K1441.StubTechEff_bld_KOR$minicam.energy.input)) {
+      stop("K1441: no gcam-usa/A44.globaltech_eff entry for ",
+           paste(unique(K1441.StubTechEff_bld_KOR$stub.technology[is.na(K1441.StubTechEff_bld_KOR$efficiency)]),
+                 collapse = ", "))
+    }
+
     # Gradual (not instantaneous) adoption of the new efficiency-tier technologies.
     #
     # Without this rule the new tiers jump from their calibrated base-year share-weight
@@ -316,7 +324,7 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Keeps technologies like resid/comm heating 'electricity' (replaced by 'electric furnace' + 'electric heat pump') from reviving via the shared global technology's future share-weight trajectory") %>%
       add_legacy_name("K1441.StubTechShrwt_bld_KOR") %>%
-      add_precursors("gcam-usa/A44.globaltech_shares", "L244.StubTechCalInput_bld") ->
+      add_precursors("L244.StubTechCalInput_bld") ->
       K1441.StubTechShrwt_bld_KOR
 
     K1441.StubTechSCurve_bld_KOR %>%
@@ -340,7 +348,7 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Linear ramp from the calibrated final-base-year share-weight to the global default at the model end year, so new tiers (notably electric heat pump) phase in gradually instead of jumping to full competitiveness in the first future period") %>%
       add_legacy_name("K1441.StubTechInterp_bld_KOR") %>%
-      add_precursors("gcam-usa/A44.globaltech_shares", "L244.StubTechCalInput_bld") ->
+      add_precursors("L244.StubTechCalInput_bld") ->
       K1441.StubTechInterp_bld_KOR
 
     return_data(K1441.StubTechCalInput_bld_KOR, K1441.StubTechShrwt_bld_KOR, K1441.StubTechSCurve_bld_KOR,
