@@ -94,13 +94,21 @@ module_energy_K101.en_bal_KOR <- function(command, ...) {
       bind_rows(K101.KOR_TES) ->
       K101.KOR_full
 
-    # Replace Korea's rows in the full table; leave all other regions untouched.
-    # Preserve the original region-ascending row order so downstream chunks that are
-    # sensitive to floating-point summation order are unaffected by this substitution.
+    # Replace Korea's values in place. The output has exactly the rows of L101, in the same
+    # order and with the same column types, so every other region (and any sum downstream
+    # whose result depends on row order) sees the unchanged L101 table.
     L101.en_bal_EJ_R_Si_Fi_Yh_full %>%
-      filter(GCAM_region_ID != KOREA_REGION_ID) %>%
-      bind_rows(K101.KOR_full) %>%
-      arrange(GCAM_region_ID, sector, fuel, year) ->
+      left_join(rename(K101.KOR_full, value_KOR = value),
+                by = c("GCAM_region_ID", "sector", "fuel", "year")) ->
+      K101.joined
+    K101.is_KOR <- K101.joined$GCAM_region_ID == KOREA_REGION_ID
+    assertthat::assert_that(nrow(K101.joined) == nrow(L101.en_bal_EJ_R_Si_Fi_Yh_full),
+                            sum(K101.is_KOR) == nrow(K101.KOR_full),
+                            !anyNA(K101.joined$value_KOR[K101.is_KOR]),
+                            msg = "Korea overlay rows do not match Korea's rows in L101.en_bal_EJ_R_Si_Fi_Yh_full one to one")
+    K101.joined %>%
+      mutate(value = if_else(K101.is_KOR, value_KOR, value)) %>%
+      select(-value_KOR) ->
       K101.en_bal_EJ_R_Si_Fi_Yh_full
 
     K101.en_bal_EJ_R_Si_Fi_Yh_full %>%

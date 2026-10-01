@@ -514,13 +514,14 @@ module_energy_L144.building_det_en <- function(command, ...) {
       mutate(value = if_else(grepl("heat", service),
                              kor_dh_total * heating_share,
                              kor_dh_total * others_share)) %>%
-      select(GCAM_region_ID, sector, fuel, service, year, value) ->
+      select(GCAM_region_ID, sector, fuel, service, year, value_KOR = value) ->
       L144.KOR_districtheat_split
 
+    # Replace the values in place, so the table keeps its rows and row order for all regions
     L144.in_EJ_R_bld_serv_F_Yh %>%
-      filter(!(GCAM_region_ID == KOREA_REGION_ID & fuel == "heat")) %>%
-      bind_rows(L144.KOR_districtheat_split) %>%
-      arrange(GCAM_region_ID, sector, fuel, service, year) ->
+      left_join(L144.KOR_districtheat_split, by = c("GCAM_region_ID", "sector", "fuel", "service", "year")) %>%
+      mutate(value = if_else(is.na(value_KOR), value, value_KOR)) %>%
+      select(-value_KOR) ->
       L144.in_EJ_R_bld_serv_F_Yh
 
 
