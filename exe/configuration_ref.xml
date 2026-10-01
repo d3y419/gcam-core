@@ -38,8 +38,6 @@
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
-		<Value name = "building_KOR">../input/gcamdata/xml/building_det_KOR.xml</Value>
-		<Value name = "korea_bld_retirement_scurve">../input/extra/korea_bld_retirement_scurve.xml</Value>
 		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE.xml</Value>
 		<Value name = "carbon_content">../input/gcamdata/xml/Ccoef.xml</Value>
 		<Value name = "carbon_storage">../input/gcamdata/xml/Cstorage.xml</Value>
@@ -108,6 +106,9 @@
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 		<!-- South Korea district heat (d3y419/gcam-core#1); must come after heat.xml -->
 		<Value name = "korea_district_heat_2021_cost_override">../input/extra/korea_district_heat_2021_cost_override.xml</Value>
+		<!-- South Korea buildings (d3y419/gcam-core#2); must come after building_det.xml -->
+		<Value name = "building_KOR">../input/gcamdata/xml/building_det_KOR.xml</Value>
+		<Value name = "korea_bld_retirement_scurve">../input/extra/korea_bld_retirement_scurve.xml</Value>
 
 	</ScenarioComponents>
 	<Strings>
