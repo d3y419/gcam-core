@@ -2,7 +2,7 @@
 
 #' module_energy_K101.en_bal_KOR
 #'
-#' Overlay the South Korea (GCAM_region_ID 28) energy balance with a Korea-specific data source,
+#' Overlay the South Korea (\code{gcam.KOREA_REGION}) energy balance with a Korea-specific data source,
 #' independent of the rest of the global IEA-based energy balance.
 #'
 #' @param command API command to execute
@@ -19,10 +19,9 @@
 #' @importFrom tidyr gather replace_na
 #' @author HCM 2026
 module_energy_K101.en_bal_KOR <- function(command, ...) {
-  KOREA_REGION_ID <- 28
-
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "energy/KOR_en_bal.csv",
+    return(c(FILE = "common/GCAM_region_names",
+             FILE = "energy/KOR_en_bal.csv",
              "L101.en_bal_EJ_R_Si_Fi_Yh_full"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("K101.en_bal_EJ_R_Si_Fi_Yh_full"))
@@ -32,8 +31,14 @@ module_energy_K101.en_bal_KOR <- function(command, ...) {
 
     GCAM_region_ID <- sector <- fuel <- year <- value <- NULL  # silence package check notes
 
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     L101.en_bal_EJ_R_Si_Fi_Yh_full <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_full", strip_attributes = TRUE)
     KOR_en_bal.csv <- get_data(all_data, "energy/KOR_en_bal.csv")
+
+    # Look up Korea's region ID by name so this chunk follows the region mapping file
+    KOREA_REGION_ID <- GCAM_region_names$GCAM_region_ID[GCAM_region_names$region == gcam.KOREA_REGION]
+    assertthat::assert_that(length(KOREA_REGION_ID) == 1,
+                            msg = paste("Region", gcam.KOREA_REGION, "not found once in common/GCAM_region_names"))
 
     # Long-form Korea overlay
     KOR_en_bal.csv %>%
@@ -83,9 +88,9 @@ module_energy_K101.en_bal_KOR <- function(command, ...) {
     K101.en_bal_EJ_R_Si_Fi_Yh_full %>%
       add_title("Energy balances by GCAM region / intermediate sector / intermediate fuel / historical year, with South Korea overlaid from a Korea-specific data source") %>%
       add_units("EJ") %>%
-      add_comments("South Korea (GCAM_region_ID 28) rows are replaced with energy/KOR_en_bal.csv; TES is recomputed for Korea; all other regions pass through unchanged from L101.en_bal_EJ_R_Si_Fi_Yh_full") %>%
+      add_comments("South Korea rows are replaced with energy/KOR_en_bal.csv; TES is recomputed for Korea; all other regions pass through unchanged from L101.en_bal_EJ_R_Si_Fi_Yh_full") %>%
       add_legacy_name("K101.en_bal_EJ_R_Si_Fi_Yh_full") %>%
-      add_precursors("energy/KOR_en_bal.csv", "L101.en_bal_EJ_R_Si_Fi_Yh_full") ->
+      add_precursors("common/GCAM_region_names", "energy/KOR_en_bal.csv", "L101.en_bal_EJ_R_Si_Fi_Yh_full") ->
       K101.en_bal_EJ_R_Si_Fi_Yh_full
 
     return_data(K101.en_bal_EJ_R_Si_Fi_Yh_full)

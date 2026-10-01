@@ -136,7 +136,7 @@ module_energy_L224.heat <- function(command, ...) {
     # technology this subsector represents, leaving gas structurally unable to compete against biomass in
     # future periods despite being cheaper. Until that CHP accounting is addressed, force Korea's gas
     # subsector share-weight to 1 for all future years, on par with biomass, so it can compete on cost.
-    KOREA_REGION_NAME <- "South Korea"
+    KOREA_REGION_NAME <- gcam.KOREA_REGION
     L224.SubsectorInterp_heat <- L224.SubsectorInterp_heat %>%
       filter(!(region == KOREA_REGION_NAME & supplysector == "district heat" & subsector == "gas"))
 

@@ -502,8 +502,11 @@ module_energy_L144.building_det_en <- function(command, ...) {
     # district-heat usage patterns and are not representative of Korea's system. Total district
     # heat energy by region / sector / year is preserved; only the heating vs. others split
     # changes. No other fuel, service, or region is affected.
+    KOREA_REGION_ID <- GCAM_region_names$GCAM_region_ID[GCAM_region_names$region == gcam.KOREA_REGION]
+    assertthat::assert_that(length(KOREA_REGION_ID) == 1,
+                            msg = paste("Region", gcam.KOREA_REGION, "not found once in common/GCAM_region_names"))
     L144.in_EJ_R_bld_serv_F_Yh %>%
-      filter(GCAM_region_ID == 28, fuel == "heat") %>%
+      filter(GCAM_region_ID == KOREA_REGION_ID, fuel == "heat") %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       mutate(kor_dh_total = sum(value)) %>%
       ungroup() %>%
@@ -515,7 +518,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
       L144.KOR_districtheat_split
 
     L144.in_EJ_R_bld_serv_F_Yh %>%
-      filter(!(GCAM_region_ID == 28 & fuel == "heat")) %>%
+      filter(!(GCAM_region_ID == KOREA_REGION_ID & fuel == "heat")) %>%
       bind_rows(L144.KOR_districtheat_split) %>%
       arrange(GCAM_region_ID, sector, fuel, service, year) ->
       L144.in_EJ_R_bld_serv_F_Yh
