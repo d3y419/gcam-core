@@ -28,7 +28,11 @@
 #'   \item resid/comm heating electricity: split 76%/24% between "electric furnace" and
 #'     "electric heat pump" (USA's only nonzero base-year partition among these tiers).
 #'     Korea's existing "electricity" stub-technology calibration is zeroed out for this
-#'     split so total calibrated energy is unchanged.
+#'     split so total calibrated energy is unchanged. The tiers' higher efficiencies give more
+#'     service from that energy, so the base service in L244 comes from
+#'     \code{module_energy_K1440.building_det_serv_KOR}, which uses the same split and efficiencies.
+#'     This chunk checks that the calibrated output of all South Korea building technologies equals
+#'     the base service L244 writes, for every service, consumer group and base year.
 #'   \item All other new tiers ("gas furnace hi-eff", "fuel furnace hi-eff",
 #'     "air conditioning hi-eff", "gas cooling") get 0% in the base year, matching USA's own
 #'     base-year treatment of these technologies -- they only grow in future periods via the
@@ -102,6 +106,9 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
              FILE = "gcam-usa/A44.globaltech_eff",
              "L244.StubTechCalInput_bld",
              "L244.StubTech_bld",
+             "L244.StubTechEff_bld",
+             "L244.ThermalBaseService",
+             "L244.GenericBaseService",
              "L201.en_pol_emissions",
              "L201.en_ghg_emissions",
              "L201.nonghg_max_reduction",
@@ -121,13 +128,16 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       half_life_stock <- steepness_stock <- half_life_new <- steepness_new <- steepness <-
       half.life <- technology <- efficiency <- market.name <- apply.to <- from.year <- to.year <-
       interpolation.function <- input.emissions <- emiss.coef <- Non.CO2 <- input.name <- base.calibrated.value <-
-      subsector.map <- NULL  # silence package check notes
+      subsector.map <- output <- base.service <- thermal.building.service.input <- building.service.input <- NULL  # silence package check notes
 
     A44.globaltech_shares <- get_data(all_data, "gcam-usa/A44.globaltech_shares", strip_attributes = TRUE)
     A44.globaltech_retirement <- get_data(all_data, "gcam-usa/A44.globaltech_retirement", strip_attributes = TRUE)
     A44.globaltech_eff <- get_data(all_data, "gcam-usa/A44.globaltech_eff", strip_attributes = TRUE)
     L244.StubTechCalInput_bld <- get_data(all_data, "L244.StubTechCalInput_bld", strip_attributes = TRUE)
     L244.StubTech_bld <- get_data(all_data, "L244.StubTech_bld", strip_attributes = TRUE)
+    L244.StubTechEff_bld <- get_data(all_data, "L244.StubTechEff_bld", strip_attributes = TRUE)
+    L244.ThermalBaseService <- get_data(all_data, "L244.ThermalBaseService", strip_attributes = TRUE)
+    L244.GenericBaseService <- get_data(all_data, "L244.GenericBaseService", strip_attributes = TRUE)
     L201.en_pol_emissions <- get_data(all_data, "L201.en_pol_emissions", strip_attributes = TRUE)
     L201.en_ghg_emissions <- get_data(all_data, "L201.en_ghg_emissions", strip_attributes = TRUE)
     L201.nonghg_max_reduction <- get_data(all_data, "L201.nonghg_max_reduction", strip_attributes = TRUE)
@@ -298,6 +308,35 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
                  collapse = ", "))
     }
 
+    # GCAM calibrates each service to its base service, so the calibrated output of all technologies in a
+    # service (calibrated input x efficiency, core technologies and tiers together) must equal the base
+    # service L244 writes. If it does not, GCAM cuts the other heating fuels to match. The 1e-6 EJ allows
+    # for the rounding of each value (energy.DIGITS_CALOUTPUT).
+    L244.StubTechCalInput_bld %>%
+      filter(region == KOREA_REGION_NAME) %>%
+      anti_join(K1441.StubTechCalInput_bld_KOR, by = c("region", "supplysector", "subsector", "stub.technology", "year")) %>%
+      bind_rows(K1441.StubTechCalInput_bld_KOR) %>%
+      filter(calibrated.value > 0) %>%
+      left_join_error_no_match(L244.StubTechEff_bld %>%
+                                 filter(region == KOREA_REGION_NAME) %>%
+                                 anti_join(K1441.StubTechEff_bld_KOR, by = c("region", "supplysector", "subsector", "stub.technology", "year")) %>%
+                                 bind_rows(K1441.StubTechEff_bld_KOR) %>%
+                                 select(region, supplysector, subsector, stub.technology, year, efficiency),
+                               by = c("region", "supplysector", "subsector", "stub.technology", "year")) %>%
+      group_by(region, supplysector, year) %>%
+      summarise(output = sum(calibrated.value * efficiency)) %>%
+      ungroup() %>%
+      left_join_error_no_match(bind_rows(L244.ThermalBaseService %>% rename(supplysector = thermal.building.service.input),
+                                         L244.GenericBaseService %>% rename(supplysector = building.service.input)) %>%
+                                 select(region, supplysector, year, base.service),
+                               by = c("region", "supplysector", "year")) ->
+      K1441.service_check
+    if(any(abs(K1441.service_check$output - K1441.service_check$base.service) > 1e-4 * K1441.service_check$base.service + 1e-6)) {
+      stop("K1441: calibrated output of South Korea building technologies differs from the L244 base service in ",
+           paste(unique(K1441.service_check$supplysector[abs(K1441.service_check$output - K1441.service_check$base.service) >
+                                                           1e-4 * K1441.service_check$base.service + 1e-6]), collapse = ", "))
+    }
+
     # Non-CO2 emissions for the new tiers. Korea's base technologies get calibrated emissions
     # (L201 InputEmissions) from which GCAM derives an emission coefficient; the new tiers have no
     # base-year energy, so they would otherwise have no non-CO2 at all (e.g. a "gas furnace hi-eff"
@@ -395,7 +434,8 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Adds GCAM-USA's efficiency-tier heating/cooling technologies to South Korea, calibrated using USA's base-year exogenous tier shares as a placeholder (see chunk docs TODO); total calibrated energy per fuel/dwelling-type/year is unchanged") %>%
       add_legacy_name("K1441.StubTechCalInput_bld_KOR") %>%
-      add_precursors("gcam-usa/A44.globaltech_shares", "L244.StubTechCalInput_bld") ->
+      add_precursors("gcam-usa/A44.globaltech_shares", "L244.StubTechCalInput_bld", "L244.StubTechEff_bld",
+                     "L244.ThermalBaseService", "L244.GenericBaseService") ->
       K1441.StubTechCalInput_bld_KOR
 
     K1441.StubTechShrwt_bld_KOR %>%
