@@ -56,10 +56,10 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
   # base technology's calibration; "add" pairs are introduced at zero calibrated energy.
   # retirement.category matches gcam-usa/A44.globaltech_retirement.csv's "supplysector" column
   # (a USA end-use category, not a literal GCAM supplysector name) -- every new technology
-  # needs an explicit S-curve retirement like its sibling base technology already has
-  # (input/extra/korea_bld_retirement_scurve.xml), or GCAM's default (unvintaged, full-
-  # turnover) behavior for the new technology can misbehave once mixed into a subsector whose
-  # sibling *is* vintaged.
+  # needs an explicit S-curve retirement like its sibling base technology (both are written
+  # below, K1441.StubTechSCurve_bld_KOR), or GCAM's default (unvintaged, full-turnover)
+  # behavior for the new technology can misbehave once mixed into a subsector whose sibling
+  # *is* vintaged.
   TIER_MAP <- tibble::tribble(
     ~sector_regex, ~subsector, ~base.technology, ~new.technology, ~mode, ~retirement.category,
     "^resid heating modern_d[0-9]+$", "electricity", "electricity", "electric furnace", "split", "resid heating",
@@ -99,7 +99,8 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
     return(c(FILE = "gcam-usa/A44.globaltech_shares",
              FILE = "gcam-usa/A44.globaltech_retirement",
              FILE = "gcam-usa/A44.globaltech_eff",
-             "L244.StubTechCalInput_bld"))
+             "L244.StubTechCalInput_bld",
+             "L244.StubTech_bld"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR",
              "K1441.StubTechEff_bld_KOR", "K1441.StubTechInterp_bld_KOR"))
@@ -119,6 +120,7 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
     A44.globaltech_retirement <- get_data(all_data, "gcam-usa/A44.globaltech_retirement", strip_attributes = TRUE)
     A44.globaltech_eff <- get_data(all_data, "gcam-usa/A44.globaltech_eff", strip_attributes = TRUE)
     L244.StubTechCalInput_bld <- get_data(all_data, "L244.StubTechCalInput_bld", strip_attributes = TRUE)
+    L244.StubTech_bld <- get_data(all_data, "L244.StubTech_bld", strip_attributes = TRUE)
 
     # USA's base-year exogenous share of "electric heat pump" within resid heating / electricity.
     # This is the one nonzero split among the tiers K1441 adds; used as South Korea's
@@ -208,14 +210,35 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechShrwt"]]) ->
       K1441.StubTechShrwt_bld_KOR
 
-    # Give every new tier technology the same S-curve age-based retirement as its sibling base
-    # technology already has (input/extra/korea_bld_retirement_scurve.xml), using the same
-    # borrowed-from-USA retirement category lookup. Applied at MODEL_FINAL_BASE_YEAR (stock
-    # parameters) and every future year (new-investment parameters), matching the existing file.
-    new_tier_rows %>%
-      dplyr::distinct(region, supplysector, subsector, stub.technology, retirement.category) %>%
+    # S-curve age-based retirement for all of South Korea's heating, cooling and "others" building
+    # technologies: the existing (core) ones and the new tiers. Korea had no vintaging, so stock
+    # turned over fully each period. Parameters are BORROWED from GCAM-USA
+    # (gcam-usa/A44.globaltech_retirement) by end-use category; they are equipment parameters,
+    # a placeholder until Korea-specific stock and survival data are available.
+    # Core "others" bundles water heating and miscellaneous appliances; it is mapped to USA's
+    # "hot water" category as the closest single analogue (ARBITRARY).
+    # Applied at MODEL_FINAL_BASE_YEAR (stock parameters) and every future year (new-investment
+    # parameters). (This replaces the hand-made input/extra/korea_bld_retirement_scurve.xml.)
+    RETIREMENT_CATEGORY <- tibble::tribble(
+      ~sector_regex, ~retirement.category,
+      "^resid heating ", "resid heating",
+      "^resid cooling ", "resid cooling",
+      "^resid others ", "resid hot water",
+      "^comm heating$", "comm heating",
+      "^comm cooling$", "comm cooling",
+      "^comm others$", "comm hot water")
+    L244.StubTech_bld %>%
+      filter(region == KOREA_REGION_NAME) %>%
+      dplyr::distinct(region, supplysector, subsector, stub.technology) %>%
+      repeat_add_columns(RETIREMENT_CATEGORY) %>%
+      filter(stringr::str_detect(supplysector, sector_regex)) %>%
+      select(region, supplysector, subsector, stub.technology, retirement.category) %>%
+      bind_rows(new_tier_rows %>%
+                  dplyr::distinct(region, supplysector, subsector, stub.technology, retirement.category)) %>%
       left_join_error_no_match(A44.globaltech_retirement, by = c("retirement.category" = "supplysector")) ->
       new_tier_retirement_base
+    assertthat::assert_that(!anyDuplicated(new_tier_retirement_base[c("supplysector", "subsector", "stub.technology")]),
+                            msg = "K1441: a South Korea building technology got two retirement categories")
 
     new_tier_retirement_base %>%
       mutate(year = MODEL_FINAL_BASE_YEAR,
@@ -328,11 +351,11 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       K1441.StubTechShrwt_bld_KOR
 
     K1441.StubTechSCurve_bld_KOR %>%
-      add_title("South Korea S-curve retirement for new efficiency-tier building technologies") %>%
+      add_title("South Korea S-curve retirement for building heating, cooling and others technologies") %>%
       add_units("lifetime/half.life: years; steepness: unitless") %>%
-      add_comments("Same borrowed-from-USA retirement category lookup as input/extra/korea_bld_retirement_scurve.xml, applied to the new technologies this chunk adds, so they vintage consistently with their sibling base technology instead of using GCAM's default unvintaged behavior") %>%
+      add_comments("Borrowed from GCAM-USA by end-use category (others mapped to hot water), for Korea's existing technologies and the new tiers, so they vintage instead of using GCAM's default unvintaged behavior") %>%
       add_legacy_name("K1441.StubTechSCurve_bld_KOR") %>%
-      add_precursors("gcam-usa/A44.globaltech_retirement", "L244.StubTechCalInput_bld") ->
+      add_precursors("gcam-usa/A44.globaltech_retirement", "L244.StubTechCalInput_bld", "L244.StubTech_bld") ->
       K1441.StubTechSCurve_bld_KOR
 
     K1441.StubTechEff_bld_KOR %>%
