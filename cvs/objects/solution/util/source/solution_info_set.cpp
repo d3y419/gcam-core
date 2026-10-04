@@ -51,8 +51,12 @@
 #include "marketplace/include/market.h"
 #include "solution/util/include/solution_info_param_parser.h"
 #include "containers/include/market_dependency_finder.h"
+#include "containers/include/scenario.h"
+#include "util/base/include/model_time.h"
 
 using namespace std;
+
+extern Scenario* scenario;
 
 //! Constructor
 SolutionInfoSet::SolutionInfoSet( Marketplace* aMarketplace ):
@@ -79,7 +83,8 @@ SolutionInfoSet::SolutionInfoSet( const vector<SolutionInfo> aSolutionSet ): sol
  *                                 that we should set within them.
  */
 void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSolutionTolerance,
-                          const double aDefaultSolutionFloor, const SolutionInfoParamParser* aSolutionInfoParamParser )
+                          const double aDefaultSolutionFloor, const SolutionInfoParamParser* aSolutionInfoParamParser,
+                          const bool aUseMarketScale )
 {
     assert( aPeriod >= 0 );
     this->period = aPeriod;
@@ -91,6 +96,27 @@ void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSol
 
     // Request the markets to solve from the marketplace. 
     vector<Market*> marketsToSolve = marketplace->getMarketsToSolve( period );
+    // The scale-aware convergence test is applied only after the final calibration period:
+    // calibration periods keep the classic test so calibrated results are untouched, and the
+    // previous period is then always a solved equilibrium. (Period 0 is never solved, and using
+    // its supplies and demands as the scale for 1990 made that period fail to solve.)
+    // GCAM moves on after a period fails to solve, so also require that the previous period
+    // solved: an unsolved period's supplies and demands are not a valid scale.
+    const vector<int>& unsolvedPeriods = scenario->getUnsolvedPeriods();
+    const bool prevPeriodSolved = find( unsolvedPeriods.begin(), unsolvedPeriods.end(),
+                                        static_cast<int>( period ) - 1 ) == unsolvedPeriods.end();
+    const bool useMarketScale = aUseMarketScale && prevPeriodSolved &&
+        static_cast<int>( period ) > scenario->getModeltime()->getFinalCalibrationPeriod();
+    if( aUseMarketScale && !prevPeriodSolved ) {
+        solverLog << "Previous period did not solve: using the classic convergence test in period "
+                  << period << "." << endl;
+    }
+    // The same markets in the previous period, in the same (market number) order, so the
+    // scale-aware convergence test can be judged against the size the market recently had.
+    // Indexing by market number avoids a name lookup, which would fail for markets whose
+    // region is not a model region (e.g. the "global" CO2 market).
+    const vector<Market*> prevMarkets = useMarketScale ?
+        marketplace->getMarketsToSolve( period - 1 ) : vector<Market*>();
 
     // Create and initialize a SolutionInfo object for each market.
     typedef vector<Market*>::const_iterator ConstMarketIterator;
@@ -109,6 +135,15 @@ void SolutionInfoSet::init( const unsigned int aPeriod, const double aDefaultSol
 #else
         SolutionInfo currInfo( *iter, partialList );
 #endif
+        double prevPeriodScale = 0;
+        if( !prevMarkets.empty() ) {
+            const Market* prevMarket = prevMarkets[ marketNumber ];
+            // Use the solver's view of the market, as SolutionInfo::getDemand/getSupply do: for
+            // price and demand markets getDemand/getSupply return the linked quantity, not the
+            // values the excess demand is computed from.
+            prevPeriodScale = max( fabs( prevMarket->getSolverDemand() ), fabs( prevMarket->getSolverSupply() ) );
+        }
+        currInfo.setScaleParams( useMarketScale, prevPeriodScale );
         currInfo.init( aDefaultSolutionTolerance, aDefaultSolutionFloor,
                        aSolutionInfoParamParser->getSolutionInfoValuesForMarket( (*iter)->getGoodName(), (*iter)->getRegionName(),
                                                                                  currInfo.getTypeName(), period ) );

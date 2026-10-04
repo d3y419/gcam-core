@@ -82,7 +82,7 @@ public:
     SolutionInfoSet( Marketplace* marketplace );
     SolutionInfoSet( const std::vector<SolutionInfo> aSolutionSet );
     void init( const unsigned int aPeriod, const double aDefaultSolutionTolerance, const double aDefaultSolutionFloor,
-               const SolutionInfoParamParser* aSolutionInfoParamParser );
+               const SolutionInfoParamParser* aSolutionInfoParamParser, const bool aUseMarketScale = false );
     UpdateCode updateSolvable( const ISolutionInfoFilter* aSolutionInfoFilter );
     void updateElasticities();
     void resetBrackets();
