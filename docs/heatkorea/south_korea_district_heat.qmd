@@ -1,0 +1,198 @@
+---
+title: "South Korea District Heat Calibration"
+author: "Haewon McJeon"
+date: last-modified
+format:
+  html:
+    toc: true
+    code-fold: true
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+---
+
+## Summary
+
+This work has two parts: (1) giving South Korea its own energy balance,
+separate from the global IEA-derived balance every other region shares, and
+(2) using that separation to calibrate district heat as a proper technology
+in Korea's buildings sector, which previously didn't exist there at all.
+
+Branch: `hcm/proj/heatkorea`.
+
+## Part 1: separating Korea's energy balance from the global IEA balance
+
+### What changed
+
+| File | Change |
+|---|---|
+| [`R/zenergy_K101.en_bal_KOR.R`](../../input/gcamdata/R/zenergy_K101.en_bal_KOR.R) (new) | Overlays Korea's rows in the global IEA energy balance with a Korea-specific balance, so Korea's numbers can diverge from the global-average calculation without touching any other region |
+| [`energy/KOR_en_bal.csv`](../../input/gcamdata/inst/extdata/energy/KOR_en_bal.csv) (new) | The Korea-specific sector x fuel x year energy balance overlay consumed by K101 |
+| [`R/zenergy_L1011.en_bal_adj.R`](../../input/gcamdata/R/zenergy_L1011.en_bal_adj.R) | Downstream input redirected from the global balance to the new Korea-overlaid balance (K101) |
+
+### Why
+
+GCAM's global IEA energy balance has no district-heat line item for Korea,
+so historically all of Korea's district-heat energy was absorbed into other
+fuel categories. To fix this without perturbing any other region's
+calibration, Korea's rows are overlaid with a Korea-specific balance
+(`K101`, "Korea, level-1 chunk 01") rather than editing the shared global
+balance directly. Every other region's data is untouched except through
+legitimate global trade effects (e.g. gas/biomass markets).
+
+`K101` sits between `L101` (the global IEA balance) and `L1011` (an existing
+downstream adjustment chunk, unrenamed since it isn't Korea-specific code):
+`L101 → K101 (Korea overlay) → L1011 → ... → L224 (district heat sector)`.
+
+## Part 2: district heat calibration
+
+South Korea had `has_district_heat = 0` in `A_regions.csv`, so even after
+Part 1 gave Korea its own energy balance, that district-heat energy was
+still folded into other fuels downstream, and GCAM never modeled Korean
+district heat as its own technology. This part turns district heat on for
+South Korea and calibrates it as a proper technology competing inside
+`resid heating`, `resid others`, `comm heating`, and `comm others`.
+
+### What changed
+
+| File | Change |
+|---|---|
+| [`energy/A_regions.csv`](../../input/gcamdata/inst/extdata/energy/A_regions.csv) | `has_district_heat` for South Korea: 0 → 1 |
+| [`energy/share_districtheat_korea.csv`](../../input/gcamdata/inst/extdata/energy/share_districtheat_korea.csv) (new) | Placeholder 70:30 heating:others split for how Korea's district-heat energy divides between the "heating" and "others" building services |
+| [`R/zenergy_L144.building_det_en.R`](../../input/gcamdata/R/zenergy_L144.building_det_en.R) | Applies the 70:30 split above to Korea's building-sector heat energy |
+| [`R/zenergy_L224.heat.R`](../../input/gcamdata/R/zenergy_L224.heat.R) | Removes Korea's district-heat "gas" subsector from the `fixed` share-weight interpolation rule that otherwise permanently freezes it at its last-calibrated (CHP-suppressed) share |
+| [`input/extra/korea_district_heat_2021_cost_override.xml`](../../input/extra/korea_district_heat_2021_cost_override.xml) (new) | Standalone XML scenario component: sets South Korea district-heat biomass non-energy cost to $1/GJ for 2005-2021 |
+| [`exe/configuration_ref.xml`](../../exe/configuration_ref.xml) | Adds the cost-override XML as a scenario component, right after `heat.xml` |
+
+### Why
+
+**The 70:30 heating/others split.** District heat needs to be divided
+between the "heating" and "others" (water heating, etc.) building services.
+Real Korea District Heating Corporation (KDHC) data was not available during
+this work, so a flat 70:30 placeholder is used for all historical years.
+This is documented in the CSV header as a placeholder pending real data.
+
+**The gas share-weight fix.** GCAM's CHP secondary-heat-output convention
+restricts CHP heat output to calibration years only (a deliberate,
+long-standing GCAM design choice — CHP-derived heat can otherwise exceed
+future end-use demand and break model solution for some regions). Because
+Korea's historical district-heat gas subsector was calibrated on a
+CHP-inclusive basis and then had that "fixed" share-weight rule freeze it at
+its last historical value, gas ended up artificially locked out of future
+competition against biomass. Removing Korea's gas subsector from that fixed
+rule lets it compete normally going forward, using the default fill-out
+share-weight of 1.
+
+**The 2021 cost override.** Korea's district-heat cost is a demand-weighted
+blend across biomass/gas/refined-liquids technologies. Once the CHP
+convention drops CHP-derived heat after the last calibration year, the
+blended sector-average cost profile shifts between 2021 and 2025, causing
+an abrupt ~17.6% price drop and a corresponding artificial jump in modeled
+total district-heat consumption in 2025. Since 2021 and all earlier years
+are historical/calibration years — the calibrated quantities do not respond
+to cost — a single-country, single-technology override of biomass's 2021
+(and, for consistency, 2005/2010/2015) non-energy cost to a round $1/GJ
+closes that gap without touching any other region or any future-year
+solved value. It is implemented as a standalone `input/extra` XML scenario
+component rather than a gcamdata code change, per this repo's convention
+for single-variable, single-country overrides.
+
+::: {.callout-warning}
+### This $1/GJ value is arbitrary — do not remove without replacing the fix
+
+It is not derived from real Korean cost data. It exists purely to prevent
+the 2021→2025 consumption jump described above. It is safe to leave as-is
+because 2005-2021 are all calibration years (fixed quantities, cost has no
+effect on the calibrated result) — but removing the override will bring
+the jump back unless it's replaced with something else that closes the same
+gap. See the comment in
+[`korea_district_heat_2021_cost_override.xml`](../../input/extra/korea_district_heat_2021_cost_override.xml)
+for the same note in the actual scenario file. Replace with real KDHC cost
+data when available.
+:::
+
+## Validation
+
+The charts below are from a full Reference-scenario run (1990-2100,
+21 periods) of `gcam.exe` with all changes above applied. All periods solved
+with no errors. 2020 reads as zero across the board — that's a standard
+GCAM/IEA-balance artifact (2020 is excluded as a historical calibration
+year), not something introduced by this change.
+
+```{r}
+#| label: load-data
+library(tidyverse)
+
+prod <- read_csv("data/district_heat_production_by_tech.csv", show_col_types = FALSE) |>
+  filter(year != 2020) |>
+  mutate(
+    fuel = factor(fuel, levels = c("biomass", "gas", "refined liquids")),
+    type = factor(type, levels = c("boiler", "CHP")),
+    year = as.integer(year)
+  )
+
+cons <- read_csv("data/district_heat_consumption_by_sector.csv", show_col_types = FALSE) |>
+  filter(year != 2020) |>
+  mutate(
+    sector = factor(sector, levels = c("resid heating", "resid others", "comm heating", "comm others")),
+    year = as.integer(year)
+  )
+```
+
+### Total district heat production, by fuel and technology (boiler vs. CHP)
+
+CHP secondary heat output only exists through the last calibration year
+(2021) by GCAM design; boiler output is solved through 2100. Total
+production (boiler + CHP combined) is essentially flat across the
+2021→2025 transition (0.115 EJ → 0.110 EJ), confirming there is no
+discontinuity once CHP and boiler are viewed together.
+
+```{r}
+#| label: fig-production
+#| fig-cap: "South Korea district heat production by fuel (color) and technology (boiler = solid, CHP = faded)"
+fuel_colors <- c("biomass" = "#4C72B0", "gas" = "#DD8452", "refined liquids" = "#55A868")
+
+ggplot(prod, aes(x = year, y = EJ, fill = fuel, alpha = type)) +
+  geom_col(position = "stack", width = 3.5) +
+  scale_fill_manual(values = fuel_colors) +
+  scale_alpha_manual(values = c("boiler" = 1, "CHP" = 0.45)) +
+  labs(
+    x = NULL, y = "EJ",
+    title = "South Korea district heat production",
+    fill = "Fuel", alpha = "Technology"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+### District heat consumption in buildings, by sector
+
+District heat's share of buildings end-use energy declines smoothly and
+monotonically across all four sectors from 2021 onward, with no jump at the
+2021→2025 boundary.
+
+```{r}
+#| label: fig-consumption
+#| fig-cap: "South Korea district heat consumption in buildings, by sector"
+sector_colors <- c(
+  "resid heating" = "#4C72B0",
+  "resid others" = "#8CA9D6",
+  "comm heating" = "#DD8452",
+  "comm others" = "#E8B294"
+)
+
+ggplot(cons, aes(x = year, y = EJ, fill = sector)) +
+  geom_col(position = "stack", width = 3.5) +
+  scale_fill_manual(values = sector_colors) +
+  labs(
+    x = NULL, y = "EJ",
+    title = "South Korea district heat consumption in buildings",
+    fill = "Sector"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+## Known placeholders / follow-up items
+
+- **70:30 heating/others split** ([`share_districtheat_korea.csv`](../../input/gcamdata/inst/extdata/energy/share_districtheat_korea.csv)) is a flat assumption for all years, pending real KDHC data.
+- **2021 biomass cost override** is arbitrary (see callout above); replace once real historical Korean district-heat costs are available.
