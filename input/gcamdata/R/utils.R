@@ -380,13 +380,62 @@ find_chunks <- function(pattern = "^module_[a-zA-Z\\.]*_.*$", include_disabled =
 
   assertthat::assert_that(is.character(pattern))
 
-  ls(name = parent.env(environment()), pattern = pattern) %>%
-    tibble::tibble(name = .,
-                   disabled = grepl("_DISABLED$", name) | grepl(paste0("^module_.*", DISABLED_MODULES), name)) %>%
+  all_names <- ls(name = parent.env(environment()), pattern = pattern)
+
+  disabled <- grepl("_DISABLED$", all_names) |
+    grepl(paste0("^module_.*", DISABLED_MODULES), all_names)
+
+  # Disabling a module by name removes its chunks, but not the chunks elsewhere
+  # that consume their output - those are left with a dependency nothing can
+  # satisfy, and the driver fails. A module can therefore only be skipped as far
+  # as nothing still enabled needs it. Keep the minimal set required to leave the
+  # remaining chunks satisfiable and disable the rest.
+  #
+  # Only runs when a module is actually disabled, so the default configuration
+  # pays nothing for it.
+  if(!include_disabled && any(disabled) && DISABLED_MODULES != "xxxxxxxx") {
+    disabled <- keep_required_chunks(all_names, disabled)
+  }
+
+  tibble::tibble(name = all_names, disabled = disabled) %>%
     filter(include_disabled | !disabled) %>%
     tidyr::separate(name, into = c("x", "module", "chunk"), remove = FALSE,
                     sep = "_", extra = "merge") %>%
     dplyr::select(-x)
+}
+
+
+#' keep_required_chunks
+#'
+#' Clear the disabled flag on chunks whose output an enabled chunk still requires.
+#'
+#' @details Used by \code{\link{find_chunks}} when \code{DISABLED_MODULES} is set.
+#' Walks to a fixed point, because a rescued chunk may itself need another that was
+#' disabled. Inputs read from files are ignored - those are always available.
+#'
+#' As of this writing, disabling \code{gcamusa} keeps four of its 134 chunks:
+#' \code{L101.nonghg_en_S_T_Y}, \code{L103.ghg_an_S_T_Y}, \code{L104.bcoc_en_S_T_Y}
+#' and \code{L277.nonghg_prc}, whose outputs feed the global emissions chunks
+#' \code{L112.ceds_ghg_en_R_S_T_Y}, \code{L114.bcoc_en_R_S_T_Y} and
+#' \code{L253.emission_controls}. None of the four write XML, so no GCAM-USA input
+#' files are produced.
+#'
+#' @param all_names Character vector of every chunk name.
+#' @param disabled Logical vector, same length, TRUE where the name matched.
+#' @return \code{disabled}, with required chunks cleared to FALSE.
+keep_required_chunks <- function(all_names, disabled) {
+  outs <- chunk_outputs(all_names)
+  ins <- chunk_inputs(all_names)
+  ins <- ins[!ins$from_file, ]
+
+  repeat {
+    needed <- unique(ins$input[ins$name %in% all_names[!disabled]])
+    rescue <- unique(outs$name[outs$output %in% needed &
+                                 outs$name %in% all_names[disabled]])
+    if(length(rescue) == 0) break
+    disabled[all_names %in% rescue] <- FALSE
+  }
+  disabled
 }
 
 
