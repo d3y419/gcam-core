@@ -10,7 +10,8 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{K1441.StubTechCalInput_bld_KOR}, \code{K1441.StubTechShrwt_bld_KOR},
-#' \code{K1441.StubTechSCurve_bld_KOR}, \code{K1441.StubTechEff_bld_KOR}, \code{K1441.StubTechInterp_bld_KOR}.
+#' \code{K1441.StubTechSCurve_bld_KOR}, \code{K1441.StubTechEff_bld_KOR}, \code{K1441.StubTechInterp_bld_KOR},
+#' \code{K1441.InputEmissCoeff_bld_KOR}, \code{K1441.GDPCtrlMax_bld_KOR}, \code{K1441.GDPCtrlSteep_bld_KOR}.
 #' @details South Korea's core building technologies are a single flat technology per fuel
 #' (e.g. "gas", "electricity"). GCAM-USA's buildings module models several of the same
 #' fuels as multiple efficiency-tier technologies (e.g. "gas furnace" vs "gas furnace
@@ -100,10 +101,15 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
              FILE = "gcam-usa/A44.globaltech_retirement",
              FILE = "gcam-usa/A44.globaltech_eff",
              "L244.StubTechCalInput_bld",
-             "L244.StubTech_bld"))
+             "L244.StubTech_bld",
+             "L201.en_pol_emissions",
+             "L201.en_ghg_emissions",
+             "L201.nonghg_max_reduction",
+             "L201.nonghg_steepness"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("K1441.StubTechCalInput_bld_KOR", "K1441.StubTechShrwt_bld_KOR", "K1441.StubTechSCurve_bld_KOR",
-             "K1441.StubTechEff_bld_KOR", "K1441.StubTechInterp_bld_KOR"))
+             "K1441.StubTechEff_bld_KOR", "K1441.StubTechInterp_bld_KOR",
+             "K1441.InputEmissCoeff_bld_KOR", "K1441.GDPCtrlMax_bld_KOR", "K1441.GDPCtrlSteep_bld_KOR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -114,13 +120,18 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       technology1 <- technology2 <- elec.heat.share <- retirement.category <- lifetime <-
       half_life_stock <- steepness_stock <- half_life_new <- steepness_new <- steepness <-
       half.life <- technology <- efficiency <- market.name <- apply.to <- from.year <- to.year <-
-      interpolation.function <- NULL  # silence package check notes
+      interpolation.function <- input.emissions <- emiss.coef <- Non.CO2 <- input.name <- base.calibrated.value <-
+      subsector.map <- NULL  # silence package check notes
 
     A44.globaltech_shares <- get_data(all_data, "gcam-usa/A44.globaltech_shares", strip_attributes = TRUE)
     A44.globaltech_retirement <- get_data(all_data, "gcam-usa/A44.globaltech_retirement", strip_attributes = TRUE)
     A44.globaltech_eff <- get_data(all_data, "gcam-usa/A44.globaltech_eff", strip_attributes = TRUE)
     L244.StubTechCalInput_bld <- get_data(all_data, "L244.StubTechCalInput_bld", strip_attributes = TRUE)
     L244.StubTech_bld <- get_data(all_data, "L244.StubTech_bld", strip_attributes = TRUE)
+    L201.en_pol_emissions <- get_data(all_data, "L201.en_pol_emissions", strip_attributes = TRUE)
+    L201.en_ghg_emissions <- get_data(all_data, "L201.en_ghg_emissions", strip_attributes = TRUE)
+    L201.nonghg_max_reduction <- get_data(all_data, "L201.nonghg_max_reduction", strip_attributes = TRUE)
+    L201.nonghg_steepness <- get_data(all_data, "L201.nonghg_steepness", strip_attributes = TRUE)
 
     # USA's base-year exogenous share of "electric heat pump" within resid heating / electricity.
     # This is the one nonzero split among the tiers K1441 adds; used as South Korea's
@@ -287,6 +298,51 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
                  collapse = ", "))
     }
 
+    # Non-CO2 emissions for the new tiers. Korea's base technologies get calibrated emissions
+    # (L201 InputEmissions) from which GCAM derives an emission coefficient; the new tiers have no
+    # base-year energy, so they would otherwise have no non-CO2 at all (e.g. a "gas furnace hi-eff"
+    # with no NOx). Each tier gets its sibling base technology's final-base-year coefficient
+    # (emissions / calibrated input), and any GDP control the sibling has. GCAM copies these to
+    # later vintages. CO2 is not affected (it comes from the fuel's carbon content).
+    new_tier_rows %>%
+      dplyr::distinct(region, supplysector, subsector, stub.technology) %>%
+      repeat_add_columns(TIER_MAP %>% dplyr::distinct(sector_regex, subsector.map = subsector, base.technology, new.technology)) %>%
+      filter(stringr::str_detect(supplysector, sector_regex), subsector == subsector.map, stub.technology == new.technology) %>%
+      select(region, supplysector, subsector, stub.technology, base.technology) ->
+      K1441.tier_base
+    assertthat::assert_that(!anyDuplicated(K1441.tier_base[c("supplysector", "subsector", "stub.technology")]),
+                            msg = "K1441: a tier matched more than one base technology")
+
+    L244.StubTechCalInput_bld %>%
+      filter(region == KOREA_REGION_NAME, year == MODEL_FINAL_BASE_YEAR) %>%
+      select(supplysector, subsector, base.technology = stub.technology, base.calibrated.value = calibrated.value) ->
+      K1441.base_input
+
+    bind_rows(L201.en_pol_emissions, L201.en_ghg_emissions) %>%
+      filter(region == KOREA_REGION_NAME, year == MODEL_FINAL_BASE_YEAR) %>%
+      rename(base.technology = stub.technology) %>%
+      inner_join(K1441.tier_base, by = c("region", "supplysector", "subsector", "base.technology")) %>%
+      left_join_error_no_match(K1441.base_input, by = c("supplysector", "subsector", "base.technology")) %>%
+      # a sibling with no calibrated energy has no defined coefficient; leave that tier without one
+      filter(base.calibrated.value > 0) %>%
+      mutate(emiss.coef = signif(input.emissions / base.calibrated.value, 7)) %>%
+      select(LEVEL2_DATA_NAMES[["InputEmissCoeff"]]) ->
+      K1441.InputEmissCoeff_bld_KOR
+
+    copy_ctrl <- function(ctrl) {
+      ctrl %>%
+        filter(region == KOREA_REGION_NAME) %>%
+        rename(base.technology = stub.technology) %>%
+        inner_join(K1441.tier_base, by = c("region", "supplysector", "subsector", "base.technology")) %>%
+        # the sibling carries its control from its first vintage; a tier's non-CO2 objects only exist
+        # from MODEL_FINAL_BASE_YEAR (where the coefficient is set), and GCAM stops on a non-CO2 object
+        # without a coefficient, so attach the control there too
+        mutate(year = MODEL_FINAL_BASE_YEAR) %>%
+        semi_join(K1441.InputEmissCoeff_bld_KOR, by = c("region", "supplysector", "subsector", "stub.technology", "Non.CO2"))
+    }
+    copy_ctrl(L201.nonghg_max_reduction) %>% select(LEVEL2_DATA_NAMES[["GDPCtrlMax"]]) -> K1441.GDPCtrlMax_bld_KOR
+    copy_ctrl(L201.nonghg_steepness) %>% select(LEVEL2_DATA_NAMES[["GDPCtrlSteep"]]) -> K1441.GDPCtrlSteep_bld_KOR
+
     # Gradual (not instantaneous) adoption of the new efficiency-tier technologies.
     #
     # Without this rule the new tiers jump from their calibrated base-year share-weight
@@ -374,8 +430,33 @@ module_energy_K1441.building_det_en_KOR <- function(command, ...) {
       add_precursors("L244.StubTechCalInput_bld") ->
       K1441.StubTechInterp_bld_KOR
 
+    K1441.InputEmissCoeff_bld_KOR %>%
+      add_title("South Korea non-CO2 emission coefficients for the new efficiency-tier building technologies") %>%
+      add_units("Tg / EJ (as the sibling base technology)") %>%
+      add_comments("Copied from each tier's sibling base technology: final-base-year input emissions / calibrated input") %>%
+      add_legacy_name("K1441.InputEmissCoeff_bld_KOR") %>%
+      add_precursors("L201.en_pol_emissions", "L201.en_ghg_emissions", "L244.StubTechCalInput_bld") ->
+      K1441.InputEmissCoeff_bld_KOR
+
+    K1441.GDPCtrlMax_bld_KOR %>%
+      add_title("South Korea GDP control (max reduction) for the new efficiency-tier building technologies") %>%
+      add_units("Percent reduction") %>%
+      add_comments("Copied from each tier's sibling base technology") %>%
+      add_legacy_name("K1441.GDPCtrlMax_bld_KOR") %>%
+      add_precursors("L201.nonghg_max_reduction", "L244.StubTechCalInput_bld") ->
+      K1441.GDPCtrlMax_bld_KOR
+
+    K1441.GDPCtrlSteep_bld_KOR %>%
+      add_title("South Korea GDP control (steepness) for the new efficiency-tier building technologies") %>%
+      add_units("Unitless") %>%
+      add_comments("Copied from each tier's sibling base technology") %>%
+      add_legacy_name("K1441.GDPCtrlSteep_bld_KOR") %>%
+      add_precursors("L201.nonghg_steepness", "L244.StubTechCalInput_bld") ->
+      K1441.GDPCtrlSteep_bld_KOR
+
     return_data(K1441.StubTechCalInput_bld_KOR, K1441.StubTechShrwt_bld_KOR, K1441.StubTechSCurve_bld_KOR,
-                K1441.StubTechEff_bld_KOR, K1441.StubTechInterp_bld_KOR)
+                K1441.StubTechEff_bld_KOR, K1441.StubTechInterp_bld_KOR,
+                K1441.InputEmissCoeff_bld_KOR, K1441.GDPCtrlMax_bld_KOR, K1441.GDPCtrlSteep_bld_KOR)
   } else {
     stop("Unknown command")
   }
