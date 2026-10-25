@@ -71,16 +71,19 @@ load_csv_files <- function(filenames, optionals, quiet = FALSE, dummy = NULL, ..
     # Read the file header and extract the column type info from it
     assert_that(file.exists(fqfn))
     header <- find_header(fqfn)
-    csv <- fqfn
+    csv_input <- fqfn
     if(isTRUE(getOption("gcamdata.trim_trailing_commas", TRUE))) {
       # Excel pads every row to the widest one with trailing commas: strip them from the header and,
       # if the column-name row is padded, the same number from every row (real empty last values stay)
       header <- sub(",+$", "", header, useBytes = TRUE)
-      names_row <- readLines(fqfn, n = length(header) + 1, warn = FALSE)[length(header) + 1]
+      # Column-name row is the first line not starting with "#" (bytewise, as headers may not be UTF-8)
+      con <- file(fqfn, "r")
+      while(isTRUE(startsWith(names_row <- readLines(con, n = 1, warn = FALSE), COMMENT_CHAR))) {}
+      close(con)
       pad <- attr(regexpr(",+$", names_row, useBytes = TRUE), "match.length")
       if(isTRUE(pad > 0)) {
         lines <- sub(paste0(",{", pad, "}$"), "", readLines(fqfn, warn = FALSE), useBytes = TRUE)
-        csv <- charToRaw(paste0(lines, "\n", collapse = ""))
+        csv_input <- charToRaw(paste0(lines, "\n", collapse = ""))
       }
     }
     col_types <- extract_header_info(header, label = "Column types:", fqfn, required = TRUE)
@@ -92,7 +95,7 @@ load_csv_files <- function(filenames, optionals, quiet = FALSE, dummy = NULL, ..
     current_opts <- options()
     on.exit(options(current_opts), add = TRUE)
     op <- options(warn = 2)
-    fd <- try(readr::read_csv(csv, comment = COMMENT_CHAR, col_types = col_types, ...))
+    fd <- try(readr::read_csv(csv_input, comment = COMMENT_CHAR, col_types = col_types, ...))
     options(op)
     # ...ensuring we trap any anomaly here
     if(is(fd, "try-error")) {
