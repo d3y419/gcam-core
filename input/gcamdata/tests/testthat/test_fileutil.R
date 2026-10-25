@@ -49,6 +49,24 @@ test_that("loads test file", {
   expect_is(get_title(f2), "character")
 })
 
+test_that("ignores trailing commas added by Excel", {
+  fn <- "tests/cars.csv"
+  f1 <- load_csv_files(fn, optionals = FALSE, quiet = TRUE)[[1]]
+  x <- readLines(system.file("extdata", fn, package = "gcamdata"))
+  x <- c(x, "11.0,")                    # a real empty last value must survive
+  tf <- file.path(tempfile(), basename(fn))
+  dir.create(dirname(tf))
+  writeLines(paste0(x, ",,"), tf)       # Excel pads every row to the widest one
+  mockr::with_mock(find_csv_file = function(...) tf, .env = "gcamdata", {
+    f2 <- load_csv_files(fn, optionals = FALSE, quiet = TRUE)[[1]]
+    expect_equivalent(f2, dplyr::bind_rows(f1, tibble(speed = 11, dist = NA_real_)))
+    expect_equal(get_title(f2), get_title(f1))
+    op <- options(gcamdata.trim_trailing_commas = FALSE)
+    suppressWarnings(expect_error(load_csv_files(fn, optionals = FALSE, quiet = TRUE)))
+    options(op)
+  })
+})
+
 test_that("errors on coltype mismatch", {
   fn <- "tests/bad_A_agRsrc.csv"
   expect_error(load_csv_files(fn, optionals = FALSE, quiet = FALSE))
