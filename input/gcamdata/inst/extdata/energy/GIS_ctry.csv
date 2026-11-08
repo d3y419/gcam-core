@@ -1,8 +1,8 @@
-# File: GIS_ctry.csv,
-# Title: GIS country iso codes,
-# Units: NA,
-# Description: Mapping between iso codes and country names in GIS data,
-# Reference: Unknown,
+# File: GIS_ctry.csv
+# Title: GIS country iso codes
+# Units: NA
+# Description: Mapping between iso codes and country names in GIS data
+# Reference: Unknown
 # Column types: cc 
 # ----------
 country,iso
