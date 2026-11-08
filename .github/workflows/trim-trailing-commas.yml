@@ -1,0 +1,45 @@
+name: Input CSV format
+
+on:
+  push:
+    paths:
+      - 'input/gcamdata/inst/extdata/**'
+      - 'input/gcamdata/R/utils.R'
+      - 'input/gcamdata/R/constants.R'
+      - '.github/workflows/trim-trailing-commas.yml'
+  pull_request:
+    paths:
+      - 'input/gcamdata/inst/extdata/**'
+      - 'input/gcamdata/R/utils.R'
+      - 'input/gcamdata/R/constants.R'
+      - '.github/workflows/trim-trailing-commas.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  trim-trailing-commas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            input/gcamdata/R
+            input/gcamdata/inst/extdata
+      - uses: r-lib/actions/setup-r@v2
+      - name: Check input CSVs for trailing commas added by Excel
+        run: |
+          cat > "$RUNNER_TEMP/check.R" <<'EOF'
+          source("input/gcamdata/R/constants.R")
+          source("input/gcamdata/R/utils.R")
+          f <- list.files("input/gcamdata/inst/extdata", "[.]csv$", recursive = TRUE, full.names = TRUE)
+          bad <- f[vapply(f, trim_trailing_commas, logical(1), fix = FALSE)]
+          cat(length(f), "input CSVs checked\n")
+          if(length(bad)) {
+            message("Trailing commas (Excel) in:\n  ", paste(bad, collapse = "\n  "),
+                    "\nRemove them with trim_trailing_commas() (input/gcamdata/R/utils.R), which gcamdata",
+                    " runs when it reads a file, or with the commit hook in .githooks.")
+            quit(status = 1)
+          }
+          EOF
+          Rscript --vanilla "$RUNNER_TEMP/check.R"
