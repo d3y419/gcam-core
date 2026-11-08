@@ -28,6 +28,91 @@ find_header <- function(fqfn) {
   header
 }
 
+#' trim_trailing_commas
+#'
+#' Remove the trailing commas that Excel adds to a CSV file, in place.
+#'
+#' @param fqfn Fully qualified filename, character
+#' @param fix Logical: clean the file? If \code{FALSE}, only check it.
+#' @return Invisibly, \code{TRUE} if the file has trailing commas to remove, \code{FALSE} if not.
+#' @details Excel pads every row of a CSV file to the widest row with trailing commas. This removes
+#' trailing commas from comment lines, removes the quotes Excel puts around a comment line that
+#' contains a comma, and removes the commas after the last named column from the other rows.
+#' Empty values in named columns are kept, and lines that end inside a quoted value are not changed.
+#' Before a file is cleaned, the original is copied to \code{outputs/trailing_comma_originals/} in the
+#' gcamdata folder. Line endings are kept.
+trim_trailing_commas <- function(fqfn, fix = TRUE) {
+  # Base R only: .githooks/pre-commit and the GitHub check source this file without loading gcamdata.
+  # All text is handled as bytes, as some files are not valid UTF-8.
+  bytes <- readBin(fqfn, "raw", file.size(fqfn))
+  if(length(bytes) == 0) return(invisible(FALSE))
+  txt <- rawToChar(bytes)
+  # Quick test on the whole text: a comment line ending in a comma, a quoted comment line, or a
+  # column-name row (first line not starting with the comment character) ending in a comma
+  names_row <- regmatches(txt, regexpr(paste0("(?m)^(?!", COMMENT_CHAR, ").*$"), txt, perl = TRUE, useBytes = TRUE))
+  if(!grepl(paste0('(?m)^', COMMENT_CHAR, '.*,\r?$|^"', COMMENT_CHAR), txt, perl = TRUE, useBytes = TRUE) &&
+     !any(grepl(",\r?$", names_row, useBytes = TRUE))) {
+    return(invisible(FALSE))
+  }
+  eol <- if(grepl("\r\n", txt, fixed = TRUE, useBytes = TRUE)) "\r\n" else "\n"
+  lines <- strsplit(txt, "\r?\n", useBytes = TRUE)[[1]]
+
+  # Comment lines that Excel quoted because they contain a comma: remove the quotes
+  quoted <- grepl(paste0('^"', COMMENT_CHAR, '([^"]|"")*",*$'), lines, useBytes = TRUE)
+  lines[quoted] <- gsub('""', '"', sub('^"(.*)",*$', "\\1", lines[quoted], useBytes = TRUE),
+                        fixed = TRUE, useBytes = TRUE)
+  # Comment lines: remove all trailing commas
+  comment <- grepl(paste0("^", COMMENT_CHAR), lines, useBytes = TRUE)
+  padded <- comment & grepl(",$", lines, useBytes = TRUE)
+  lines[padded] <- sub(",+$", "", lines[padded], useBytes = TRUE)
+  changed <- quoted | padded
+
+  # Other rows: if the column-name row ends in k commas, Excel padded every row by k columns
+  data <- which(!comment)
+  k <- if(length(data)) attr(regexpr(",+$", lines[data[1]], useBytes = TRUE), "match.length") else -1
+  if(k > 0) {
+    n_fields <- function(x) {
+      unquoted <- gsub('"[^"]*"', "", x, useBytes = TRUE)
+      nchar(gsub("[^,]", "", unquoted, useBytes = TRUE), type = "bytes") + 1
+    }
+    # A record ends on the first line that leaves no quoted value open
+    n_quotes <- nchar(gsub('[^"]', "", lines[data], useBytes = TRUE), type = "bytes")
+    open <- cumsum(n_quotes) %% 2 == 1
+    record <- cumsum(c(TRUE, !open[-length(open)]))
+    record_text <- lines[data]
+    if(any(n_quotes > 0)) {
+      record_text <- vapply(split(record_text, record), paste, character(1), collapse = "\n")
+    }
+    last <- !duplicated(record, fromLast = TRUE)
+    record_end <- data[last]
+    trailing <- pmax(0, attr(regexpr(",+$", lines[record_end], useBytes = TRUE), "match.length"))
+    # Remove the commas beyond the named columns (not from a record still open at the end of the file)
+    drop <- pmin(pmax(0, n_fields(record_text) - (n_fields(lines[data[1]]) - k)), trailing)
+    drop[open[last]] <- 0
+    for(d in setdiff(unique(drop), 0)) {
+      i <- record_end[drop == d]
+      lines[i] <- sub(paste0(",{", d, "}$"), "", lines[i], useBytes = TRUE)
+      changed[i] <- TRUE
+    }
+  }
+
+  if(!any(changed)) return(invisible(FALSE))
+  if(fix) {
+    in_extdata <- grepl("extdata[/\\\\]", fqfn)
+    root <- if(in_extdata) sub("(inst[/\\\\])?extdata[/\\\\].*$", "", fqfn) else paste0(dirname(fqfn), "/")
+    original <- paste0(root, OUTPUTS_DIR, "trailing_comma_originals/",
+                       if(in_extdata) sub("^.*extdata[/\\\\]", "", fqfn) else basename(fqfn))
+    dir.create(dirname(original), recursive = TRUE, showWarnings = FALSE)
+    if(!file.copy(fqfn, original, overwrite = TRUE)) {
+      stop("Could not copy ", fqfn, " to ", original)
+    }
+    final_eol <- if(bytes[length(bytes)] == as.raw(10)) eol else ""
+    writeBin(charToRaw(paste0(paste(lines, collapse = eol), final_eol)), fqfn)
+    message("Removed trailing commas from ", basename(fqfn), "; original copied to ", original)
+  }
+  invisible(TRUE)
+}
+
 #' load_csv_files
 #'
 #' Load one or more internal, i.e. included with the package, csv (or csv.gz) data files.
@@ -39,8 +124,8 @@ find_header <- function(fqfn) {
 #' @param ... Any other parameter to pass to \code{readr::read_csv}
 #' @details The data frames read in are marked as inputs, not ones that have
 #' been computed, via \code{\link{add_comments}}. Optional files that are not found
-#' as returned as NA in the list. Trailing commas added by Excel are ignored unless
-#' \code{options(gcamdata.trim_trailing_commas = FALSE)}.
+#' as returned as NA in the list. Trailing commas added by Excel are first removed from the file with
+#' \code{\link{trim_trailing_commas}}, unless \code{options(gcamdata.trim_trailing_commas = FALSE)}.
 #' @return A list of data frames (tibbles).
 #' @importFrom magrittr "%>%"
 #' @importFrom methods is
@@ -70,20 +155,11 @@ load_csv_files <- function(filenames, optionals, quiet = FALSE, dummy = NULL, ..
 
     # Read the file header and extract the column type info from it
     assert_that(file.exists(fqfn))
-    header <- find_header(fqfn)
-    pad <- 0
-    if(isTRUE(getOption("gcamdata.trim_trailing_commas", TRUE))) {
-      # Excel pads every row to the widest one with trailing commas: strip them from the header, and
-      # count the unnamed columns they add, which are read as text below and dropped if empty
-      header <- sub(",+$", "", header, useBytes = TRUE)
-      # Column-name row is the first line not starting with "#" (bytewise, as headers may not be UTF-8)
-      con <- file(fqfn, "r")
-      while(isTRUE(startsWith(names_row <- readLines(con, n = 1, warn = FALSE), COMMENT_CHAR))) {}
-      close(con)
-      pad <- max(0, attr(regexpr(",+$", names_row, useBytes = TRUE), "match.length"))
+    if(isTRUE(getOption("gcamdata.trim_trailing_commas", TRUE)) && grepl("\\.csv$", fqfn)) {
+      trim_trailing_commas(fqfn)
     }
+    header <- find_header(fqfn)
     col_types <- extract_header_info(header, label = "Column types:", fqfn, required = TRUE)
-    col_types <- paste0(col_types, strrep("c", pad))
 
     # Attempt the file read
     # Note `options(warn = 2)` forces all warnings to errors, so we save the current options to an
@@ -92,19 +168,11 @@ load_csv_files <- function(filenames, optionals, quiet = FALSE, dummy = NULL, ..
     current_opts <- options()
     on.exit(options(current_opts), add = TRUE)
     op <- options(warn = 2)
-    # (readr's message about naming the unnamed padding columns is muffled)
-    fd <- try(withCallingHandlers(readr::read_csv(fqfn, comment = COMMENT_CHAR, col_types = col_types, ...),
-                                  message = function(m) if(pad > 0) invokeRestart("muffleMessage")))
+    fd <- try(readr::read_csv(fqfn, comment = COMMENT_CHAR, col_types = col_types, ...))
     options(op)
     # ...ensuring we trap any anomaly here
     if(is(fd, "try-error")) {
       stop("Error or warning while reading ", basename(fqfn))
-    }
-    if(pad > 0) {
-      if(any(!is.na(fd[ncol(fd) - seq_len(pad) + 1]))) {
-        stop("Values in unnamed columns after the last named column in ", basename(fqfn))
-      }
-      fd <- fd[seq_len(ncol(fd) - pad)]
     }
 
     # Parse the file's header and add metadata
@@ -174,9 +242,6 @@ extract_header_info <- function(header_lines, label, filename, required = FALSE,
       trimws ->
       info
 
-    if(any(grepl(",,+$", info))) {
-      warning("Multiple commas at end of header line in ", filename)
-    }
     if(nchar(paste(info, collapse = "")) == 0) {
       stop("Empty metadata label '", label, "' found in ", basename(filename))
     }
@@ -217,8 +282,6 @@ parse_csv_header <- function(obj, filename, header, enforce_requirements = TRUE)
 
   # The 'File:' field has to match the actual filename
   filecheck <- extract_header_info(header, "File:", filename, required = enforce_requirements)
-  # Remove trailing commas - stupid Excel
-  filecheck <- gsub(",*$", "", filecheck)
   if(enforce_requirements & !identical(filecheck, basename(filename))) {
     stop("'File:' given in header (", filecheck, ") doesn't match filename in ", filename)
   }
