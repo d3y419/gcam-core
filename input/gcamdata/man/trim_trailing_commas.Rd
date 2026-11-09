@@ -20,8 +20,10 @@ Remove the trailing commas that Excel adds to a CSV file, in place.
 \details{
 Excel pads every row of a CSV file to the widest row with trailing commas. This removes
 trailing commas from comment lines, removes the quotes Excel puts around a comment line that
-contains a comma, and removes the commas after the last named column from the other rows.
-Empty values in named columns are kept, and lines that end inside a quoted value are not changed.
+contains a comma (above the column-name row), and removes the commas after the last named column
+from the other rows. A comment line is a line that starts with the comment character outside a
+quoted value. Empty values in named columns, blank rows, quoted values (including values spanning
+lines) and line endings are kept.
 Before a file is cleaned, the original is copied to \code{outputs/trailing_comma_originals/} in the
-gcamdata folder. Line endings are kept.
+gcamdata folder.
 }

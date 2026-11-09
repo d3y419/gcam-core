@@ -37,10 +37,12 @@ find_header <- function(fqfn) {
 #' @return Invisibly, \code{TRUE} if the file has trailing commas to remove, \code{FALSE} if not.
 #' @details Excel pads every row of a CSV file to the widest row with trailing commas. This removes
 #' trailing commas from comment lines, removes the quotes Excel puts around a comment line that
-#' contains a comma, and removes the commas after the last named column from the other rows.
-#' Empty values in named columns are kept, and lines that end inside a quoted value are not changed.
+#' contains a comma (above the column-name row), and removes the commas after the last named column
+#' from the other rows. A comment line is a line that starts with the comment character outside a
+#' quoted value. Empty values in named columns, blank rows, quoted values (including values spanning
+#' lines) and line endings are kept.
 #' Before a file is cleaned, the original is copied to \code{outputs/trailing_comma_originals/} in the
-#' gcamdata folder. Line endings are kept.
+#' gcamdata folder.
 trim_trailing_commas <- function(fqfn, fix = TRUE) {
   # Base R only: .githooks/pre-commit and the GitHub check source this file without loading gcamdata.
   # All text is handled as bytes, as some files are not valid UTF-8.
@@ -48,47 +50,68 @@ trim_trailing_commas <- function(fqfn, fix = TRUE) {
   if(length(bytes) == 0) return(invisible(FALSE))
   txt <- rawToChar(bytes)
   # Quick test on the whole text: a comment line ending in a comma, a quoted comment line, or a
-  # column-name row (first line not starting with the comment character) ending in a comma
-  names_row <- regmatches(txt, regexpr(paste0("(?m)^(?!", COMMENT_CHAR, ").*$"), txt, perl = TRUE, useBytes = TRUE))
+  # column-name row (first line that is not a comment and not blank) ending in a comma
+  names_row <- regmatches(txt, regexpr(paste0("(?m)^(?!", COMMENT_CHAR, ")(?!,*\r?$).*$"), txt,
+                                       perl = TRUE, useBytes = TRUE))
   if(!grepl(paste0('(?m)^', COMMENT_CHAR, '.*,\r?$|^"', COMMENT_CHAR), txt, perl = TRUE, useBytes = TRUE) &&
      !any(grepl(",\r?$", names_row, useBytes = TRUE))) {
     return(invisible(FALSE))
   }
-  eol <- if(grepl("\r\n", txt, fixed = TRUE, useBytes = TRUE)) "\r\n" else "\n"
-  lines <- strsplit(txt, "\r?\n", useBytes = TRUE)[[1]]
+  # Lines, each with its own line ending
+  lines <- strsplit(txt, "\n", fixed = TRUE, useBytes = TRUE)[[1]]
+  eol <- ifelse(grepl("\r$", lines, useBytes = TRUE), "\r\n", "\n")
+  if(bytes[length(bytes)] != as.raw(10)) eol[length(eol)] <- sub("\n", "", eol[length(eol)], fixed = TRUE)
+  lines <- sub("\r$", "", lines, useBytes = TRUE)
 
-  # Comment lines that Excel quoted because they contain a comma: remove the quotes
-  quoted <- grepl(paste0('^"', COMMENT_CHAR, '([^"]|"")*",*$'), lines, useBytes = TRUE)
+  # Lines that start inside a quoted value; a comment line does not open one
+  hash <- grepl(paste0("^", COMMENT_CHAR), lines, useBytes = TRUE)
+  odd <- which(nchar(gsub('[^"]', "", lines, useBytes = TRUE), type = "bytes") %% 2 == 1)
+  inside <- logical(length(lines))
+  in_quote <- FALSE
+  start <- 1
+  for(i in odd) {
+    inside[start:i] <- in_quote
+    if(in_quote || !hash[i]) in_quote <- !in_quote
+    start <- i + 1
+  }
+  if(start <= length(lines)) inside[start:length(lines)] <- in_quote
+  comment <- hash & !inside
+
+  # Column-name row: the first line that is not a comment, a quoted comment line or blank
+  quoted <- !inside & grepl(paste0('^"', COMMENT_CHAR, '([^"]|"")*",*$'), lines, useBytes = TRUE)
+  blank <- grepl("^,*$", lines, useBytes = TRUE)
+  names_i <- which(!inside & !comment & !quoted & !blank)[1]
+  if(is.na(names_i)) names_i <- length(lines) + 1
+
+  # Comment lines above the column-name row that Excel quoted because they contain a comma: remove the quotes
+  quoted <- quoted & seq_along(lines) < names_i
   lines[quoted] <- gsub('""', '"', sub('^"(.*)",*$', "\\1", lines[quoted], useBytes = TRUE),
                         fixed = TRUE, useBytes = TRUE)
+  comment <- comment | quoted
   # Comment lines: remove all trailing commas
-  comment <- grepl(paste0("^", COMMENT_CHAR), lines, useBytes = TRUE)
   padded <- comment & grepl(",$", lines, useBytes = TRUE)
   lines[padded] <- sub(",+$", "", lines[padded], useBytes = TRUE)
   changed <- quoted | padded
 
   # Other rows: if the column-name row ends in k commas, Excel padded every row by k columns
-  data <- which(!comment)
-  k <- if(length(data)) attr(regexpr(",+$", lines[data[1]], useBytes = TRUE), "match.length") else -1
+  k <- if(names_i <= length(lines)) attr(regexpr(",+$", lines[names_i], useBytes = TRUE), "match.length") else -1
   if(k > 0) {
     n_fields <- function(x) {
       unquoted <- gsub('"[^"]*"', "", x, useBytes = TRUE)
       nchar(gsub("[^,]", "", unquoted, useBytes = TRUE), type = "bytes") + 1
     }
-    # A record ends on the first line that leaves no quoted value open
-    n_quotes <- nchar(gsub('[^"]', "", lines[data], useBytes = TRUE), type = "bytes")
-    open <- cumsum(n_quotes) %% 2 == 1
-    record <- cumsum(c(TRUE, !open[-length(open)]))
+    # A record starts on each line that does not start inside a quoted value
+    data <- which(seq_along(lines) >= names_i & !comment)
+    record <- cumsum(!inside[data])
     record_text <- lines[data]
-    if(any(n_quotes > 0)) {
+    if(any(inside[data])) {
       record_text <- vapply(split(record_text, record), paste, character(1), collapse = "\n")
     }
-    last <- !duplicated(record, fromLast = TRUE)
-    record_end <- data[last]
+    record_end <- data[!duplicated(record, fromLast = TRUE)]
     trailing <- pmax(0, attr(regexpr(",+$", lines[record_end], useBytes = TRUE), "match.length"))
     # Remove the commas beyond the named columns (not from a record still open at the end of the file)
-    drop <- pmin(pmax(0, n_fields(record_text) - (n_fields(lines[data[1]]) - k)), trailing)
-    drop[open[last]] <- 0
+    drop <- pmin(pmax(0, n_fields(record_text) - (n_fields(lines[names_i]) - k)), trailing)
+    if(in_quote) drop[length(drop)] <- 0
     for(d in setdiff(unique(drop), 0)) {
       i <- record_end[drop == d]
       lines[i] <- sub(paste0(",{", d, "}$"), "", lines[i], useBytes = TRUE)
@@ -106,8 +129,7 @@ trim_trailing_commas <- function(fqfn, fix = TRUE) {
     if(!file.copy(fqfn, original, overwrite = TRUE)) {
       stop("Could not copy ", fqfn, " to ", original)
     }
-    final_eol <- if(bytes[length(bytes)] == as.raw(10)) eol else ""
-    writeBin(charToRaw(paste0(paste(lines, collapse = eol), final_eol)), fqfn)
+    writeBin(charToRaw(paste0(lines, eol, collapse = "")), fqfn)
     message("Removed trailing commas from ", basename(fqfn), "; original copied to ", original)
   }
   invisible(TRUE)

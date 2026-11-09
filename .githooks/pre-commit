@@ -36,9 +36,12 @@ source("input/gcamdata/R/utils.R")
 staged <- file.path(tmp, paste0(seq_along(files), ".csv"))
 bad <- files[vapply(staged, trim_trailing_commas, logical(1), fix = FALSE)]
 if(length(bad) == 0) quit(status = 0)
-for(f in bad[file.exists(bad)]) trim_trailing_commas(f)
+# The commit is stopped even if a working copy cannot be cleaned
+for(f in bad[file.exists(bad)]) {
+  tryCatch(trim_trailing_commas(f), error = function(e) message("Could not clean ", f, ": ", conditionMessage(e)))
+}
 message("Trailing commas (Excel) in staged input CSVs:\n  ", paste(bad, collapse = "\n  "),
-        "\nThey were removed from the working copy: stage these files again and commit.")
+        "\nThey were removed from the working copy, unless noted above: stage these files again and commit.")
 quit(status = 3)
 EOF
 
