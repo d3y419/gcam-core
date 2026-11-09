@@ -1,0 +1,56 @@
+#!/bin/sh
+# Stops a commit when a staged gcamdata input CSV has trailing commas added by Excel, and removes
+# them from the working copy with trim_trailing_commas() (input/gcamdata/R/utils.R); the original is
+# copied to input/gcamdata/outputs/trailing_comma_originals/. Stage the cleaned files and commit again.
+#
+# Install once per clone:  git config core.hooksPath .githooks
+
+files=$(git -c core.quotePath=false diff --cached --name-only --diff-filter=ACMR -- 'input/gcamdata/inst/extdata/*.csv')
+[ -z "$files" ] && exit 0
+
+rscript=$(command -v Rscript)
+if [ -z "$rscript" ]; then
+  for r in "/c/Program Files/R"/R-*/bin/Rscript.exe /usr/local/bin/Rscript /opt/homebrew/bin/Rscript; do
+    [ -x "$r" ] && rscript=$r
+  done
+fi
+if [ -z "$rscript" ]; then
+  echo "pre-commit: Rscript not found; input CSVs not checked for trailing commas" >&2
+  exit 0
+fi
+
+tmp=$(mktemp -d) || exit 0
+trap 'rm -rf "$tmp"' EXIT
+printf '%s\n' "$files" > "$tmp/files"
+i=0
+printf '%s\n' "$files" | while IFS= read -r f; do
+  i=$((i + 1))
+  git cat-file blob ":$f" > "$tmp/$i.csv"
+done
+
+cat > "$tmp/check.R" <<'EOF'
+tmp <- commandArgs(TRUE)[1]
+files <- readLines(file.path(tmp, "files"))
+source("input/gcamdata/R/constants.R")
+source("input/gcamdata/R/utils.R")
+staged <- file.path(tmp, paste0(seq_along(files), ".csv"))
+bad <- files[vapply(staged, trim_trailing_commas, logical(1), fix = FALSE)]
+if(length(bad) == 0) quit(status = 0)
+# The commit is stopped even if a working copy cannot be cleaned
+for(f in bad[file.exists(bad)]) {
+  tryCatch(trim_trailing_commas(f), error = function(e) message("Could not clean ", f, ": ", conditionMessage(e)))
+}
+message("Trailing commas (Excel) in staged input CSVs:\n  ", paste(bad, collapse = "\n  "),
+        "\nThey were removed from the working copy, unless noted above: stage these files again and commit.")
+quit(status = 3)
+EOF
+
+# Git Bash: pass Windows paths to R (also when MSYS_NO_PATHCONV is set), and unset LANG=C.UTF-8,
+# which R for Windows cannot use and warns about
+rtmp=$tmp
+case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) rtmp=$(cygpath -m "$tmp"); unset LANG LC_ALL LC_CTYPE ;; esac
+"$rscript" --vanilla "$rtmp/check.R" "$rtmp"
+status=$?
+[ "$status" -eq 3 ] && exit 1
+[ "$status" -ne 0 ] && echo "pre-commit: trailing-comma check of input CSVs failed to run (Rscript status $status); commit not blocked" >&2
+exit 0

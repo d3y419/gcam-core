@@ -1,7 +1,7 @@
-# File: gains_to_gcam_sector.csv,
-# Title: Mapping GAINS model sectors to GCAM sector,
-# Units: NA,
-# Source: Rao et al. 2017 "Future air pollution in the Shared Socio-economic Pathways" Global Environmental Change.,
+# File: gains_to_gcam_sector.csv
+# Title: Mapping GAINS model sectors to GCAM sector
+# Units: NA
+# Source: Rao et al. 2017 "Future air pollution in the Shared Socio-economic Pathways" Global Environmental Change.
 # Column types: cc 
 # ----------
 IIASA_Sector,GCAM_tag
