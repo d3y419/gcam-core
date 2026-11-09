@@ -1,7 +1,7 @@
 # File: A23.globaltech_fcr.csv
 # Title: Electricity technology capital cost fixed charge rates
 # Units: %/yr
-# Source: Muratori et al. (2017), Renewable and Sustainable Energy Reviews v 77, pp 861–874,,
+# Source: Muratori et al. (2017), Renewable and Sustainable Energy Reviews v 77, pp 861–874
 # Column types: ccccni
 # ----------
 supplysector,subsector,technology,input-capital,interest.rate,payback.years

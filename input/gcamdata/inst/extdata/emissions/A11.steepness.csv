@@ -1,8 +1,8 @@
-# File: A11.steepness.csv,
-# Title: Steepness of emissions reduction for agricultural sectors in all regions,
-# Description: Shape parameter of s-curve function that reduces the emissions coefficient as a function of the per-capita GDP,
-# Units: Unitless,
-# Source: Internal GCAM assumptions,
+# File: A11.steepness.csv
+# Title: Steepness of emissions reduction for agricultural sectors in all regions
+# Description: Shape parameter of s-curve function that reduces the emissions coefficient as a function of the per-capita GDP
+# Units: Unitless
+# Source: Internal GCAM assumptions
 # Column types: cn 
 # ----------
 AgSupplySector,steepness

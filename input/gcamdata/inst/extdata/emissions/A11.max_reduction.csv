@@ -1,7 +1,7 @@
-# File: A11.max_reduction.csv,
-# Title: Maximum emissions reduction for agricultural sectors in all regions,
-# Units: Percent reduction from base-year emissions coefficient,
-# Source: Internal GCAM assumptions,
+# File: A11.max_reduction.csv
+# Title: Maximum emissions reduction for agricultural sectors in all regions
+# Units: Percent reduction from base-year emissions coefficient
+# Source: Internal GCAM assumptions
 # Column types: ci 
 # ----------
 AgSupplySector,max.reduction
